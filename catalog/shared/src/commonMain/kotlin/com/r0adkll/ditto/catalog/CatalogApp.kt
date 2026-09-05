@@ -46,6 +46,9 @@ import com.r0adkll.ditto.components.TextField
 import com.r0adkll.ditto.components.Checkbox
 import com.r0adkll.ditto.components.RadioButton
 import com.r0adkll.ditto.components.Scaffold
+import com.r0adkll.ditto.components.SegmentedControl
+import com.r0adkll.ditto.components.Slider
+import com.r0adkll.ditto.components.TabRow
 import com.r0adkll.ditto.components.TopBar
 import com.r0adkll.ditto.components.TopBarVariant
 import com.r0adkll.ditto.components.rememberTopBarScrollBehavior
@@ -123,6 +126,7 @@ fun CatalogApp() {
         Section("Icon buttons") { IconButtonsDemo() }
         Section("Selection controls") { SelectionControlsDemo() }
         Section("Text fields") { TextFieldsDemo() }
+        Section("Segments, tabs, sliders") { ControlsDemo() }
         Section("Lists and cards") { ListsDemo() }
         Section("Menus, dialogs, progress") { OverlaysDemo() }
         Section("Colors") { ColorsDemo() }
@@ -270,6 +274,21 @@ private fun SelectionControlsDemo() {
       RadioButton(selected = true, onClick = null, enabled = false)
       RadioButton(selected = false, onClick = null, enabled = false)
     }
+  }
+}
+
+@Composable
+private fun ControlsDemo() {
+  var segment by remember { mutableStateOf(1) }
+  var tab by remember { mutableStateOf(0) }
+  var value by remember { mutableStateOf(0.35f) }
+  var stepped by remember { mutableStateOf(0.5f) }
+  Column(verticalArrangement = Arrangement.spacedBy(DittoTheme.spacing.lg), modifier = Modifier.width(420.dp)) {
+    SegmentedControl(options = listOf("Day", "Week", "Month"), selectedIndex = segment, onSelect = { segment = it }, modifier = Modifier.fillMaxWidth())
+    TabRow(tabs = listOf("Books", "Authors", "Series"), selectedIndex = tab, onSelect = { tab = it })
+    Slider(value = value, onValueChange = { value = it })
+    Slider(value = stepped, onValueChange = { stepped = it }, steps = 4)
+    Slider(value = 0.8f, onValueChange = {}, enabled = false)
   }
 }
 

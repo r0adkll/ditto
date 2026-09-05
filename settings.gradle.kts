@@ -36,6 +36,7 @@ rootProject.name = "ditto"
 
 include(":ditto-core")
 include(":ditto-components")
+include(":ditto-material3-interop")
 include(":internal:screenshot")
 include(":catalog:shared")
 include(":catalog:android")

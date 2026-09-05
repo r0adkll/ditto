@@ -1,0 +1,7 @@
+public final class com/r0adkll/ditto/material3/DittoMaterialThemeKt {
+	public static final fun DittoMaterialTheme (ZLkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+	public static final fun toMaterialColorScheme (Lcom/r0adkll/ditto/tokens/DittoColors;)Landroidx/compose/material3/ColorScheme;
+	public static final fun toMaterialShapes (Lcom/r0adkll/ditto/tokens/DittoShapes;)Landroidx/compose/material3/Shapes;
+	public static final fun toMaterialTypography (Lcom/r0adkll/ditto/tokens/DittoTypography;)Landroidx/compose/material3/Typography;
+}
+

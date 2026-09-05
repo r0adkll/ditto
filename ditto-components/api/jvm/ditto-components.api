@@ -410,6 +410,72 @@ public final class com/r0adkll/ditto/components/ScaffoldKt {
 	public static final fun getTopBarInsets (Landroidx/compose/runtime/Composer;I)Landroidx/compose/foundation/layout/WindowInsets;
 }
 
+public final class com/r0adkll/ditto/components/SegmentedControlDefaults {
+	public static final field $stable I
+	public static final field INSTANCE Lcom/r0adkll/ditto/components/SegmentedControlDefaults;
+	public final fun style (Lcom/r0adkll/ditto/Idiom;Landroidx/compose/runtime/Composer;II)Lcom/r0adkll/ditto/components/SegmentedControlStyle;
+}
+
+public final class com/r0adkll/ditto/components/SegmentedControlKt {
+	public static final fun SegmentedControl (Ljava/util/List;ILkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;ZLcom/r0adkll/ditto/components/SegmentedControlStyle;Landroidx/compose/runtime/Composer;II)V
+	public static final fun getLocalSegmentedControlStyle ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+}
+
+public final class com/r0adkll/ditto/components/SegmentedControlStyle {
+	public static final field $stable I
+	public synthetic fun <init> (FLandroidx/compose/ui/graphics/Shape;Landroidx/compose/ui/graphics/Shape;JLandroidx/compose/foundation/BorderStroke;FJJJFLandroidx/compose/ui/text/TextStyle;ZLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy-QGa3hlg (FLandroidx/compose/ui/graphics/Shape;Landroidx/compose/ui/graphics/Shape;JLandroidx/compose/foundation/BorderStroke;FJJJFLandroidx/compose/ui/text/TextStyle;Z)Lcom/r0adkll/ditto/components/SegmentedControlStyle;
+	public static synthetic fun copy-QGa3hlg$default (Lcom/r0adkll/ditto/components/SegmentedControlStyle;FLandroidx/compose/ui/graphics/Shape;Landroidx/compose/ui/graphics/Shape;JLandroidx/compose/foundation/BorderStroke;FJJJFLandroidx/compose/ui/text/TextStyle;ZILjava/lang/Object;)Lcom/r0adkll/ditto/components/SegmentedControlStyle;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getContainerBorder ()Landroidx/compose/foundation/BorderStroke;
+	public final fun getContainerColor-0d7_KjU ()J
+	public final fun getContainerPadding-D9Ej5fM ()F
+	public final fun getContentColor-0d7_KjU ()J
+	public final fun getDividers ()Z
+	public final fun getHeight-D9Ej5fM ()F
+	public final fun getSegmentShape ()Landroidx/compose/ui/graphics/Shape;
+	public final fun getSelectedColor-0d7_KjU ()J
+	public final fun getSelectedContentColor-0d7_KjU ()J
+	public final fun getSelectedShadow-D9Ej5fM ()F
+	public final fun getShape ()Landroidx/compose/ui/graphics/Shape;
+	public final fun getTextStyle ()Landroidx/compose/ui/text/TextStyle;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/r0adkll/ditto/components/SliderDefaults {
+	public static final field $stable I
+	public static final field INSTANCE Lcom/r0adkll/ditto/components/SliderDefaults;
+	public final fun style (Lcom/r0adkll/ditto/Idiom;Landroidx/compose/runtime/Composer;II)Lcom/r0adkll/ditto/components/SliderStyle;
+}
+
+public final class com/r0adkll/ditto/components/SliderKt {
+	public static final fun Slider (FLkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;ZLkotlin/ranges/ClosedFloatingPointRange;ILkotlin/jvm/functions/Function0;Lcom/r0adkll/ditto/components/SliderStyle;Landroidx/compose/foundation/interaction/MutableInteractionSource;Landroidx/compose/runtime/Composer;II)V
+	public static final fun getLocalSliderStyle ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+}
+
+public final class com/r0adkll/ditto/components/SliderStyle {
+	public static final field $stable I
+	public synthetic fun <init> (FJJFFJJFFFJFLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy-H5-RIlE (FJJFFJJFFFJF)Lcom/r0adkll/ditto/components/SliderStyle;
+	public static synthetic fun copy-H5-RIlE$default (Lcom/r0adkll/ditto/components/SliderStyle;FJJFFJJFFFJFILjava/lang/Object;)Lcom/r0adkll/ditto/components/SliderStyle;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getActiveTrackColor-0d7_KjU ()J
+	public final fun getInactiveTrackColor-0d7_KjU ()J
+	public final fun getThumbBorderColor-0d7_KjU ()J
+	public final fun getThumbBorderWidth-D9Ej5fM ()F
+	public final fun getThumbColor-0d7_KjU ()J
+	public final fun getThumbHeight-D9Ej5fM ()F
+	public final fun getThumbShadow-D9Ej5fM ()F
+	public final fun getThumbWidth-D9Ej5fM ()F
+	public final fun getTickColor-0d7_KjU ()J
+	public final fun getTouchHeight-D9Ej5fM ()F
+	public final fun getTrackGap-D9Ej5fM ()F
+	public final fun getTrackHeight-D9Ej5fM ()F
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class com/r0adkll/ditto/components/SwitchDefaults {
 	public static final field $stable I
 	public static final field INSTANCE Lcom/r0adkll/ditto/components/SwitchDefaults;
@@ -439,6 +505,37 @@ public final class com/r0adkll/ditto/components/SwitchStyle {
 	public final fun getUncheckedThumbColor-0d7_KjU ()J
 	public final fun getUncheckedTrackBorder ()Landroidx/compose/foundation/BorderStroke;
 	public final fun getUncheckedTrackColor-0d7_KjU ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/r0adkll/ditto/components/TabsDefaults {
+	public static final field $stable I
+	public static final field INSTANCE Lcom/r0adkll/ditto/components/TabsDefaults;
+	public final fun style (Lcom/r0adkll/ditto/Idiom;Landroidx/compose/runtime/Composer;II)Lcom/r0adkll/ditto/components/TabsStyle;
+}
+
+public final class com/r0adkll/ditto/components/TabsKt {
+	public static final fun TabRow (Ljava/util/List;ILkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;ZLcom/r0adkll/ditto/components/TabsStyle;Landroidx/compose/runtime/Composer;II)V
+	public static final fun getLocalTabsStyle ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+}
+
+public final class com/r0adkll/ditto/components/TabsStyle {
+	public static final field $stable I
+	public synthetic fun <init> (FFJLandroidx/compose/ui/graphics/Shape;ZJJLandroidx/compose/ui/text/TextStyle;JLandroidx/compose/ui/graphics/Shape;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy-dExEIEE (FFJLandroidx/compose/ui/graphics/Shape;ZJJLandroidx/compose/ui/text/TextStyle;JLandroidx/compose/ui/graphics/Shape;)Lcom/r0adkll/ditto/components/TabsStyle;
+	public static synthetic fun copy-dExEIEE$default (Lcom/r0adkll/ditto/components/TabsStyle;FFJLandroidx/compose/ui/graphics/Shape;ZJJLandroidx/compose/ui/text/TextStyle;JLandroidx/compose/ui/graphics/Shape;ILjava/lang/Object;)Lcom/r0adkll/ditto/components/TabsStyle;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getContentColor-0d7_KjU ()J
+	public final fun getDividerColor-0d7_KjU ()J
+	public final fun getHeight-D9Ej5fM ()F
+	public final fun getIndicatorColor-0d7_KjU ()J
+	public final fun getIndicatorFitsLabel ()Z
+	public final fun getIndicatorHeight-D9Ej5fM ()F
+	public final fun getIndicatorShape ()Landroidx/compose/ui/graphics/Shape;
+	public final fun getSelectedContentColor-0d7_KjU ()J
+	public final fun getTabShape ()Landroidx/compose/ui/graphics/Shape;
+	public final fun getTextStyle ()Landroidx/compose/ui/text/TextStyle;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
