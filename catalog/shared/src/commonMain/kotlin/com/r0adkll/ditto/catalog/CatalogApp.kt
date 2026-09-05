@@ -7,15 +7,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.verticalScroll
@@ -26,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.unit.Dp
@@ -47,6 +45,10 @@ import com.r0adkll.ditto.components.ListItem
 import com.r0adkll.ditto.components.TextField
 import com.r0adkll.ditto.components.Checkbox
 import com.r0adkll.ditto.components.RadioButton
+import com.r0adkll.ditto.components.Scaffold
+import com.r0adkll.ditto.components.TopBar
+import com.r0adkll.ditto.components.TopBarVariant
+import com.r0adkll.ditto.components.rememberTopBarScrollBehavior
 import com.r0adkll.ditto.components.Switch
 import com.r0adkll.ditto.components.TriStateCheckbox
 import com.r0adkll.ditto.components.FilledIconButton
@@ -84,12 +86,30 @@ fun CatalogApp() {
   var neutrals by remember { mutableStateOf(Neutrals.Cool) }
 
   DittoTheme(accent = accent, neutrals = neutrals, idiom = idiom, colorMode = colorMode) {
-    Surface(color = DittoTheme.colors.background, modifier = Modifier.fillMaxSize()) {
+    val scroll = rememberTopBarScrollBehavior()
+    Scaffold(
+      modifier = Modifier.fillMaxSize(),
+      topBar = {
+        TopBar(
+          title = "Ditto",
+          variant = TopBarVariant.Large,
+          scrollBehavior = scroll,
+          actions = {
+            IconButton(
+              icon = if (colorMode == ColorMode.Dark) DittoIcons.visibilityOff else DittoIcons.visibility,
+              contentDescription = "Toggle dark mode",
+              onClick = { colorMode = if (colorMode == ColorMode.Dark) ColorMode.Light else ColorMode.Dark },
+            )
+          },
+        )
+      },
+    ) { padding ->
       Column(
         Modifier
           .fillMaxSize()
-          .windowInsetsPadding(WindowInsets.safeDrawing)
+          .nestedScroll(scroll.connection)
           .verticalScroll(rememberScrollState())
+          .padding(padding)
           .padding(DittoTheme.spacing.lg),
         verticalArrangement = Arrangement.spacedBy(DittoTheme.spacing.xl),
       ) {
@@ -125,7 +145,6 @@ private fun Header(
   neutrals: Neutrals, onNeutrals: (Neutrals) -> Unit,
 ) {
   Column(verticalArrangement = Arrangement.spacedBy(DittoTheme.spacing.md)) {
-    Text("Ditto", style = DittoTheme.typography.display)
     Text(
       "One component API, three idioms. Tap the controls to re-render everything below.",
       style = DittoTheme.typography.bodySmall,

@@ -153,6 +153,19 @@ public final class com/r0adkll/ditto/components/CheckboxStyle {
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class com/r0adkll/ditto/components/ComposableSingletons$ScaffoldKt {
+	public static final field INSTANCE Lcom/r0adkll/ditto/components/ComposableSingletons$ScaffoldKt;
+	public fun <init> ()V
+	public final fun getLambda$-1601332654$ditto_ditto_components ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$2010777442$ditto_ditto_components ()Lkotlin/jvm/functions/Function2;
+}
+
+public final class com/r0adkll/ditto/components/ComposableSingletons$TopBarKt {
+	public static final field INSTANCE Lcom/r0adkll/ditto/components/ComposableSingletons$TopBarKt;
+	public fun <init> ()V
+	public final fun getLambda$-1648534782$ditto_ditto_components ()Lkotlin/jvm/functions/Function3;
+}
+
 public final class com/r0adkll/ditto/components/DialogDefaults {
 	public static final field $stable I
 	public static final field INSTANCE Lcom/r0adkll/ditto/components/DialogDefaults;
@@ -391,6 +404,12 @@ public final class com/r0adkll/ditto/components/RadioButtonStyle {
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class com/r0adkll/ditto/components/ScaffoldKt {
+	public static final fun Scaffold-vRFhKjU (Landroidx/compose/ui/Modifier;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;JJLandroidx/compose/foundation/layout/WindowInsets;Lkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;II)V
+	public static final fun getBottomBarInsets (Landroidx/compose/runtime/Composer;I)Landroidx/compose/foundation/layout/WindowInsets;
+	public static final fun getTopBarInsets (Landroidx/compose/runtime/Composer;I)Landroidx/compose/foundation/layout/WindowInsets;
+}
+
 public final class com/r0adkll/ditto/components/SwitchDefaults {
 	public static final field $stable I
 	public static final field INSTANCE Lcom/r0adkll/ditto/components/SwitchDefaults;
@@ -496,5 +515,57 @@ public final class com/r0adkll/ditto/components/TooltipStyle {
 	public final fun getTextStyle ()Landroidx/compose/ui/text/TextStyle;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/r0adkll/ditto/components/TopBarDefaults {
+	public static final field $stable I
+	public static final field INSTANCE Lcom/r0adkll/ditto/components/TopBarDefaults;
+	public final fun style (Lcom/r0adkll/ditto/Idiom;Landroidx/compose/runtime/Composer;II)Lcom/r0adkll/ditto/components/TopBarStyle;
+}
+
+public final class com/r0adkll/ditto/components/TopBarKt {
+	public static final fun BackButton (Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;Ljava/lang/String;Landroidx/compose/runtime/Composer;II)V
+	public static final fun TopBar (Ljava/lang/String;Landroidx/compose/ui/Modifier;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function3;Lcom/r0adkll/ditto/components/TopBarVariant;Lcom/r0adkll/ditto/components/TopBarScrollBehavior;Landroidx/compose/foundation/layout/WindowInsets;Lcom/r0adkll/ditto/components/TopBarStyle;Landroidx/compose/runtime/Composer;II)V
+	public static final fun getLocalTopBarStyle ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+	public static final fun rememberTopBarScrollBehavior (Landroidx/compose/runtime/Composer;I)Lcom/r0adkll/ditto/components/TopBarScrollBehavior;
+}
+
+public final class com/r0adkll/ditto/components/TopBarScrollBehavior {
+	public static final field $stable I
+	public final fun getCollapsedFraction ()F
+	public final fun getConnection ()Landroidx/compose/ui/input/nestedscroll/NestedScrollConnection;
+	public final fun getContentOffset ()F
+	public final fun getHeightOffset ()F
+	public final fun isScrolled ()Z
+}
+
+public final class com/r0adkll/ditto/components/TopBarStyle {
+	public static final field $stable I
+	public synthetic fun <init> (FFJJLandroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/TextStyle;JJZFLcom/r0adkll/ditto/tokens/ElevationLevel;ZLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy-Y_sfHP0 (FFJJLandroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/TextStyle;JJZFLcom/r0adkll/ditto/tokens/ElevationLevel;Z)Lcom/r0adkll/ditto/components/TopBarStyle;
+	public static synthetic fun copy-Y_sfHP0$default (Lcom/r0adkll/ditto/components/TopBarStyle;FFJJLandroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/TextStyle;JJZFLcom/r0adkll/ditto/tokens/ElevationLevel;ZILjava/lang/Object;)Lcom/r0adkll/ditto/components/TopBarStyle;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCenterTitle ()Z
+	public final fun getContainerColor-0d7_KjU ()J
+	public final fun getHairlineWhenScrolled ()Z
+	public final fun getHeight-D9Ej5fM ()F
+	public final fun getHorizontalPadding-D9Ej5fM ()F
+	public final fun getIconColor-0d7_KjU ()J
+	public final fun getLargeHeight-D9Ej5fM ()F
+	public final fun getLargeTitleStyle ()Landroidx/compose/ui/text/TextStyle;
+	public final fun getScrolledContainerColor-0d7_KjU ()J
+	public final fun getScrolledElevation ()Lcom/r0adkll/ditto/tokens/ElevationLevel;
+	public final fun getTitleColor-0d7_KjU ()J
+	public final fun getTitleStyle ()Landroidx/compose/ui/text/TextStyle;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/r0adkll/ditto/components/TopBarVariant : java/lang/Enum {
+	public static final field Large Lcom/r0adkll/ditto/components/TopBarVariant;
+	public static final field Small Lcom/r0adkll/ditto/components/TopBarVariant;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/r0adkll/ditto/components/TopBarVariant;
+	public static fun values ()[Lcom/r0adkll/ditto/components/TopBarVariant;
 }
 
