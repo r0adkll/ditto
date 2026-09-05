@@ -38,10 +38,12 @@ jobs:
           path: '**/src/jvmTest/screenshots/**'
           if-no-files-found: ignore
       - name: Upload web catalog
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: catalog-web
           path: catalog/web/build/dist/wasmJs/productionExecutable
+          if-no-files-found: ignore
 
   ios:
     name: iOS (macOS)
