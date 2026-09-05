@@ -5,8 +5,10 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
@@ -208,11 +210,17 @@ public fun Chip(
       Text(text, style = style.textStyle, color = content.copy(alpha = content.alpha * alpha), maxLines = 1)
       if (onDismiss != null) {
         Spacer(Modifier.width(DittoTheme.spacing.xs + 2.dp))
-        IconButton(
-          onClick = onDismiss,
-          enabled = enabled,
-          style = IconButtonDefaults.style(IconButtonVariant.Standard).copy(size = style.iconSize + 4.dp, iconSize = style.iconSize, contentColor = content),
-        ) { Icon(DittoIcons.close, contentDescription = "Remove $text") }
+        // A plain clickable glyph: the chip itself is the hit target, so no extra min-size here.
+        val dismissSource = remember { MutableInteractionSource() }
+        Box(
+          Modifier
+            .clip(DittoTheme.shapes.full)
+            .clickable(dismissSource, LocalIndication.current, enabled = enabled, role = Role.Button, onClick = onDismiss)
+            .padding(2.dp),
+          contentAlignment = Alignment.Center,
+        ) {
+          Icon(DittoIcons.close, contentDescription = "Remove $text", size = style.iconSize)
+        }
       }
     }
   }
