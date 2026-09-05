@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.remember
@@ -26,6 +27,16 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.foundation.focusGroup
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.input.key.type
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
@@ -198,31 +209,58 @@ public fun DropdownMenu(
     onDismissRequest = onDismissRequest,
     properties = PopupProperties(focusable = true),
   ) {
-    MenuContent(modifier, style, content)
+    MenuContent(modifier, style, autoFocus = true, content = content)
   }
 }
 
-/** The menu surface without the popup, for previews and custom hosts. */
+/**
+ * The menu surface without the popup, for previews and custom hosts. Arrow keys move between
+ * items; the first item takes focus when a keyboard is present so the menu is operable without a
+ * pointer (ADR-021).
+ */
 @Composable
 public fun MenuContent(
   modifier: Modifier = Modifier,
   style: MenuStyle? = null,
+  autoFocus: Boolean = false,
   content: @Composable ColumnScope.() -> Unit,
 ) {
   @Suppress("NAME_SHADOWING")
   val style = MenuDefaults.resolve(style)
-  CompositionLocalProvider(LocalMenuStyle provides style) {
+  val focusManager = LocalFocusManager.current
+  val firstItem = remember { MenuFocus(FocusRequester()) }
+  val keyboard = LocalInputCapabilities.current.keyboard
+  LaunchedEffect(keyboard, autoFocus) {
+    if (autoFocus && keyboard && firstItem.claimed) runCatching { firstItem.requester.requestFocus() }
+  }
+  CompositionLocalProvider(LocalMenuStyle provides style, LocalMenuFocus provides firstItem) {
     Surface(
-      modifier = modifier.widthIn(min = style.minWidth, max = style.maxWidth).width(IntrinsicSize.Max),
+      modifier = modifier
+        .widthIn(min = style.minWidth, max = style.maxWidth)
+        .width(IntrinsicSize.Max)
+        .onPreviewKeyEvent { event ->
+          if (event.type != KeyEventType.KeyDown) return@onPreviewKeyEvent false
+          when (event.key) {
+            Key.DirectionDown -> focusManager.moveFocus(FocusDirection.Down)
+            Key.DirectionUp -> focusManager.moveFocus(FocusDirection.Up)
+            else -> false
+          }
+        },
       shape = style.shape,
       color = style.containerColor,
       elevation = style.elevation,
       border = style.border,
     ) {
-      Column(Modifier.padding(style.contentPadding), content = content)
+      Column(Modifier.padding(style.contentPadding).focusGroup(), content = content)
     }
   }
 }
+
+internal class MenuFocus(val requester: FocusRequester) {
+  var claimed: Boolean = false
+}
+
+internal val LocalMenuFocus: ProvidableCompositionLocal<MenuFocus?> = staticCompositionLocalOf { null }
 
 /** One row of a [DropdownMenu]. */
 @Composable
@@ -243,10 +281,13 @@ public fun MenuItem(
   val alpha = if (enabled) 1f else DittoTheme.colors.disabledAlpha
   val contentColor = (if (destructive) DittoTheme.colors.error else style.itemContentColor).copy(alpha = alpha)
   val iconColor = (if (destructive) DittoTheme.colors.error else style.itemIconColor).copy(alpha = alpha)
+  val menuFocus = LocalMenuFocus.current
+  val isFirst = remember(menuFocus) { menuFocus != null && !menuFocus.claimed && enabled.also { if (it) menuFocus.claimed = true } }
 
   Row(
     modifier
       .fillMaxWidth()
+      .then(if (isFirst && menuFocus != null) Modifier.focusRequester(menuFocus.requester) else Modifier)
       .focusRing(interactionSource, style.itemShape)
       .clip(style.itemShape)
       .clickable(interactionSource, LocalIndication.current, enabled = enabled, role = Role.Button, onClick = onClick)

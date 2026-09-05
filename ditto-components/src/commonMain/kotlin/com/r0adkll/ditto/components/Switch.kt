@@ -6,7 +6,9 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
@@ -22,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
@@ -164,8 +167,11 @@ public fun Switch(
   val pointer = LocalInputCapabilities.current.pointer
   val haptics = rememberToggleHaptics()
 
+  val hovered by interactionSource.collectIsHoveredAsState()
+  val baseTrack = if (checked) style.checkedTrackColor else style.uncheckedTrackColor
   val trackColor by animateColorAsState(
-    if (checked) style.checkedTrackColor else style.uncheckedTrackColor,
+    // Pointer hover: nudge the track toward the content color so the control reads as live (ADR-008).
+    if (hovered && enabled) DittoTheme.colors.onSurface.copy(alpha = 0.08f).compositeOver(baseTrack) else baseTrack,
     tween(motion.durationShort),
   )
   val thumbColor by animateColorAsState(
@@ -196,7 +202,7 @@ public fun Switch(
           Modifier
         },
       )
-      .then(if (pointer && enabled && onCheckedChange != null) Modifier.pointerHoverIcon(PointerIcon.Hand) else Modifier)
+      .then(if (pointer && enabled && onCheckedChange != null) Modifier.pointerHoverIcon(PointerIcon.Hand).hoverable(interactionSource) else Modifier)
       .minimumInteractiveSize()
       .focusRing(interactionSource, style.trackShape)
       .size(style.trackWidth, style.trackHeight)

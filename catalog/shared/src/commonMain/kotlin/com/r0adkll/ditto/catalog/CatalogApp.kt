@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -33,6 +34,16 @@ import com.r0adkll.ditto.Idiom
 import com.r0adkll.ditto.components.Button
 import com.r0adkll.ditto.components.ButtonVariant
 import com.r0adkll.ditto.components.AlertDialog
+import com.r0adkll.ditto.components.Badge
+import com.r0adkll.ditto.components.BadgedBox
+import com.r0adkll.ditto.components.Chip
+import com.r0adkll.ditto.components.ModalSheet
+import com.r0adkll.ditto.components.NavigationBar
+import com.r0adkll.ditto.components.NavigationItem
+import com.r0adkll.ditto.components.NavigationRail
+import com.r0adkll.ditto.components.RadioGroup
+import com.r0adkll.ditto.components.Sidebar
+import com.r0adkll.ditto.components.SidebarItem
 import com.r0adkll.ditto.components.Card
 import com.r0adkll.ditto.components.CircularProgressIndicator
 import com.r0adkll.ditto.components.DropdownMenu
@@ -129,6 +140,7 @@ fun CatalogApp() {
         Section("Segments, tabs, sliders") { ControlsDemo() }
         Section("Lists and cards") { ListsDemo() }
         Section("Menus, dialogs, progress") { OverlaysDemo() }
+        Section("Navigation, chips, badges, sheets") { NavigationDemo() }
         Section("Colors") { ColorsDemo() }
         Section("Typography") { TypographyDemo() }
         Section("Shapes") { ShapesDemo() }
@@ -379,6 +391,50 @@ private fun OverlaysDemo() {
         LinearProgressIndicator()
       }
       Button(text = "+10%", onClick = { progress = (progress + 0.1f).let { if (it > 1f) 0f else it } }, variant = ButtonVariant.Text)
+    }
+  }
+}
+
+@Composable
+private fun NavigationDemo() {
+  var dest by remember { mutableStateOf(0) }
+  var chips by remember { mutableStateOf(setOf(0)) }
+  var sheet by remember { mutableStateOf(false) }
+  var size by remember { mutableStateOf(1) }
+  Column(verticalArrangement = Arrangement.spacedBy(DittoTheme.spacing.lg)) {
+    NavigationBar(windowInsets = WindowInsets(0), modifier = Modifier.width(360.dp)) {
+      NavigationItem(selected = dest == 0, onClick = { dest = 0 }, icon = DittoIcons.search, label = "Search")
+      NavigationItem(selected = dest == 1, onClick = { dest = 1 }, icon = DittoIcons.check, label = "Done", badge = "3")
+      NavigationItem(selected = dest == 2, onClick = { dest = 2 }, icon = DittoIcons.more, label = "More")
+    }
+    Row(Modifier.height(180.dp), horizontalArrangement = Arrangement.spacedBy(DittoTheme.spacing.lg)) {
+      NavigationRail(windowInsets = WindowInsets(0)) {
+        NavigationItem(selected = dest == 0, onClick = { dest = 0 }, icon = DittoIcons.search, label = "Find")
+        NavigationItem(selected = dest == 1, onClick = { dest = 1 }, icon = DittoIcons.check, label = "Done")
+      }
+      Sidebar(windowInsets = WindowInsets(0)) {
+        SidebarItem(selected = dest == 0, onClick = { dest = 0 }, label = "Library", icon = DittoIcons.search)
+        SidebarItem(selected = dest == 1, onClick = { dest = 1 }, label = "Queue", icon = DittoIcons.check, badge = "12")
+        SidebarItem(selected = dest == 2, onClick = { dest = 2 }, label = "Settings", icon = DittoIcons.more)
+      }
+    }
+    Row(horizontalArrangement = Arrangement.spacedBy(DittoTheme.spacing.sm), verticalAlignment = Alignment.CenterVertically) {
+      listOf("Fiction", "Audio", "Podcasts").forEachIndexed { i, label ->
+        Chip(label, selected = i in chips, onClick = { chips = if (i in chips) chips - i else chips + i })
+      }
+      Chip("Removable", onDismiss = {})
+      BadgedBox(badge = "7") { Text("Inbox") }
+    }
+    Row(horizontalArrangement = Arrangement.spacedBy(DittoTheme.spacing.lg), verticalAlignment = Alignment.Top) {
+      Button(text = "Open sheet", onClick = { sheet = true }, variant = ButtonVariant.Tonal)
+      RadioGroup(options = listOf("Small", "Medium", "Large"), selectedIndex = size, onSelect = { size = it }, modifier = Modifier.width(200.dp))
+    }
+    if (sheet) {
+      ModalSheet(onDismissRequest = { sheet = false }) {
+        ListItem(headline = "Share", onClick = { sheet = false })
+        ListItem(headline = "Add to queue", onClick = { sheet = false })
+        ListItem(headline = "Cancel", onClick = { sheet = false })
+      }
     }
   }
 }

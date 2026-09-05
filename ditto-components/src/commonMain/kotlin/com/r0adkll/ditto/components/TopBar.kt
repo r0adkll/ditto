@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.r0adkll.ditto.Idiom
 import com.r0adkll.ditto.foundation.Icon
+import com.r0adkll.ditto.foundation.ProvideTextStyle
 import com.r0adkll.ditto.foundation.Surface
 import com.r0adkll.ditto.foundation.Text
 import com.r0adkll.ditto.icons.DittoIcons
@@ -221,6 +222,37 @@ public fun TopBar(
 ) {
   @Suppress("NAME_SHADOWING")
   val style = style ?: LocalTopBarStyle.current ?: TopBarDefaults.style()
+  TopBar(
+    title = { Text(title, style = style.titleStyle, color = style.titleColor, maxLines = 1, overflow = TextOverflow.Ellipsis) },
+    largeTitle = { Text(title, style = style.largeTitleStyle, color = style.titleColor, maxLines = 1, overflow = TextOverflow.Ellipsis) },
+    modifier = modifier,
+    navigationIcon = navigationIcon,
+    actions = actions,
+    variant = variant,
+    scrollBehavior = scrollBehavior,
+    windowInsets = windowInsets,
+    style = style,
+  )
+}
+
+/**
+ * Slot-based variant: [title] is the row title, [largeTitle] the expanded title for
+ * [TopBarVariant.Large] (defaults to [title]).
+ */
+@Composable
+public fun TopBar(
+  title: @Composable () -> Unit,
+  modifier: Modifier = Modifier,
+  largeTitle: @Composable () -> Unit = title,
+  navigationIcon: (@Composable () -> Unit)? = null,
+  actions: @Composable RowScope.() -> Unit = {},
+  variant: TopBarVariant = TopBarVariant.Small,
+  scrollBehavior: TopBarScrollBehavior? = null,
+  windowInsets: WindowInsets = TopBarInsets,
+  style: TopBarStyle? = null,
+) {
+  @Suppress("NAME_SHADOWING")
+  val style = style ?: LocalTopBarStyle.current ?: TopBarDefaults.style()
   val motion = DittoTheme.motion
   val large = variant == TopBarVariant.Large
   val density = LocalDensity.current
@@ -255,14 +287,9 @@ public fun TopBar(
             contentAlignment = if (style.centerTitle) Alignment.Center else Alignment.CenterStart,
           ) {
             // Small title: always shown for Small; fades in as the large title collapses.
-            Text(
-              title,
-              style = style.titleStyle,
-              color = style.titleColor,
-              maxLines = 1,
-              overflow = TextOverflow.Ellipsis,
-              modifier = Modifier.graphicsLayer { alpha = if (large) ((fraction - 0.5f) * 2f).coerceIn(0f, 1f) else 1f },
-            )
+            Box(Modifier.graphicsLayer { alpha = if (large) ((fraction - 0.5f) * 2f).coerceIn(0f, 1f) else 1f }) {
+              ProvideTextStyle(style.titleStyle) { title() }
+            }
           }
           Row(verticalAlignment = Alignment.CenterVertically) { actions() }
         }
@@ -272,16 +299,13 @@ public fun TopBar(
           Modifier.fillMaxWidth().height(extraHeight).padding(horizontal = DittoTheme.spacing.lg),
           contentAlignment = Alignment.BottomStart,
         ) {
-          Text(
-            title,
-            style = style.largeTitleStyle,
-            color = style.titleColor,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            modifier = Modifier
+          Box(
+            Modifier
               .padding(bottom = DittoTheme.spacing.sm)
               .graphicsLayer { alpha = (1f - fraction * 2f).coerceIn(0f, 1f) },
-          )
+          ) {
+            ProvideTextStyle(style.largeTitleStyle) { largeTitle() }
+          }
         }
       }
       if (style.hairlineWhenScrolled && scrolled) HorizontalDivider()
