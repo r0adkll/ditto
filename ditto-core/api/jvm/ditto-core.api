@@ -123,6 +123,21 @@ public final class com/r0adkll/ditto/interaction/PressScaleKt {
 	public static synthetic fun pressScale$default (Landroidx/compose/ui/Modifier;Landroidx/compose/foundation/interaction/InteractionSource;ZILjava/lang/Object;)Landroidx/compose/ui/Modifier;
 }
 
+public final class com/r0adkll/ditto/interaction/RippleIndication : androidx/compose/foundation/IndicationNodeFactory {
+	public static final field $stable I
+	public static final field Companion Lcom/r0adkll/ditto/interaction/RippleIndication$Companion;
+	public synthetic fun <init> (ZFJLandroidx/compose/material/ripple/RippleAlpha;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (ZFJLandroidx/compose/material/ripple/RippleAlpha;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun create (Landroidx/compose/foundation/interaction/InteractionSource;)Landroidx/compose/ui/node/DelegatableNode;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun rememberUpdatedInstance (Landroidx/compose/foundation/interaction/InteractionSource;Landroidx/compose/runtime/Composer;I)Landroidx/compose/foundation/IndicationInstance;
+}
+
+public final class com/r0adkll/ditto/interaction/RippleIndication$Companion {
+	public final fun getDefaultAlpha ()Landroidx/compose/material/ripple/RippleAlpha;
+}
+
 public final class com/r0adkll/ditto/interaction/StateLayerIndication : androidx/compose/foundation/IndicationNodeFactory {
 	public static final field $stable I
 	public synthetic fun <init> (FFFJILkotlin/jvm/internal/DefaultConstructorMarker;)V
@@ -344,7 +359,7 @@ public final class com/r0adkll/ditto/tokens/DittoElevation$Companion {
 public final class com/r0adkll/ditto/tokens/DittoMotion {
 	public static final field $stable I
 	public static final field Companion Lcom/r0adkll/ditto/tokens/DittoMotion$Companion;
-	public fun <init> (IIILandroidx/compose/animation/core/Easing;Landroidx/compose/animation/core/Easing;Landroidx/compose/animation/core/Easing;Landroidx/compose/animation/core/Easing;Landroidx/compose/animation/core/SpringSpec;F)V
+	public fun <init> (IIILandroidx/compose/animation/core/Easing;Landroidx/compose/animation/core/Easing;Landroidx/compose/animation/core/Easing;Landroidx/compose/animation/core/Easing;FFF)V
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getDurationLong ()I
 	public final fun getDurationMedium ()I
@@ -355,7 +370,10 @@ public final class com/r0adkll/ditto/tokens/DittoMotion {
 	public final fun getEasingStandard ()Landroidx/compose/animation/core/Easing;
 	public final fun getPressScale ()F
 	public final fun getSpring ()Landroidx/compose/animation/core/SpringSpec;
+	public final fun getSpringDampingRatio ()F
+	public final fun getSpringStiffness ()F
 	public fun hashCode ()I
+	public final fun springFor ()Landroidx/compose/animation/core/SpringSpec;
 	public fun toString ()Ljava/lang/String;
 }
 

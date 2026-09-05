@@ -71,6 +71,34 @@ public final class com/r0adkll/ditto/components/ButtonVariant : java/lang/Enum {
 	public static fun values ()[Lcom/r0adkll/ditto/components/ButtonVariant;
 }
 
+public final class com/r0adkll/ditto/components/CheckboxDefaults {
+	public static final field $stable I
+	public static final field INSTANCE Lcom/r0adkll/ditto/components/CheckboxDefaults;
+	public final fun style (Lcom/r0adkll/ditto/Idiom;Landroidx/compose/runtime/Composer;II)Lcom/r0adkll/ditto/components/CheckboxStyle;
+}
+
+public final class com/r0adkll/ditto/components/CheckboxKt {
+	public static final fun Checkbox (ZLkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;ZLcom/r0adkll/ditto/components/CheckboxStyle;Landroidx/compose/foundation/interaction/MutableInteractionSource;Landroidx/compose/runtime/Composer;II)V
+	public static final fun TriStateCheckbox (Landroidx/compose/ui/state/ToggleableState;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;ZLcom/r0adkll/ditto/components/CheckboxStyle;Landroidx/compose/foundation/interaction/MutableInteractionSource;Landroidx/compose/runtime/Composer;II)V
+	public static final fun getLocalCheckboxStyle ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+}
+
+public final class com/r0adkll/ditto/components/CheckboxStyle {
+	public static final field $stable I
+	public synthetic fun <init> (FLandroidx/compose/ui/graphics/Shape;FJJJLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy-Wl9w3Jo (FLandroidx/compose/ui/graphics/Shape;FJJJ)Lcom/r0adkll/ditto/components/CheckboxStyle;
+	public static synthetic fun copy-Wl9w3Jo$default (Lcom/r0adkll/ditto/components/CheckboxStyle;FLandroidx/compose/ui/graphics/Shape;FJJJILjava/lang/Object;)Lcom/r0adkll/ditto/components/CheckboxStyle;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBorderWidth-D9Ej5fM ()F
+	public final fun getCheckedColor-0d7_KjU ()J
+	public final fun getCheckmarkColor-0d7_KjU ()J
+	public final fun getShape ()Landroidx/compose/ui/graphics/Shape;
+	public final fun getSize-D9Ej5fM ()F
+	public final fun getUncheckedBorderColor-0d7_KjU ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class com/r0adkll/ditto/components/IconButtonDefaults {
 	public static final field $stable I
 	public static final field INSTANCE Lcom/r0adkll/ditto/components/IconButtonDefaults;
@@ -132,5 +160,66 @@ public final class com/r0adkll/ditto/components/IconButtonVariant : java/lang/En
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lcom/r0adkll/ditto/components/IconButtonVariant;
 	public static fun values ()[Lcom/r0adkll/ditto/components/IconButtonVariant;
+}
+
+public final class com/r0adkll/ditto/components/RadioButtonDefaults {
+	public static final field $stable I
+	public static final field INSTANCE Lcom/r0adkll/ditto/components/RadioButtonDefaults;
+	public final fun style (Lcom/r0adkll/ditto/Idiom;Landroidx/compose/runtime/Composer;II)Lcom/r0adkll/ditto/components/RadioButtonStyle;
+}
+
+public final class com/r0adkll/ditto/components/RadioButtonKt {
+	public static final fun RadioButton (ZLkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;ZLcom/r0adkll/ditto/components/RadioButtonStyle;Landroidx/compose/foundation/interaction/MutableInteractionSource;Landroidx/compose/runtime/Composer;II)V
+	public static final fun getLocalRadioButtonStyle ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+}
+
+public final class com/r0adkll/ditto/components/RadioButtonStyle {
+	public static final field $stable I
+	public synthetic fun <init> (FFFJJZJLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy-eaCdxXM (FFFJJZJ)Lcom/r0adkll/ditto/components/RadioButtonStyle;
+	public static synthetic fun copy-eaCdxXM$default (Lcom/r0adkll/ditto/components/RadioButtonStyle;FFFJJZJILjava/lang/Object;)Lcom/r0adkll/ditto/components/RadioButtonStyle;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCheckmarkColor-0d7_KjU ()J
+	public final fun getDotSize-D9Ej5fM ()F
+	public final fun getFillWhenSelected ()Z
+	public final fun getRingWidth-D9Ej5fM ()F
+	public final fun getSelectedColor-0d7_KjU ()J
+	public final fun getSize-D9Ej5fM ()F
+	public final fun getUnselectedColor-0d7_KjU ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/r0adkll/ditto/components/SwitchDefaults {
+	public static final field $stable I
+	public static final field INSTANCE Lcom/r0adkll/ditto/components/SwitchDefaults;
+	public final fun style (Lcom/r0adkll/ditto/Idiom;Landroidx/compose/runtime/Composer;II)Lcom/r0adkll/ditto/components/SwitchStyle;
+}
+
+public final class com/r0adkll/ditto/components/SwitchKt {
+	public static final fun Switch (ZLkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;ZLcom/r0adkll/ditto/components/SwitchStyle;Landroidx/compose/foundation/interaction/MutableInteractionSource;Landroidx/compose/runtime/Composer;II)V
+	public static final fun getLocalSwitchStyle ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+}
+
+public final class com/r0adkll/ditto/components/SwitchStyle {
+	public static final field $stable I
+	public synthetic fun <init> (FFFFLandroidx/compose/ui/graphics/Shape;JJJJLandroidx/compose/foundation/BorderStroke;FZLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy-kv6FmuQ (FFFFLandroidx/compose/ui/graphics/Shape;JJJJLandroidx/compose/foundation/BorderStroke;FZ)Lcom/r0adkll/ditto/components/SwitchStyle;
+	public static synthetic fun copy-kv6FmuQ$default (Lcom/r0adkll/ditto/components/SwitchStyle;FFFFLandroidx/compose/ui/graphics/Shape;JJJJLandroidx/compose/foundation/BorderStroke;FZILjava/lang/Object;)Lcom/r0adkll/ditto/components/SwitchStyle;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCheckedThumbColor-0d7_KjU ()J
+	public final fun getCheckedTrackColor-0d7_KjU ()J
+	public final fun getShowCheckIcon ()Z
+	public final fun getThumbShadow-D9Ej5fM ()F
+	public final fun getThumbSizeChecked-D9Ej5fM ()F
+	public final fun getThumbSizeUnchecked-D9Ej5fM ()F
+	public final fun getTrackHeight-D9Ej5fM ()F
+	public final fun getTrackShape ()Landroidx/compose/ui/graphics/Shape;
+	public final fun getTrackWidth-D9Ej5fM ()F
+	public final fun getUncheckedThumbColor-0d7_KjU ()J
+	public final fun getUncheckedTrackBorder ()Landroidx/compose/foundation/BorderStroke;
+	public final fun getUncheckedTrackColor-0d7_KjU ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 

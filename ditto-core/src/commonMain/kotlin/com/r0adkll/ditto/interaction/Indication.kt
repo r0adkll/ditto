@@ -25,13 +25,13 @@ import com.r0adkll.ditto.foundation.LocalContentColor
 import kotlinx.coroutines.launch
 
 /**
- * Press feedback is idiom-specific (ADR-008): Android and Desktop draw a state layer over the
- * container (Android also scales, see [pressScale]); Apple fades the content.
+ * Press feedback is idiom-specific (ADR-008): Android ripples (and scales, see [pressScale]),
+ * Desktop draws a flat state layer, Apple fades the content.
  *
  * Hover feedback is drawn whenever a hover interaction arrives, which only happens with a pointer.
  */
 public fun dittoIndication(idiom: Idiom): IndicationNodeFactory = when (idiom) {
-  Idiom.Android -> StateLayerIndication(pressedAlpha = 0.12f, hoveredAlpha = 0.08f, focusedAlpha = 0f)
+  Idiom.Android -> RippleIndication()
   Idiom.Apple -> OpacityIndication(pressedOpacity = 0.55f, hoveredAlpha = 0.06f)
   Idiom.Desktop -> StateLayerIndication(pressedAlpha = 0.1f, hoveredAlpha = 0.06f, focusedAlpha = 0f)
 }

@@ -26,12 +26,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlin.math.roundToInt
 import com.r0adkll.ditto.Idiom
 import com.r0adkll.ditto.components.Button
 import com.r0adkll.ditto.components.ButtonVariant
+import com.r0adkll.ditto.components.Checkbox
+import com.r0adkll.ditto.components.RadioButton
+import com.r0adkll.ditto.components.Switch
+import com.r0adkll.ditto.components.TriStateCheckbox
 import com.r0adkll.ditto.components.FilledIconButton
 import com.r0adkll.ditto.components.IconButton
 import com.r0adkll.ditto.components.OutlinedButton
@@ -84,6 +89,7 @@ fun CatalogApp() {
         )
         Section("Buttons") { ButtonsDemo() }
         Section("Icon buttons") { IconButtonsDemo() }
+        Section("Selection controls") { SelectionControlsDemo() }
         Section("Colors") { ColorsDemo() }
         Section("Typography") { TypographyDemo() }
         Section("Shapes") { ShapesDemo() }
@@ -194,6 +200,42 @@ private fun IconButtonsDemo() {
     OutlinedIconButton(onClick = {}) { Icon(DittoIcons.close, "Close") }
     IconButton(onClick = {}, enabled = false) { Icon(DittoIcons.back, "Back") }
     FilledIconButton(onClick = {}, enabled = false) { Icon(DittoIcons.forward, "Forward") }
+  }
+}
+
+@Composable
+private fun SelectionControlsDemo() {
+  var switchOn by remember { mutableStateOf(true) }
+  var switchOff by remember { mutableStateOf(false) }
+  var checkA by remember { mutableStateOf(true) }
+  var checkB by remember { mutableStateOf(false) }
+  var tri by remember { mutableStateOf(ToggleableState.Indeterminate) }
+  var radio by remember { mutableStateOf(0) }
+  Column(verticalArrangement = Arrangement.spacedBy(DittoTheme.spacing.md)) {
+    Row(horizontalArrangement = Arrangement.spacedBy(DittoTheme.spacing.sm), verticalAlignment = Alignment.CenterVertically) {
+      Text("Switch", style = DittoTheme.typography.label, modifier = Modifier.width(88.dp))
+      Switch(checked = switchOn, onCheckedChange = { switchOn = it })
+      Switch(checked = switchOff, onCheckedChange = { switchOff = it })
+      Switch(checked = true, onCheckedChange = null, enabled = false)
+      Switch(checked = false, onCheckedChange = null, enabled = false)
+    }
+    Row(horizontalArrangement = Arrangement.spacedBy(DittoTheme.spacing.sm), verticalAlignment = Alignment.CenterVertically) {
+      Text("Checkbox", style = DittoTheme.typography.label, modifier = Modifier.width(88.dp))
+      Checkbox(checked = checkA, onCheckedChange = { checkA = it })
+      Checkbox(checked = checkB, onCheckedChange = { checkB = it })
+      TriStateCheckbox(
+        state = tri,
+        onClick = { tri = when (tri) { ToggleableState.On -> ToggleableState.Off; ToggleableState.Off -> ToggleableState.Indeterminate; ToggleableState.Indeterminate -> ToggleableState.On } },
+      )
+      Checkbox(checked = true, onCheckedChange = null, enabled = false)
+      Checkbox(checked = false, onCheckedChange = null, enabled = false)
+    }
+    Row(horizontalArrangement = Arrangement.spacedBy(DittoTheme.spacing.sm), verticalAlignment = Alignment.CenterVertically) {
+      Text("Radio", style = DittoTheme.typography.label, modifier = Modifier.width(88.dp))
+      (0..2).forEach { i -> RadioButton(selected = radio == i, onClick = { radio = i }) }
+      RadioButton(selected = true, onClick = null, enabled = false)
+      RadioButton(selected = false, onClick = null, enabled = false)
+    }
   }
 }
 

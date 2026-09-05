@@ -4,6 +4,7 @@ import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.remember
@@ -92,6 +93,12 @@ public fun DittoTheme(
   val resolvedTypography = remember(typography, transform) { transform?.invoke(typography) ?: typography }
   val resolvedElevation = elevation ?: remember(idiom, dark) { DittoElevation.forIdiom(idiom, dark) }
   val indication = remember(idiom) { dittoIndication(idiom) }
+  LaunchedEffect(colors) {
+    // ADR-022: on-colors are computed, but the accent itself is the app's choice. Say so once
+    // per scheme instead of silently shipping unreadable text.
+    val failures = colors.validateContrast()
+    if (failures.isNotEmpty()) println("Ditto: theme colors fail WCAG 2 contrast — ${failures.joinToString()}")
+  }
   CompositionLocalProvider(
     LocalIdiom provides idiom,
     LocalDittoColors provides colors,

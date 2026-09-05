@@ -21,20 +21,28 @@ public class DittoMotion(
   public val easingEmphasized: Easing,
   public val easingDecelerate: Easing,
   public val easingAccelerate: Easing,
-  /** Spring used for press / state transitions. */
-  public val spring: SpringSpec<Float>,
+  /** Damping ratio of the spring used for press / state transitions. */
+  public val springDampingRatio: Float,
+  /** Stiffness of the spring used for press / state transitions. */
+  public val springStiffness: Float,
   /** Scale applied to pressable containers while pressed (1f disables the effect). */
   public val pressScale: Float,
 ) {
+  /** The idiom's spring, for `Float` animations. */
+  public val spring: SpringSpec<Float> get() = springFor()
+
+  /** The idiom's spring, typed for any animatable value (`Dp`, `Color`, `Offset`, ...). */
+  public fun <T> springFor(): SpringSpec<T> = spring(dampingRatio = springDampingRatio, stiffness = springStiffness)
+
   override fun equals(other: Any?): Boolean = other is DittoMotion &&
     durationShort == other.durationShort && durationMedium == other.durationMedium && durationLong == other.durationLong &&
     easingStandard == other.easingStandard && easingEmphasized == other.easingEmphasized &&
     easingDecelerate == other.easingDecelerate && easingAccelerate == other.easingAccelerate &&
-    spring == other.spring && pressScale == other.pressScale
+    springDampingRatio == other.springDampingRatio && springStiffness == other.springStiffness && pressScale == other.pressScale
 
   override fun hashCode(): Int = listOf(
     durationShort, durationMedium, durationLong, easingStandard, easingEmphasized, easingDecelerate,
-    easingAccelerate, spring, pressScale,
+    easingAccelerate, springDampingRatio, springStiffness, pressScale,
   ).hashCode()
 
   override fun toString(): String = "DittoMotion(durationMedium=$durationMedium)"
@@ -56,7 +64,8 @@ public class DittoMotion(
         easingEmphasized = Emphasized,
         easingDecelerate = Decelerate,
         easingAccelerate = Accelerate,
-        spring = spring(dampingRatio = 0.7f, stiffness = Spring.StiffnessMedium),
+        springDampingRatio = 0.7f,
+        springStiffness = Spring.StiffnessMedium,
         pressScale = 0.96f,
       )
       Idiom.Apple -> DittoMotion(
@@ -67,7 +76,8 @@ public class DittoMotion(
         easingEmphasized = AppleStandard,
         easingDecelerate = Decelerate,
         easingAccelerate = Accelerate,
-        spring = spring(dampingRatio = Spring.DampingRatioNoBouncy, stiffness = Spring.StiffnessMediumLow),
+        springDampingRatio = Spring.DampingRatioNoBouncy,
+        springStiffness = Spring.StiffnessMediumLow,
         pressScale = 1f,
       )
       Idiom.Desktop -> DittoMotion(
@@ -78,7 +88,8 @@ public class DittoMotion(
         easingEmphasized = WebStandard,
         easingDecelerate = Decelerate,
         easingAccelerate = Accelerate,
-        spring = spring(dampingRatio = Spring.DampingRatioNoBouncy, stiffness = Spring.StiffnessHigh),
+        springDampingRatio = Spring.DampingRatioNoBouncy,
+        springStiffness = Spring.StiffnessHigh,
         pressScale = 1f,
       )
     }
