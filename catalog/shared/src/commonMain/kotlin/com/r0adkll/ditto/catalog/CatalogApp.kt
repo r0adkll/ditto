@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,6 +34,11 @@ import kotlin.math.roundToInt
 import com.r0adkll.ditto.Idiom
 import com.r0adkll.ditto.components.Button
 import com.r0adkll.ditto.components.ButtonVariant
+import com.r0adkll.ditto.components.Card
+import com.r0adkll.ditto.components.CardVariant
+import com.r0adkll.ditto.components.HorizontalDivider
+import com.r0adkll.ditto.components.ListItem
+import com.r0adkll.ditto.components.TextField
 import com.r0adkll.ditto.components.Checkbox
 import com.r0adkll.ditto.components.RadioButton
 import com.r0adkll.ditto.components.Switch
@@ -90,6 +96,8 @@ fun CatalogApp() {
         Section("Buttons") { ButtonsDemo() }
         Section("Icon buttons") { IconButtonsDemo() }
         Section("Selection controls") { SelectionControlsDemo() }
+        Section("Text fields") { TextFieldsDemo() }
+        Section("Lists and cards") { ListsDemo() }
         Section("Colors") { ColorsDemo() }
         Section("Typography") { TypographyDemo() }
         Section("Shapes") { ShapesDemo() }
@@ -235,6 +243,57 @@ private fun SelectionControlsDemo() {
       (0..2).forEach { i -> RadioButton(selected = radio == i, onClick = { radio = i }) }
       RadioButton(selected = true, onClick = null, enabled = false)
       RadioButton(selected = false, onClick = null, enabled = false)
+    }
+  }
+}
+
+@Composable
+private fun TextFieldsDemo() {
+  Column(verticalArrangement = Arrangement.spacedBy(DittoTheme.spacing.md), modifier = Modifier.width(360.dp)) {
+    TextField(state = rememberTextFieldState(), label = "Name", placeholder = "Ada Lovelace", modifier = Modifier.fillMaxWidth())
+    TextField(
+      state = rememberTextFieldState(),
+      placeholder = "Search",
+      leadingIcon = { Icon(DittoIcons.search, null) },
+      modifier = Modifier.fillMaxWidth(),
+    )
+    val email = rememberTextFieldState("not-an-email")
+    TextField(
+      state = email,
+      label = "Email",
+      isError = !email.text.contains('@'),
+      supportingText = if (email.text.contains('@')) "Looks good" else "Enter a valid address",
+      modifier = Modifier.fillMaxWidth(),
+    )
+    TextField(state = rememberTextFieldState("Read only"), enabled = false, modifier = Modifier.fillMaxWidth())
+  }
+}
+
+@Composable
+private fun ListsDemo() {
+  var wifi by remember { mutableStateOf(true) }
+  Row(horizontalArrangement = Arrangement.spacedBy(DittoTheme.spacing.lg)) {
+    Card(variant = CardVariant.Outlined, modifier = Modifier.width(340.dp)) {
+      ListItem(headline = "Wi-Fi", supporting = if (wifi) "Connected" else "Off", leading = { Icon(DittoIcons.check, null) },
+        trailing = { Switch(checked = wifi, onCheckedChange = { wifi = it }) })
+      HorizontalDivider(startIndent = DittoTheme.spacing.lg)
+      ListItem(headline = "Notifications", supporting = "Sounds, badges, banners", onClick = {})
+      HorizontalDivider(startIndent = DittoTheme.spacing.lg)
+      ListItem(headline = "About", onClick = {})
+    }
+    Column(verticalArrangement = Arrangement.spacedBy(DittoTheme.spacing.md)) {
+      CardVariant.entries.forEach { variant ->
+        Card(variant = variant, onClick = {}, modifier = Modifier.width(200.dp)) {
+          Column(Modifier.padding(DittoTheme.spacing.lg)) {
+            Text(variant.name, style = DittoTheme.typography.subheading)
+            Text("Tap me", style = DittoTheme.typography.bodySmall, color = DittoTheme.colors.onSurfaceVariant)
+          }
+        }
+      }
+      Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(DittoTheme.spacing.sm)) {
+        Text("Tooltip on hover / long-press:", style = DittoTheme.typography.bodySmall)
+        IconButton(icon = DittoIcons.more, contentDescription = "More options", onClick = {})
+      }
     }
   }
 }
