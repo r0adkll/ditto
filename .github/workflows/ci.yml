@@ -27,15 +27,15 @@ jobs:
       - name: Unit + screenshot tests
         run: ./gradlew jvmTest apiCheck --continue
       - name: Android + Web
+        if: success() || failure()
         run: ./gradlew :catalog:android:assembleDebug :ditto-core:compileAndroidMain :ditto-components:compileAndroidMain :catalog:web:wasmJsBrowserDistribution
-      - name: Upload screenshot diffs
-        if: failure()
+      # Recorded goldens (first run on a new OS), actuals and diffs. Download to commit Linux goldens.
+      - name: Upload screenshots
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: screenshot-diffs
-          path: |
-            **/src/jvmTest/screenshots/**/*-actual.png
-            **/src/jvmTest/screenshots/**/*-diff.png
+          name: screenshots
+          path: '**/src/jvmTest/screenshots/**'
           if-no-files-found: ignore
       - name: Upload web catalog
         uses: actions/upload-artifact@v4
