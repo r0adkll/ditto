@@ -34,7 +34,13 @@ import kotlin.math.roundToInt
 import com.r0adkll.ditto.Idiom
 import com.r0adkll.ditto.components.Button
 import com.r0adkll.ditto.components.ButtonVariant
+import com.r0adkll.ditto.components.AlertDialog
 import com.r0adkll.ditto.components.Card
+import com.r0adkll.ditto.components.CircularProgressIndicator
+import com.r0adkll.ditto.components.DropdownMenu
+import com.r0adkll.ditto.components.LinearProgressIndicator
+import com.r0adkll.ditto.components.MenuDivider
+import com.r0adkll.ditto.components.MenuItem
 import com.r0adkll.ditto.components.CardVariant
 import com.r0adkll.ditto.components.HorizontalDivider
 import com.r0adkll.ditto.components.ListItem
@@ -98,6 +104,7 @@ fun CatalogApp() {
         Section("Selection controls") { SelectionControlsDemo() }
         Section("Text fields") { TextFieldsDemo() }
         Section("Lists and cards") { ListsDemo() }
+        Section("Menus, dialogs, progress") { OverlaysDemo() }
         Section("Colors") { ColorsDemo() }
         Section("Typography") { TypographyDemo() }
         Section("Shapes") { ShapesDemo() }
@@ -294,6 +301,46 @@ private fun ListsDemo() {
         Text("Tooltip on hover / long-press:", style = DittoTheme.typography.bodySmall)
         IconButton(icon = DittoIcons.more, contentDescription = "More options", onClick = {})
       }
+    }
+  }
+}
+
+@Composable
+private fun OverlaysDemo() {
+  var menuOpen by remember { mutableStateOf(false) }
+  var dialogOpen by remember { mutableStateOf(false) }
+  var progress by remember { mutableStateOf(0.4f) }
+  Column(verticalArrangement = Arrangement.spacedBy(DittoTheme.spacing.lg)) {
+    Row(horizontalArrangement = Arrangement.spacedBy(DittoTheme.spacing.md), verticalAlignment = Alignment.CenterVertically) {
+      Box {
+        Button(text = "Open menu", onClick = { menuOpen = true }, variant = ButtonVariant.Tonal, leadingIcon = DittoIcons.chevronDown)
+        DropdownMenu(expanded = menuOpen, onDismissRequest = { menuOpen = false }) {
+          MenuItem("Share", onClick = { menuOpen = false }, leadingIcon = { Icon(DittoIcons.forward, null) })
+          MenuItem("Rename", onClick = { menuOpen = false }, trailingIcon = { Text("⌘R") })
+          MenuDivider()
+          MenuItem("Disabled", onClick = {}, enabled = false)
+          MenuItem("Delete", onClick = { menuOpen = false }, destructive = true, leadingIcon = { Icon(DittoIcons.close, null) })
+        }
+      }
+      Button(text = "Show dialog", onClick = { dialogOpen = true }, variant = ButtonVariant.Outlined)
+      if (dialogOpen) {
+        AlertDialog(
+          onDismissRequest = { dialogOpen = false },
+          title = "Delete recording?",
+          text = "This removes the file from every device. You can't undo this.",
+          confirmButton = { Button(text = "Delete", onClick = { dialogOpen = false }) },
+          dismissButton = { Button(text = "Cancel", onClick = { dialogOpen = false }, variant = ButtonVariant.Text) },
+        )
+      }
+    }
+    Row(horizontalArrangement = Arrangement.spacedBy(DittoTheme.spacing.lg), verticalAlignment = Alignment.CenterVertically) {
+      CircularProgressIndicator()
+      CircularProgressIndicator(progress = { progress })
+      Column(Modifier.width(240.dp), verticalArrangement = Arrangement.spacedBy(DittoTheme.spacing.sm)) {
+        LinearProgressIndicator(progress = { progress })
+        LinearProgressIndicator()
+      }
+      Button(text = "+10%", onClick = { progress = (progress + 0.1f).let { if (it > 1f) 0f else it } }, variant = ButtonVariant.Text)
     }
   }
 }
