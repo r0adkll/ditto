@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  GRADLE_OPTS: -Dorg.gradle.jvmargs=-Xmx6g
+
+jobs:
+  jvm:
+    name: JVM, Android, Web (Linux)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: zulu
+          java-version: 21
+      - uses: gradle/actions/setup-gradle@v4
+      # Screenshot goldens are per-OS; Linux is the source of truth (ADR-016).
+      - name: Unit + screenshot tests
+        run: ./gradlew jvmTest apiCheck --continue
+      - name: Android + Web
+        run: ./gradlew :catalog:android:assembleDebug :ditto-core:compileAndroidMain :ditto-components:compileAndroidMain :catalog:web:wasmJsBrowserDistribution
+      - name: Upload screenshot diffs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshot-diffs
+          path: |
+            **/src/jvmTest/screenshots/**/*-actual.png
+            **/src/jvmTest/screenshots/**/*-diff.png
+          if-no-files-found: ignore
+      - name: Upload web catalog
+        uses: actions/upload-artifact@v4
+        with:
+          name: catalog-web
+          path: catalog/web/build/dist/wasmJs/productionExecutable
+
+  ios:
+    name: iOS (macOS)
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: zulu
+          java-version: 21
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Compile iOS targets
+        run: ./gradlew :ditto-core:compileKotlinIosSimulatorArm64 :ditto-components:compileKotlinIosSimulatorArm64 :catalog:shared:linkDebugFrameworkIosSimulatorArm64

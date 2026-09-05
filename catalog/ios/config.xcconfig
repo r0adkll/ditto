@@ -1,0 +1,4 @@
+APP_NAME = Ditto Catalog
+PRODUCT_BUNDLE_IDENTIFIER = com.r0adkll.ditto.catalog
+VERSION_NAME = 0.1.0
+VERSION_CODE = 1

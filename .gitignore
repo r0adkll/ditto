@@ -1,0 +1,28 @@
+# Gradle
+.gradle/
+build/
+**/build/
+.kotlin/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+local.properties
+
+# macOS
+.DS_Store
+
+# Xcode
+catalog/ios/iosApp.xcodeproj/xcuserdata/
+catalog/ios/iosApp.xcodeproj/project.xcworkspace/xcuserdata/
+**/xcuserdata/
+DerivedData/
+
+# Kotlin/JS & wasm
+kotlin-js-store/
+node_modules/
+
+# Screenshot test output
+**/screenshots/**/*-actual.png
+**/screenshots/**/*-diff.png

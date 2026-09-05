@@ -1,0 +1,490 @@
+public final class com/r0adkll/ditto/Idiom : java/lang/Enum {
+	public static final field Android Lcom/r0adkll/ditto/Idiom;
+	public static final field Apple Lcom/r0adkll/ditto/Idiom;
+	public static final field Desktop Lcom/r0adkll/ditto/Idiom;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/r0adkll/ditto/Idiom;
+	public static fun values ()[Lcom/r0adkll/ditto/Idiom;
+}
+
+public final class com/r0adkll/ditto/IdiomKt {
+	public static final fun getLocalIdiom ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+}
+
+public final class com/r0adkll/ditto/Idiom_jvmKt {
+	public static final fun platformIdiom ()Lcom/r0adkll/ditto/Idiom;
+}
+
+public final class com/r0adkll/ditto/foundation/ContentColorKt {
+	public static final fun ProvideTextStyle (Landroidx/compose/ui/text/TextStyle;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;I)V
+	public static final fun contentColorFor-ek8zF_U (JLandroidx/compose/runtime/Composer;I)J
+	public static final fun getLocalContentColor ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+	public static final fun getLocalTextStyle ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+}
+
+public final class com/r0adkll/ditto/foundation/IconKt {
+	public static final fun Icon-q9LK7_k (Landroidx/compose/ui/graphics/painter/Painter;Ljava/lang/String;Landroidx/compose/ui/Modifier;JFLandroidx/compose/runtime/Composer;II)V
+	public static final fun Icon-q9LK7_k (Landroidx/compose/ui/graphics/vector/ImageVector;Ljava/lang/String;Landroidx/compose/ui/Modifier;JFLandroidx/compose/runtime/Composer;II)V
+}
+
+public final class com/r0adkll/ditto/foundation/SurfaceKt {
+	public static final fun Surface-pAZo6Ak (Landroidx/compose/ui/Modifier;Landroidx/compose/ui/graphics/Shape;JJLcom/r0adkll/ditto/tokens/ElevationLevel;Landroidx/compose/foundation/BorderStroke;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+	public static final fun surfaceAtElevation-bw27NRU (Lcom/r0adkll/ditto/tokens/DittoColors;JI)J
+}
+
+public final class com/r0adkll/ditto/foundation/TextKt {
+	public static final fun Text--W292Q4 (Landroidx/compose/ui/text/AnnotatedString;Landroidx/compose/ui/Modifier;JLandroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/style/TextAlign;IZIILjava/util/Map;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;III)V
+	public static final fun Text-ryoPdCg (Ljava/lang/String;Landroidx/compose/ui/Modifier;JLandroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/style/TextAlign;IZIILkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class com/r0adkll/ditto/icons/DittoIcons {
+	public static final field $stable I
+	public static final field INSTANCE Lcom/r0adkll/ditto/icons/DittoIcons;
+	public final fun back (Lcom/r0adkll/ditto/Idiom;)Landroidx/compose/ui/graphics/vector/ImageVector;
+	public final fun check (Lcom/r0adkll/ditto/Idiom;)Landroidx/compose/ui/graphics/vector/ImageVector;
+	public final fun chevronDown (Lcom/r0adkll/ditto/Idiom;)Landroidx/compose/ui/graphics/vector/ImageVector;
+	public final fun chevronRight (Lcom/r0adkll/ditto/Idiom;)Landroidx/compose/ui/graphics/vector/ImageVector;
+	public final fun clear (Lcom/r0adkll/ditto/Idiom;)Landroidx/compose/ui/graphics/vector/ImageVector;
+	public final fun close (Lcom/r0adkll/ditto/Idiom;)Landroidx/compose/ui/graphics/vector/ImageVector;
+	public final fun dropdown (Lcom/r0adkll/ditto/Idiom;)Landroidx/compose/ui/graphics/vector/ImageVector;
+	public final fun forward (Lcom/r0adkll/ditto/Idiom;)Landroidx/compose/ui/graphics/vector/ImageVector;
+	public final fun getBack (Landroidx/compose/runtime/Composer;I)Landroidx/compose/ui/graphics/vector/ImageVector;
+	public final fun getCheck (Landroidx/compose/runtime/Composer;I)Landroidx/compose/ui/graphics/vector/ImageVector;
+	public final fun getChevronDown (Landroidx/compose/runtime/Composer;I)Landroidx/compose/ui/graphics/vector/ImageVector;
+	public final fun getChevronRight (Landroidx/compose/runtime/Composer;I)Landroidx/compose/ui/graphics/vector/ImageVector;
+	public final fun getClear (Landroidx/compose/runtime/Composer;I)Landroidx/compose/ui/graphics/vector/ImageVector;
+	public final fun getClose (Landroidx/compose/runtime/Composer;I)Landroidx/compose/ui/graphics/vector/ImageVector;
+	public final fun getDropdown (Landroidx/compose/runtime/Composer;I)Landroidx/compose/ui/graphics/vector/ImageVector;
+	public final fun getForward (Landroidx/compose/runtime/Composer;I)Landroidx/compose/ui/graphics/vector/ImageVector;
+	public final fun getIndeterminate (Landroidx/compose/runtime/Composer;I)Landroidx/compose/ui/graphics/vector/ImageVector;
+	public final fun getMore (Landroidx/compose/runtime/Composer;I)Landroidx/compose/ui/graphics/vector/ImageVector;
+	public final fun getSearch (Landroidx/compose/runtime/Composer;I)Landroidx/compose/ui/graphics/vector/ImageVector;
+	public final fun getVisibility (Landroidx/compose/runtime/Composer;I)Landroidx/compose/ui/graphics/vector/ImageVector;
+	public final fun getVisibilityOff (Landroidx/compose/runtime/Composer;I)Landroidx/compose/ui/graphics/vector/ImageVector;
+	public final fun indeterminate (Lcom/r0adkll/ditto/Idiom;)Landroidx/compose/ui/graphics/vector/ImageVector;
+	public final fun more (Lcom/r0adkll/ditto/Idiom;)Landroidx/compose/ui/graphics/vector/ImageVector;
+	public final fun search (Lcom/r0adkll/ditto/Idiom;)Landroidx/compose/ui/graphics/vector/ImageVector;
+	public final fun visibility (Lcom/r0adkll/ditto/Idiom;)Landroidx/compose/ui/graphics/vector/ImageVector;
+	public final fun visibilityOff (Lcom/r0adkll/ditto/Idiom;)Landroidx/compose/ui/graphics/vector/ImageVector;
+}
+
+public final class com/r0adkll/ditto/input/InputCapabilities {
+	public static final field $stable I
+	public static final field Companion Lcom/r0adkll/ditto/input/InputCapabilities$Companion;
+	public fun <init> (ZZ)V
+	public final fun component1 ()Z
+	public final fun component2 ()Z
+	public final fun copy (ZZ)Lcom/r0adkll/ditto/input/InputCapabilities;
+	public static synthetic fun copy$default (Lcom/r0adkll/ditto/input/InputCapabilities;ZZILjava/lang/Object;)Lcom/r0adkll/ditto/input/InputCapabilities;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getKeyboard ()Z
+	public final fun getPointer ()Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/r0adkll/ditto/input/InputCapabilities$Companion {
+	public final fun getPointerAndKeyboard ()Lcom/r0adkll/ditto/input/InputCapabilities;
+	public final fun getTouch ()Lcom/r0adkll/ditto/input/InputCapabilities;
+}
+
+public final class com/r0adkll/ditto/input/InputCapabilitiesKt {
+	public static final fun getLocalInputCapabilities ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+}
+
+public final class com/r0adkll/ditto/input/InputCapabilities_jvmKt {
+	public static final fun platformInputCapabilities ()Lcom/r0adkll/ditto/input/InputCapabilities;
+}
+
+public final class com/r0adkll/ditto/interaction/FocusRingKt {
+	public static final fun focusRing-BndDDMc (Landroidx/compose/ui/Modifier;Landroidx/compose/foundation/interaction/InteractionSource;Landroidx/compose/ui/graphics/Shape;JFF)Landroidx/compose/ui/Modifier;
+	public static synthetic fun focusRing-BndDDMc$default (Landroidx/compose/ui/Modifier;Landroidx/compose/foundation/interaction/InteractionSource;Landroidx/compose/ui/graphics/Shape;JFFILjava/lang/Object;)Landroidx/compose/ui/Modifier;
+}
+
+public final class com/r0adkll/ditto/interaction/IndicationKt {
+	public static final fun dittoIndication (Lcom/r0adkll/ditto/Idiom;)Landroidx/compose/foundation/IndicationNodeFactory;
+}
+
+public final class com/r0adkll/ditto/interaction/MinimumInteractiveSizeKt {
+	public static final fun minimumInteractiveSize (Landroidx/compose/ui/Modifier;)Landroidx/compose/ui/Modifier;
+}
+
+public final class com/r0adkll/ditto/interaction/OpacityIndication : androidx/compose/foundation/IndicationNodeFactory {
+	public static final field $stable I
+	public fun <init> (FF)V
+	public fun create (Landroidx/compose/foundation/interaction/InteractionSource;)Landroidx/compose/ui/node/DelegatableNode;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun rememberUpdatedInstance (Landroidx/compose/foundation/interaction/InteractionSource;Landroidx/compose/runtime/Composer;I)Landroidx/compose/foundation/IndicationInstance;
+}
+
+public final class com/r0adkll/ditto/interaction/PressScaleKt {
+	public static final fun pressScale (Landroidx/compose/ui/Modifier;Landroidx/compose/foundation/interaction/InteractionSource;Z)Landroidx/compose/ui/Modifier;
+	public static synthetic fun pressScale$default (Landroidx/compose/ui/Modifier;Landroidx/compose/foundation/interaction/InteractionSource;ZILjava/lang/Object;)Landroidx/compose/ui/Modifier;
+}
+
+public final class com/r0adkll/ditto/interaction/StateLayerIndication : androidx/compose/foundation/IndicationNodeFactory {
+	public static final field $stable I
+	public synthetic fun <init> (FFFJILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (FFFJLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun create (Landroidx/compose/foundation/interaction/InteractionSource;)Landroidx/compose/ui/node/DelegatableNode;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun rememberUpdatedInstance (Landroidx/compose/foundation/interaction/InteractionSource;Landroidx/compose/runtime/Composer;I)Landroidx/compose/foundation/IndicationInstance;
+}
+
+public final class com/r0adkll/ditto/preview/DittoPreviewMatrixKt {
+	public static final fun DittoPreviewMatrix-AjpBEmI (FLjava/util/List;Ljava/util/List;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class com/r0adkll/ditto/theme/AndroidTokens {
+	public static final field $stable I
+	public static final field Companion Lcom/r0adkll/ditto/theme/AndroidTokens$Companion;
+	public fun <init> (FFF)V
+	public final fun component1 ()F
+	public final fun component2 ()F
+	public final fun component3 ()F
+	public final fun copy (FFF)Lcom/r0adkll/ditto/theme/AndroidTokens;
+	public static synthetic fun copy$default (Lcom/r0adkll/ditto/theme/AndroidTokens;FFFILjava/lang/Object;)Lcom/r0adkll/ditto/theme/AndroidTokens;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFocusedStateAlpha ()F
+	public final fun getHoveredStateAlpha ()F
+	public final fun getPressedStateAlpha ()F
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/r0adkll/ditto/theme/AndroidTokens$Companion {
+	public final fun from (Lcom/r0adkll/ditto/tokens/DittoColors;)Lcom/r0adkll/ditto/theme/AndroidTokens;
+	public final fun getCurrent (Landroidx/compose/runtime/Composer;I)Lcom/r0adkll/ditto/theme/AndroidTokens;
+}
+
+public final class com/r0adkll/ditto/theme/AppleTokens {
+	public static final field $stable I
+	public static final field Companion Lcom/r0adkll/ditto/theme/AppleTokens$Companion;
+	public synthetic fun <init> (JJFLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-0d7_KjU ()J
+	public final fun component2-0d7_KjU ()J
+	public final fun component3 ()F
+	public final fun copy-jxsXWHM (JJF)Lcom/r0adkll/ditto/theme/AppleTokens;
+	public static synthetic fun copy-jxsXWHM$default (Lcom/r0adkll/ditto/theme/AppleTokens;JJFILjava/lang/Object;)Lcom/r0adkll/ditto/theme/AppleTokens;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getGroupedBackground-0d7_KjU ()J
+	public final fun getPressedOpacity ()F
+	public final fun getSeparator-0d7_KjU ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/r0adkll/ditto/theme/AppleTokens$Companion {
+	public final fun from (Lcom/r0adkll/ditto/tokens/DittoColors;)Lcom/r0adkll/ditto/theme/AppleTokens;
+	public final fun getCurrent (Landroidx/compose/runtime/Composer;I)Lcom/r0adkll/ditto/theme/AppleTokens;
+}
+
+public final class com/r0adkll/ditto/theme/DesktopTokens {
+	public static final field $stable I
+	public static final field Companion Lcom/r0adkll/ditto/theme/DesktopTokens$Companion;
+	public synthetic fun <init> (JJJLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-0d7_KjU ()J
+	public final fun component2-0d7_KjU ()J
+	public final fun component3-0d7_KjU ()J
+	public final fun copy-ysEtTa8 (JJJ)Lcom/r0adkll/ditto/theme/DesktopTokens;
+	public static synthetic fun copy-ysEtTa8$default (Lcom/r0adkll/ditto/theme/DesktopTokens;JJJILjava/lang/Object;)Lcom/r0adkll/ditto/theme/DesktopTokens;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFocusRing-0d7_KjU ()J
+	public final fun getHoverOverlay-0d7_KjU ()J
+	public final fun getPressedOverlay-0d7_KjU ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/r0adkll/ditto/theme/DesktopTokens$Companion {
+	public final fun from (Lcom/r0adkll/ditto/tokens/DittoColors;)Lcom/r0adkll/ditto/theme/DesktopTokens;
+	public final fun getCurrent (Landroidx/compose/runtime/Composer;I)Lcom/r0adkll/ditto/theme/DesktopTokens;
+}
+
+public final class com/r0adkll/ditto/theme/DittoDefaults {
+	public static final field $stable I
+	public static final field INSTANCE Lcom/r0adkll/ditto/theme/DittoDefaults;
+	public final fun getAccent-0d7_KjU ()J
+}
+
+public final class com/r0adkll/ditto/theme/DittoTheme {
+	public static final field $stable I
+	public static final field INSTANCE Lcom/r0adkll/ditto/theme/DittoTheme;
+	public final fun getColors (Landroidx/compose/runtime/Composer;I)Lcom/r0adkll/ditto/tokens/DittoColors;
+	public final fun getDimens (Landroidx/compose/runtime/Composer;I)Lcom/r0adkll/ditto/tokens/DittoDimens;
+	public final fun getElevation (Landroidx/compose/runtime/Composer;I)Lcom/r0adkll/ditto/tokens/DittoElevation;
+	public final fun getIdiom (Landroidx/compose/runtime/Composer;I)Lcom/r0adkll/ditto/Idiom;
+	public final fun getMotion (Landroidx/compose/runtime/Composer;I)Lcom/r0adkll/ditto/tokens/DittoMotion;
+	public final fun getShapes (Landroidx/compose/runtime/Composer;I)Lcom/r0adkll/ditto/tokens/DittoShapes;
+	public final fun getSpacing (Landroidx/compose/runtime/Composer;I)Lcom/r0adkll/ditto/tokens/DittoSpacing;
+	public final fun getTypography (Landroidx/compose/runtime/Composer;I)Lcom/r0adkll/ditto/tokens/DittoTypography;
+	public final fun isDark (Landroidx/compose/runtime/Composer;I)Z
+}
+
+public final class com/r0adkll/ditto/theme/DittoThemeKt {
+	public static final fun DittoTheme (Lcom/r0adkll/ditto/Idiom;Lcom/r0adkll/ditto/tokens/ColorMode;Lcom/r0adkll/ditto/tokens/DittoColors;Lcom/r0adkll/ditto/tokens/DittoColors;Lcom/r0adkll/ditto/tokens/DittoTypography;Lcom/r0adkll/ditto/tokens/DittoShapes;Lcom/r0adkll/ditto/tokens/DittoSpacing;Lcom/r0adkll/ditto/tokens/DittoElevation;Lcom/r0adkll/ditto/tokens/DittoMotion;Lcom/r0adkll/ditto/tokens/DittoDimens;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;III)V
+	public static final fun DittoTheme-yWKOrZg (JLcom/r0adkll/ditto/tokens/Neutrals;Lcom/r0adkll/ditto/Idiom;Lcom/r0adkll/ditto/tokens/ColorMode;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+	public static final fun getLocalDittoColors ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+	public static final fun getLocalDittoDimens ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+	public static final fun getLocalDittoElevation ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+	public static final fun getLocalDittoMotion ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+	public static final fun getLocalDittoShapes ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+	public static final fun getLocalDittoSpacing ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+	public static final fun getLocalDittoTypography ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+	public static final fun getLocalDittoTypographyTransform ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+}
+
+public final class com/r0adkll/ditto/theme/IdiomTokensKt {
+	public static final fun getLocalAndroidTokens ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+	public static final fun getLocalAppleTokens ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+	public static final fun getLocalDesktopTokens ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+}
+
+public final class com/r0adkll/ditto/tokens/ColorMode : java/lang/Enum {
+	public static final field Dark Lcom/r0adkll/ditto/tokens/ColorMode;
+	public static final field Light Lcom/r0adkll/ditto/tokens/ColorMode;
+	public static final field System Lcom/r0adkll/ditto/tokens/ColorMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/r0adkll/ditto/tokens/ColorMode;
+	public static fun values ()[Lcom/r0adkll/ditto/tokens/ColorMode;
+}
+
+public final class com/r0adkll/ditto/tokens/Contrast {
+	public static final field $stable I
+	public static final field BodyText F
+	public static final field INSTANCE Lcom/r0adkll/ditto/tokens/Contrast;
+	public static final field LargeTextAndUi F
+	public final fun onColor-__2xXxo (JJJ)J
+	public static synthetic fun onColor-__2xXxo$default (Lcom/r0adkll/ditto/tokens/Contrast;JJJILjava/lang/Object;)J
+	public final fun ratio--OWjLjI (JJ)F
+}
+
+public final class com/r0adkll/ditto/tokens/DittoColors {
+	public static final field $stable I
+	public static final field Companion Lcom/r0adkll/ditto/tokens/DittoColors$Companion;
+	public synthetic fun <init> (JJJJJJJJJJJJJJJJJZLcom/r0adkll/ditto/tokens/NeutralRamp;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun contentColorFor-l2rxGTc (J)J
+	public final fun copy-ydeCUXc (JJJJJJJJJJJJJJJJJZLcom/r0adkll/ditto/tokens/NeutralRamp;)Lcom/r0adkll/ditto/tokens/DittoColors;
+	public static synthetic fun copy-ydeCUXc$default (Lcom/r0adkll/ditto/tokens/DittoColors;JJJJJJJJJJJJJJJJJZLcom/r0adkll/ditto/tokens/NeutralRamp;ILjava/lang/Object;)Lcom/r0adkll/ditto/tokens/DittoColors;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAccent-0d7_KjU ()J
+	public final fun getBackground-0d7_KjU ()J
+	public final fun getDisabledAlpha ()F
+	public final fun getError-0d7_KjU ()J
+	public final fun getNeutrals ()Lcom/r0adkll/ditto/tokens/NeutralRamp;
+	public final fun getOnAccent-0d7_KjU ()J
+	public final fun getOnBackground-0d7_KjU ()J
+	public final fun getOnError-0d7_KjU ()J
+	public final fun getOnSuccess-0d7_KjU ()J
+	public final fun getOnSurface-0d7_KjU ()J
+	public final fun getOnSurfaceVariant-0d7_KjU ()J
+	public final fun getOnWarning-0d7_KjU ()J
+	public final fun getOutline-0d7_KjU ()J
+	public final fun getOutlineVariant-0d7_KjU ()J
+	public final fun getSuccess-0d7_KjU ()J
+	public final fun getSurface-0d7_KjU ()J
+	public final fun getSurfaceOverlay-0d7_KjU ()J
+	public final fun getSurfaceRaised-0d7_KjU ()J
+	public final fun getWarning-0d7_KjU ()J
+	public fun hashCode ()I
+	public final fun isDark ()Z
+	public fun toString ()Ljava/lang/String;
+	public final fun validateContrast ()Ljava/util/List;
+}
+
+public final class com/r0adkll/ditto/tokens/DittoColors$Companion {
+	public final fun from-ek8zF_U (JZLcom/r0adkll/ditto/tokens/Neutrals;)Lcom/r0adkll/ditto/tokens/DittoColors;
+	public static synthetic fun from-ek8zF_U$default (Lcom/r0adkll/ditto/tokens/DittoColors$Companion;JZLcom/r0adkll/ditto/tokens/Neutrals;ILjava/lang/Object;)Lcom/r0adkll/ditto/tokens/DittoColors;
+}
+
+public final class com/r0adkll/ditto/tokens/DittoDimens {
+	public static final field $stable I
+	public static final field Companion Lcom/r0adkll/ditto/tokens/DittoDimens$Companion;
+	public synthetic fun <init> (FFFFLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-D9Ej5fM ()F
+	public final fun component2-D9Ej5fM ()F
+	public final fun component3-D9Ej5fM ()F
+	public final fun component4-D9Ej5fM ()F
+	public final fun copy-a9UjIt4 (FFFF)Lcom/r0adkll/ditto/tokens/DittoDimens;
+	public static synthetic fun copy-a9UjIt4$default (Lcom/r0adkll/ditto/tokens/DittoDimens;FFFFILjava/lang/Object;)Lcom/r0adkll/ditto/tokens/DittoDimens;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBorderWidth-D9Ej5fM ()F
+	public final fun getFocusRingWidth-D9Ej5fM ()F
+	public final fun getIconSize-D9Ej5fM ()F
+	public final fun getMinInteractiveSize-D9Ej5fM ()F
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/r0adkll/ditto/tokens/DittoDimens$Companion {
+	public final fun forIdiom (Lcom/r0adkll/ditto/Idiom;)Lcom/r0adkll/ditto/tokens/DittoDimens;
+}
+
+public final class com/r0adkll/ditto/tokens/DittoElevation {
+	public static final field $stable I
+	public static final field Companion Lcom/r0adkll/ditto/tokens/DittoElevation$Companion;
+	public fun <init> (Lcom/r0adkll/ditto/tokens/ElevationStyle;Lcom/r0adkll/ditto/tokens/ElevationStyle;Lcom/r0adkll/ditto/tokens/ElevationStyle;Lcom/r0adkll/ditto/tokens/ElevationStyle;Lcom/r0adkll/ditto/tokens/ElevationStyle;)V
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun get (Lcom/r0adkll/ditto/tokens/ElevationLevel;)Lcom/r0adkll/ditto/tokens/ElevationStyle;
+	public final fun getLevel0 ()Lcom/r0adkll/ditto/tokens/ElevationStyle;
+	public final fun getLevel1 ()Lcom/r0adkll/ditto/tokens/ElevationStyle;
+	public final fun getLevel2 ()Lcom/r0adkll/ditto/tokens/ElevationStyle;
+	public final fun getLevel3 ()Lcom/r0adkll/ditto/tokens/ElevationStyle;
+	public final fun getLevel4 ()Lcom/r0adkll/ditto/tokens/ElevationStyle;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/r0adkll/ditto/tokens/DittoElevation$Companion {
+	public final fun forIdiom (Lcom/r0adkll/ditto/Idiom;Z)Lcom/r0adkll/ditto/tokens/DittoElevation;
+}
+
+public final class com/r0adkll/ditto/tokens/DittoMotion {
+	public static final field $stable I
+	public static final field Companion Lcom/r0adkll/ditto/tokens/DittoMotion$Companion;
+	public fun <init> (IIILandroidx/compose/animation/core/Easing;Landroidx/compose/animation/core/Easing;Landroidx/compose/animation/core/Easing;Landroidx/compose/animation/core/Easing;Landroidx/compose/animation/core/SpringSpec;F)V
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDurationLong ()I
+	public final fun getDurationMedium ()I
+	public final fun getDurationShort ()I
+	public final fun getEasingAccelerate ()Landroidx/compose/animation/core/Easing;
+	public final fun getEasingDecelerate ()Landroidx/compose/animation/core/Easing;
+	public final fun getEasingEmphasized ()Landroidx/compose/animation/core/Easing;
+	public final fun getEasingStandard ()Landroidx/compose/animation/core/Easing;
+	public final fun getPressScale ()F
+	public final fun getSpring ()Landroidx/compose/animation/core/SpringSpec;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/r0adkll/ditto/tokens/DittoMotion$Companion {
+	public final fun forIdiom (Lcom/r0adkll/ditto/Idiom;)Lcom/r0adkll/ditto/tokens/DittoMotion;
+}
+
+public final class com/r0adkll/ditto/tokens/DittoShapes {
+	public static final field $stable I
+	public static final field Companion Lcom/r0adkll/ditto/tokens/DittoShapes$Companion;
+	public fun <init> (Landroidx/compose/foundation/shape/CornerBasedShape;Landroidx/compose/foundation/shape/CornerBasedShape;Landroidx/compose/foundation/shape/CornerBasedShape;Landroidx/compose/foundation/shape/CornerBasedShape;Landroidx/compose/foundation/shape/CornerBasedShape;Landroidx/compose/foundation/shape/CornerBasedShape;Landroidx/compose/foundation/shape/CornerBasedShape;)V
+	public final fun copy (Landroidx/compose/foundation/shape/CornerBasedShape;Landroidx/compose/foundation/shape/CornerBasedShape;Landroidx/compose/foundation/shape/CornerBasedShape;Landroidx/compose/foundation/shape/CornerBasedShape;Landroidx/compose/foundation/shape/CornerBasedShape;Landroidx/compose/foundation/shape/CornerBasedShape;Landroidx/compose/foundation/shape/CornerBasedShape;)Lcom/r0adkll/ditto/tokens/DittoShapes;
+	public static synthetic fun copy$default (Lcom/r0adkll/ditto/tokens/DittoShapes;Landroidx/compose/foundation/shape/CornerBasedShape;Landroidx/compose/foundation/shape/CornerBasedShape;Landroidx/compose/foundation/shape/CornerBasedShape;Landroidx/compose/foundation/shape/CornerBasedShape;Landroidx/compose/foundation/shape/CornerBasedShape;Landroidx/compose/foundation/shape/CornerBasedShape;Landroidx/compose/foundation/shape/CornerBasedShape;ILjava/lang/Object;)Lcom/r0adkll/ditto/tokens/DittoShapes;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getExtraLarge ()Landroidx/compose/foundation/shape/CornerBasedShape;
+	public final fun getExtraSmall ()Landroidx/compose/foundation/shape/CornerBasedShape;
+	public final fun getFull ()Landroidx/compose/foundation/shape/CornerBasedShape;
+	public final fun getLarge ()Landroidx/compose/foundation/shape/CornerBasedShape;
+	public final fun getMedium ()Landroidx/compose/foundation/shape/CornerBasedShape;
+	public final fun getNone ()Landroidx/compose/foundation/shape/CornerBasedShape;
+	public final fun getSmall ()Landroidx/compose/foundation/shape/CornerBasedShape;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/r0adkll/ditto/tokens/DittoShapes$Companion {
+	public final fun forIdiom (Lcom/r0adkll/ditto/Idiom;)Lcom/r0adkll/ditto/tokens/DittoShapes;
+}
+
+public final class com/r0adkll/ditto/tokens/DittoSpacing {
+	public static final field $stable I
+	public static final field Companion Lcom/r0adkll/ditto/tokens/DittoSpacing$Companion;
+	public fun <init> ()V
+	public fun <init> (F)V
+	public synthetic fun <init> (FILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDensity ()F
+	public final fun getLg-D9Ej5fM ()F
+	public final fun getMd-D9Ej5fM ()F
+	public final fun getSm-D9Ej5fM ()F
+	public final fun getXl-D9Ej5fM ()F
+	public final fun getXs-D9Ej5fM ()F
+	public final fun getXxl-D9Ej5fM ()F
+	public final fun getXxs-D9Ej5fM ()F
+	public final fun getXxxl-D9Ej5fM ()F
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/r0adkll/ditto/tokens/DittoSpacing$Companion {
+	public final fun forIdiom (Lcom/r0adkll/ditto/Idiom;)Lcom/r0adkll/ditto/tokens/DittoSpacing;
+}
+
+public final class com/r0adkll/ditto/tokens/DittoTypography {
+	public static final field $stable I
+	public static final field Companion Lcom/r0adkll/ditto/tokens/DittoTypography$Companion;
+	public fun <init> (Landroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/TextStyle;)V
+	public final fun copy (Landroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/TextStyle;)Lcom/r0adkll/ditto/tokens/DittoTypography;
+	public static synthetic fun copy$default (Lcom/r0adkll/ditto/tokens/DittoTypography;Landroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/TextStyle;ILjava/lang/Object;)Lcom/r0adkll/ditto/tokens/DittoTypography;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBody ()Landroidx/compose/ui/text/TextStyle;
+	public final fun getBodySmall ()Landroidx/compose/ui/text/TextStyle;
+	public final fun getCaption ()Landroidx/compose/ui/text/TextStyle;
+	public final fun getDisplay ()Landroidx/compose/ui/text/TextStyle;
+	public final fun getHeading ()Landroidx/compose/ui/text/TextStyle;
+	public final fun getLabel ()Landroidx/compose/ui/text/TextStyle;
+	public final fun getSubheading ()Landroidx/compose/ui/text/TextStyle;
+	public final fun getTitle ()Landroidx/compose/ui/text/TextStyle;
+	public fun hashCode ()I
+	public final fun map (Lkotlin/jvm/functions/Function1;)Lcom/r0adkll/ditto/tokens/DittoTypography;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/r0adkll/ditto/tokens/DittoTypography$Companion {
+	public final fun forIdiom (Lcom/r0adkll/ditto/Idiom;Landroidx/compose/ui/text/font/FontFamily;)Lcom/r0adkll/ditto/tokens/DittoTypography;
+	public static synthetic fun forIdiom$default (Lcom/r0adkll/ditto/tokens/DittoTypography$Companion;Lcom/r0adkll/ditto/Idiom;Landroidx/compose/ui/text/font/FontFamily;ILjava/lang/Object;)Lcom/r0adkll/ditto/tokens/DittoTypography;
+}
+
+public final class com/r0adkll/ditto/tokens/ElevationLevel : java/lang/Enum {
+	public static final field Level0 Lcom/r0adkll/ditto/tokens/ElevationLevel;
+	public static final field Level1 Lcom/r0adkll/ditto/tokens/ElevationLevel;
+	public static final field Level2 Lcom/r0adkll/ditto/tokens/ElevationLevel;
+	public static final field Level3 Lcom/r0adkll/ditto/tokens/ElevationLevel;
+	public static final field Level4 Lcom/r0adkll/ditto/tokens/ElevationLevel;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/r0adkll/ditto/tokens/ElevationLevel;
+	public static fun values ()[Lcom/r0adkll/ditto/tokens/ElevationLevel;
+}
+
+public final class com/r0adkll/ditto/tokens/ElevationStyle {
+	public static final field $stable I
+	public synthetic fun <init> (FIZLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-D9Ej5fM ()F
+	public final fun component2 ()I
+	public final fun component3 ()Z
+	public final fun copy-8Feqmps (FIZ)Lcom/r0adkll/ditto/tokens/ElevationStyle;
+	public static synthetic fun copy-8Feqmps$default (Lcom/r0adkll/ditto/tokens/ElevationStyle;FIZILjava/lang/Object;)Lcom/r0adkll/ditto/tokens/ElevationStyle;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBorder ()Z
+	public final fun getShadow-D9Ej5fM ()F
+	public final fun getSurfaceStep ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/r0adkll/ditto/tokens/NeutralRamp {
+	public static final field $stable I
+	public static final field Companion Lcom/r0adkll/ditto/tokens/NeutralRamp$Companion;
+	public static final field STEPS I
+	public fun <init> (Ljava/util/List;)V
+	public final fun asList ()Ljava/util/List;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun get-vNxB06k (I)J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/r0adkll/ditto/tokens/NeutralRamp$Companion {
+	public final fun generate-mxwnekA (Lcom/r0adkll/ditto/tokens/Neutrals;ZJ)Lcom/r0adkll/ditto/tokens/NeutralRamp;
+	public static synthetic fun generate-mxwnekA$default (Lcom/r0adkll/ditto/tokens/NeutralRamp$Companion;Lcom/r0adkll/ditto/tokens/Neutrals;ZJILjava/lang/Object;)Lcom/r0adkll/ditto/tokens/NeutralRamp;
+}
+
+public final class com/r0adkll/ditto/tokens/Neutrals : java/lang/Enum {
+	public static final field Cool Lcom/r0adkll/ditto/tokens/Neutrals;
+	public static final field Pure Lcom/r0adkll/ditto/tokens/Neutrals;
+	public static final field Tinted Lcom/r0adkll/ditto/tokens/Neutrals;
+	public static final field Warm Lcom/r0adkll/ditto/tokens/Neutrals;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/r0adkll/ditto/tokens/Neutrals;
+	public static fun values ()[Lcom/r0adkll/ditto/tokens/Neutrals;
+}
+
