@@ -27,13 +27,15 @@ class DemoScreenTest {
     ids.forEach { assertTrue(slug.matches(it), "demo id is not slug-like: $it") }
   }
 
+  /** What a docs page actually embeds: one frame, chrome bar on top, demo centred beneath. */
   @Test
-  fun singleDemoAcrossIdioms() = assertScreenshot("demo-screen", width = 900, height = 340) {
-    Row {
-      listOf(Idiom.Android, Idiom.Apple, Idiom.Desktop).forEach { idiom ->
-        Column(Modifier.size(300.dp, 340.dp)) {
-          DemoScreen(id = "switch", idiom = idiom, colorMode = ColorMode.Light)
-        }
+  fun demoFrame() = assertScreenshot("demo-screen", width = 680, height = 420) {
+    Column {
+      Column(Modifier.size(660.dp, 200.dp)) {
+        DemoScreen(id = "switch", idiom = Idiom.Apple, colorMode = ColorMode.Light)
+      }
+      Column(Modifier.size(660.dp, 200.dp)) {
+        DemoScreen(id = "button", idiom = Idiom.Android, colorMode = ColorMode.Dark)
       }
     }
   }

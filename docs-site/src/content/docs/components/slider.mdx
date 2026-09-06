@@ -6,21 +6,15 @@ sidebar:
 ---
 
 import { Tabs, TabItem, Aside } from '@astrojs/starlight/components';
-import IdiomDemos from '../../../components/IdiomDemos.astro';
 import Demo from '../../../components/Demo.astro';
 
 Picks a value from a range. Press anywhere on the track to jump the thumb there, then drag; or
 focus it and use the arrow keys.
 
-<Demo id="slider" height={200} caption="Continuous, stepped and disabled — drag or use the arrow keys" />
+<Demo id="slider" height={260} caption="Continuous, stepped and disabled — drag or use the arrow keys" />
 
-## Across the idioms
+Switch idioms in the demo. Android takes the Expressive treatment: a thick track split by a gap around a bar-shaped handle. Apple is a thin track with a large white thumb. Desktop is compact, with a ringed thumb.
 
-The same call renders to each platform's proportions. Android takes the Expressive treatment: a
-thick track split by a gap around a bar-shaped handle. Apple is a thin track with a large white
-thumb. Desktop is compact, with a ringed thumb.
-
-<IdiomDemos id="slider" height={200} />
 
 ## Usage
 

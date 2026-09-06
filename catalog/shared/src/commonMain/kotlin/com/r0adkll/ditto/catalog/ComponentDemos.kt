@@ -74,10 +74,8 @@ internal fun IconButtonDemo() = Line {
 @Composable
 internal fun ToggleButtonDemo() {
   var on by remember { mutableStateOf(true) }
-  var bold by remember { mutableStateOf(false) }
   Line {
     ToggleButton(checked = on, onCheckedChange = { on = it }) { Icon(DittoIcons.check, null); Text(if (on) " On" else " Off") }
-    ToggleButton(checked = bold, onCheckedChange = { bold = it }) { Text("Bold") }
     ToggleButton(checked = true, onCheckedChange = {}, enabled = false) { Text("Disabled") }
   }
 }
@@ -93,23 +91,18 @@ internal fun FabDemo() = Line {
 @Composable
 internal fun SwitchDemo() {
   var wifi by remember { mutableStateOf(true) }
-  var cell by remember { mutableStateOf(false) }
   Line {
     Switch(checked = wifi, onCheckedChange = { wifi = it })
-    Switch(checked = cell, onCheckedChange = { cell = it })
     Switch(checked = true, onCheckedChange = null, enabled = false)
-    Switch(checked = false, onCheckedChange = null, enabled = false)
   }
 }
 
 @Composable
 internal fun CheckboxDemo() {
   var a by remember { mutableStateOf(true) }
-  var b by remember { mutableStateOf(false) }
   var tri by remember { mutableStateOf(ToggleableState.Indeterminate) }
   Line {
     Checkbox(checked = a, onCheckedChange = { a = it })
-    Checkbox(checked = b, onCheckedChange = { b = it })
     TriStateCheckbox(
       state = tri,
       onClick = {

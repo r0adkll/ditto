@@ -1,6 +1,22 @@
 package com.r0adkll.ditto.catalog
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.width
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.unit.dp
+import com.r0adkll.ditto.components.HorizontalDivider
+import com.r0adkll.ditto.components.IconButton
+import com.r0adkll.ditto.components.SegmentedControl
+import com.r0adkll.ditto.icons.DittoIcons
+import androidx.compose.ui.Alignment
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -82,9 +98,15 @@ fun catalogDemos(): List<DemoItem> = listOf(
 )
 
 /**
- * Renders a single demo on its own, themed and padded, for embedding in a docs page (one lazy
- * iframe per component). Unknown ids render a visible message rather than a blank frame, so a
- * broken embed is obvious on the page instead of silently empty.
+ * Renders one demo on its own for embedding in a docs page: a compact chrome bar with an idiom
+ * selector and a light/dark toggle, then the demo centred beneath it.
+ *
+ * The selector lives *inside* the frame on purpose. Switching idiom from the host page would mean
+ * changing the iframe `src`, which re-instantiates the whole wasm runtime; here it is a
+ * recomposition, which is what makes runtime idiom switching worth showing at all.
+ *
+ * [idiom] and [colorMode] seed the controls, so a deep link like `?id=switch&idiom=apple` still
+ * opens on the right variant.
  */
 @Composable
 fun DemoScreen(
@@ -92,14 +114,51 @@ fun DemoScreen(
   idiom: Idiom = platformIdiom(),
   colorMode: ColorMode = ColorMode.System,
 ) {
-  DittoTheme(accent = DittoBrand.Violet, idiom = idiom, colorMode = colorMode) {
+  var selectedIdiom by remember(idiom) { mutableStateOf(idiom) }
+  var selectedMode by remember(colorMode) { mutableStateOf(colorMode) }
+  val demo = catalogDemos().firstOrNull { it.id == id }
+  val dark = when (selectedMode) {
+    ColorMode.Light -> false
+    ColorMode.Dark -> true
+    ColorMode.System -> isSystemInDarkTheme()
+  }
+
+  // The chrome is always Desktop-idiom so it stays put while the content below it changes.
+  DittoTheme(accent = DittoBrand.Violet, idiom = Idiom.Desktop, colorMode = selectedMode) {
     Surface(color = DittoTheme.colors.background, modifier = Modifier.fillMaxSize()) {
-      Box(Modifier.fillMaxSize().padding(DittoTheme.spacing.lg)) {
-        val demo = catalogDemos().firstOrNull { it.id == id }
-        if (demo != null) {
-          demo.content()
-        } else {
-          Text("No demo registered for id \"$id\"", color = DittoTheme.colors.error)
+      Column(Modifier.fillMaxSize()) {
+        Row(
+          Modifier
+            .fillMaxWidth()
+            .padding(horizontal = DittoTheme.spacing.sm, vertical = DittoTheme.spacing.xs),
+          verticalAlignment = Alignment.CenterVertically,
+          horizontalArrangement = Arrangement.spacedBy(DittoTheme.spacing.sm),
+        ) {
+          SegmentedControl(
+            options = Idiom.entries.map { it.name },
+            selectedIndex = Idiom.entries.indexOf(selectedIdiom),
+            onSelect = { selectedIdiom = Idiom.entries[it] },
+            modifier = Modifier.width(230.dp),
+          )
+          Spacer(Modifier.weight(1f))
+          IconButton(
+            icon = if (dark) DittoIcons.visibilityOff else DittoIcons.visibility,
+            contentDescription = "Toggle light and dark",
+            onClick = { selectedMode = if (dark) ColorMode.Light else ColorMode.Dark },
+          )
+        }
+        HorizontalDivider()
+        Box(
+          Modifier.fillMaxSize().padding(DittoTheme.spacing.lg),
+          contentAlignment = Alignment.Center,
+        ) {
+          DittoTheme(accent = DittoBrand.Violet, idiom = selectedIdiom, colorMode = selectedMode) {
+            if (demo != null) {
+              demo.content()
+            } else {
+              Text("No demo registered for id \"$id\"", color = DittoTheme.colors.error)
+            }
+          }
         }
       }
     }

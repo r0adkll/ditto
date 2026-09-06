@@ -20,22 +20,27 @@
   --sl-color-accent-high: #3a155b;
 }
 
-/* Live demo frames: definite height is required — Compose sizes its canvas from the
-   container, and only re-layouts on window resize. */
+/* Live demo frames. A definite height is required: Compose sizes its canvas from the container
+   and only re-layouts on *window* resize, so the frame must not depend on its content. */
 .ditto-demo {
-  width: 100%;
+  margin: 1.5rem 0;
+}
+.ditto-demo-frame {
   border: 1px solid var(--sl-color-gray-5);
   border-radius: 0.5rem;
+  /* An iframe paints its own background over the parent's rounded corners; clipping here is what
+     actually rounds it. */
+  overflow: hidden;
   background: var(--sl-color-bg);
+}
+.ditto-demo-frame iframe {
   display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
 }
-.ditto-demo-row {
-  display: grid;
-  gap: 0.75rem;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-}
-.ditto-demo-caption {
+.ditto-demo figcaption {
   font-size: var(--sl-text-xs);
   color: var(--sl-color-gray-3);
-  margin: 0.25rem 0 0;
+  margin: 0.4rem 0 0;
 }

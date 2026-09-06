@@ -4,9 +4,12 @@
  *
  * Deliberately an iframe rather than an in-page Compose root: every Compose root holds its own
  * WebGL2 context, browsers cap those (~8 on Android) and Compose exposes no dispose API, so
- * per-demo canvases would break a long page. `loading="lazy"` keeps the ~4.6 MB runtime off the
- * initial load; the browser fetches it when the frame nears the viewport, and it is HTTP- and
- * V8-cached for every later demo in the session.
+ * per-demo canvases would break a long page. `loading="lazy"` keeps the runtime off the initial
+ * load; the browser fetches it when the frame nears the viewport, and it is HTTP- and V8-cached
+ * for every later demo in the session.
+ *
+ * The idiom and light/dark controls live inside the frame, so switching is a recomposition rather
+ * than an iframe reload. `idiom` and `mode` here only seed them.
  */
 interface Props {
   id: string;
@@ -19,13 +22,15 @@ const { id, idiom, mode, height = 260, caption } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const params = new URLSearchParams({ id, ...(idiom ? { idiom } : {}), ...(mode ? { mode } : {}) });
 ---
-<div>
-  <iframe
-    class="ditto-demo"
-    loading="lazy"
-    src={`${base}/catalog/?${params.toString()}`}
-    title={caption ?? `${id} demo`}
-    style={`height:${height}px`}
-  ></iframe>
-  {caption && <p class="ditto-demo-caption">{caption}</p>}
-</div>
+<figure class="ditto-demo">
+  {/* The frame clips the iframe: an iframe paints its own background over a border-radius, so the
+      rounding has to live on a wrapper with overflow hidden. */}
+  <div class="ditto-demo-frame" style={`height:${height}px`}>
+    <iframe
+      loading="lazy"
+      src={`${base}/catalog/?${params.toString()}`}
+      title={caption ?? `${id} demo`}
+    ></iframe>
+  </div>
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
