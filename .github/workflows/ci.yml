@@ -25,7 +25,7 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
       # Screenshot goldens are per-OS; Linux is the source of truth (ADR-016).
       - name: Unit + screenshot tests
-        run: ./gradlew jvmTest apiCheck --continue
+        run: ./gradlew jvmTest apiCheck checkNoLeakedTypes --continue
       - name: Android + Web
         if: success() || failure()
         run: ./gradlew :catalog:android:assembleDebug :ditto-core:compileAndroidMain :ditto-components:compileAndroidMain :catalog:web:wasmJsBrowserDistribution
