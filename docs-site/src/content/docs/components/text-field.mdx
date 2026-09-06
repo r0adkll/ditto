@@ -1,0 +1,94 @@
+---
+title: Text field
+description: Single- or multi-line text entry, with a label that stays put.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import Demo from '../../../components/Demo.astro';
+
+The standard text input. Ditto has **no floating label**: the label sits above the field in every
+idiom, so it stays readable while typing and the field's height never changes underneath the
+caret.
+
+<Demo id="text-field" height={360} />
+
+## Usage
+
+The primary API takes a `TextFieldState`, which owns the text and the selection:
+
+```kotlin
+val email = rememberTextFieldState()
+
+TextField(
+  state = email,
+  label = "Email",
+  placeholder = "ada@example.com",
+  keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+)
+```
+
+There is also a `value` / `onValueChange` overload for migrating existing code. Prefer the state
+one in new code — it avoids the dropped-keystroke and caret-jump problems that come with hoisting
+text through a `String`.
+
+## Errors
+
+`isError` recolours the border, label and supporting text together. Put the reason in
+`supportingText`; the red border alone does not say what is wrong:
+
+```kotlin
+val valid = "@" in email.text
+
+TextField(
+  state = email,
+  label = "Email",
+  isError = !valid,
+  supportingText = if (valid) null else "Enter a valid address",
+)
+```
+
+<Aside type="tip" title="Reserve the supporting line">
+  Showing supporting text only on error makes the field grow and shove the form down at the worst
+  moment. Passing a hint in the non-error case keeps the layout still.
+</Aside>
+
+## Specification
+
+| | Android | Apple | Desktop |
+|---|---|---|---|
+| Container | transparent, 1dp `outline` border, 4dp radius, 56dp | `surfaceOverlay` fill, no border, 10dp radius, 44dp | `surface`, 1dp `outlineVariant` border, 6dp radius, 36dp |
+| Focus | border thickens to 2dp accent | no change beyond the keyboard focus ring | keyboard focus ring |
+| Error | border, label and supporting text in `error` | same | same |
+
+Selection handles and the caret use `accent` in every idiom.
+
+## Accessibility
+
+- The label is the field's accessible name; the supporting text becomes its description.
+- Error state is exposed to screen readers, not only drawn in red.
+- Respects the platform font scale: the container grows with the text rather than clipping it.
+
+## API
+
+```kotlin
+@Composable
+fun TextField(
+  state: TextFieldState,
+  modifier: Modifier = Modifier,
+  enabled: Boolean = true,
+  readOnly: Boolean = false,
+  label: String? = null,
+  placeholder: String? = null,
+  supportingText: String? = null,
+  isError: Boolean = false,
+  leadingIcon: (@Composable () -> Unit)? = null,
+  trailingIcon: (@Composable () -> Unit)? = null,
+  lineLimits: TextFieldLineLimits = TextFieldLineLimits.SingleLine,
+  keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+  onKeyboardAction: KeyboardActionHandler? = null,
+  inputTransformation: InputTransformation? = null,
+  outputTransformation: OutputTransformation? = null,
+  style: TextFieldStyle? = null,
+  interactionSource: MutableInteractionSource? = null,
+)
+```

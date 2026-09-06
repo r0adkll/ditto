@@ -1,0 +1,93 @@
+---
+title: Icon button
+description: A button whose whole label is its icon, in the same four emphases as Button.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import Demo from '../../../components/Demo.astro';
+
+The same four emphases as [Button](/ditto/components/button/), sized for a glyph instead of a
+label. Reach for one when the icon is genuinely self-explanatory — back, close, search — and for a
+[button](/ditto/components/button/) with words when it isn't.
+
+<Demo id="icon-button" height={170} />
+
+## Usage
+
+```kotlin
+IconButton(onClick = { close() }) {
+  Icon(DittoIcons.close, contentDescription = "Close")
+}
+
+FilledIconButton(onClick = { confirm() }) { Icon(DittoIcons.check, contentDescription = "Done") }
+TonalIconButton(onClick = { search() }) { Icon(DittoIcons.search, contentDescription = "Search") }
+OutlinedIconButton(onClick = { more() }) { Icon(DittoIcons.more, contentDescription = "More") }
+```
+
+The content slot inherits the button's content colour and icon size, so an `Icon` inside needs
+neither a `tint` nor a `size`.
+
+<Aside type="caution" title="The description is not optional">
+  An icon button with no `contentDescription` is a button with no name. Screen readers announce it
+  as "button" and nothing else. Describe the **action**, not the picture: "Close", not "X".
+</Aside>
+
+## With a tooltip
+
+There is a shorthand that takes the icon directly and reuses the description as tooltip text, so
+pointer users get the same label a screen reader hears:
+
+```kotlin
+IconButton(
+  icon = DittoIcons.search,
+  contentDescription = "Search the library",
+  onClick = { open() },
+)   // tooltip = true by default
+```
+
+See [Tooltip](/ditto/components/tooltip/) for the timing and touch behaviour.
+
+## Specification
+
+| | Android | Apple | Desktop |
+|---|---|---|---|
+| Visual size | 40dp | 36dp | 32dp |
+| Standard tint | `onSurfaceVariant` | `accent` | `onSurfaceVariant` |
+| Shape | `full` | `full` | `small` |
+
+The hit target is always at least the idiom minimum even when the visual size is smaller, so the
+Desktop button stays comfortable to tap on a touchscreen.
+
+## Accessibility
+
+- `Role.Button`; the label comes from the icon's `contentDescription`.
+- Activated by **Space** and **Enter**; a focus ring appears when a keyboard is present.
+- Hit target expands to the idiom minimum beyond the drawn bounds.
+
+## API
+
+```kotlin
+@Composable
+fun IconButton(
+  onClick: () -> Unit,
+  modifier: Modifier = Modifier,
+  enabled: Boolean = true,
+  style: IconButtonStyle? = null,
+  interactionSource: MutableInteractionSource? = null,
+  content: @Composable () -> Unit,
+)
+
+// Same shape: FilledIconButton, TonalIconButton, OutlinedIconButton
+
+@Composable
+fun IconButton(
+  icon: ImageVector,
+  contentDescription: String,
+  onClick: () -> Unit,
+  modifier: Modifier = Modifier,
+  enabled: Boolean = true,
+  variant: IconButtonVariant = IconButtonVariant.Standard,
+  tooltip: Boolean = true,
+  style: IconButtonStyle? = null,
+)
+```

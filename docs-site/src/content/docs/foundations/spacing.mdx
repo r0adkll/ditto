@@ -1,0 +1,107 @@
+---
+title: Spacing & density
+description: One eight-step scale times a density multiplier, plus the dimensions controls are sized from.
+sidebar:
+  order: 3
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import Demo from '../../../components/Demo.astro';
+
+One spacing scale, multiplied per idiom. Desktop wants roughly 85% of mobile spacing *everywhere*,
+which is a multiplier rather than a second set of numbers to keep in sync.
+
+<Demo id="spacing" height={330} caption="The same eight steps; switch to Desktop to see the ×0.85" />
+
+## The scale
+
+| Token | Mobile | Desktop (×0.85) | Typical use |
+|---|---|---|---|
+| `xxs` | 2dp | 1.7dp | hairline gaps, badge insets |
+| `xs` | 4dp | 3.4dp | icon-to-text inside a dense control |
+| `sm` | 8dp | 6.8dp | between related controls in a row |
+| `md` | 12dp | 10.2dp | between rows in a form |
+| `lg` | 16dp | 13.6dp | screen and card padding |
+| `xl` | 24dp | 20.4dp | between sections |
+| `xxl` | 32dp | 27.2dp | around a page's major blocks |
+| `xxxl` | 48dp | 40.8dp | empty states, hero areas |
+
+```kotlin
+Column(
+  Modifier.padding(DittoTheme.spacing.lg),
+  verticalArrangement = Arrangement.spacedBy(DittoTheme.spacing.md),
+) { /* … */ }
+```
+
+<Aside type="tip" title="Reach for a token, not a number">
+  A hard-coded `16.dp` is 16dp on a desktop too, where everything around it has quietly tightened.
+  `DittoTheme.spacing.lg` moves with the idiom.
+</Aside>
+
+## Density
+
+Spacing sets the gaps; **density** sets how tall controls are. `DittoDensity` has two values, and
+the idiom picks one: mobile idioms are `Comfortable`, Desktop is `Compact` — the tool-window
+density you would recognise from an IDE.
+
+```kotlin
+// A touch-capable desktop, a kiosk, a TV: loosen it
+DittoTheme(density = DittoDensity.Comfortable) { App() }
+```
+
+| | Android | Apple | Desktop Comfortable | Desktop Compact |
+|---|---|---|---|---|
+| Minimum target | 48dp | 44dp | 32dp | 28dp |
+| Control height | 40dp | 44dp | 36dp | 28dp |
+| Field height | 56dp | 44dp | 36dp | 28dp |
+| Icon button | 40dp | 36dp | 32dp | 24dp |
+| List row | 56dp | 44dp | 40dp | 28dp |
+| List row, two-line | 72dp | 60dp | 56dp | 44dp |
+| Menu item | 48dp | 44dp | 32dp | 24dp |
+| Tab height | 48dp | 44dp | 40dp | 32dp |
+| Icon size | 24dp | 22dp | 18dp | 16dp |
+
+These are `DittoTheme.dimens`, and components read them rather than hard-coding heights — which is
+why a single `density` argument shortens every row, field and menu item in the app at once.
+
+`Compact` on a *mobile* idiom is a different thing: it trims 8dp from heights but leaves
+`minInteractiveSize` alone, so a denser phone list still has honest touch targets.
+
+<Aside type="caution" title="Compact is not a licence to shrink targets">
+  28dp controls are fine under a mouse and hostile under a thumb. Ditto keeps the hit target at the
+  idiom minimum even when the drawn control is smaller — don't undo that by putting a fixed size on
+  a wrapper.
+</Aside>
+
+## API
+
+```kotlin
+class DittoSpacing(val density: Float = 1f) {
+  val xxs: Dp; val xs: Dp; val sm: Dp; val md: Dp
+  val lg: Dp;  val xl: Dp; val xxl: Dp; val xxxl: Dp
+
+  companion object { fun forIdiom(idiom: Idiom): DittoSpacing }
+}
+
+enum class DittoDensity { Comfortable, Compact;
+  companion object { fun forIdiom(idiom: Idiom): DittoDensity }
+}
+
+data class DittoDimens(
+  val minInteractiveSize: Dp,
+  val iconSize: Dp,
+  val borderWidth: Dp,
+  val focusRingWidth: Dp,
+  val controlHeight: Dp,
+  val fieldHeight: Dp,
+  val iconButtonSize: Dp,
+  val listRowHeight: Dp,
+  val listRowHeightTwoLine: Dp,
+  val menuItemHeight: Dp,
+  val tabHeight: Dp,
+) {
+  companion object {
+    fun forIdiom(idiom: Idiom, density: DittoDensity = DittoDensity.forIdiom(idiom)): DittoDimens
+  }
+}
+```

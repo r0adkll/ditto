@@ -1,0 +1,111 @@
+---
+title: Top bar
+description: The screen's header, and the scaffold that lays it out with the content.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import Demo from '../../../components/Demo.astro';
+
+The header of a screen: a title, an optional back button, and actions at the end. It comes with
+`Scaffold`, which measures the bars and hands the content the padding it needs.
+
+<Demo id="top-bar" height={320} caption="A large title collapsing as the list scrolls" />
+
+## Usage
+
+```kotlin
+Scaffold(
+  topBar = {
+    TopBar(
+      title = "Library",
+      navigationIcon = { BackButton(onClick = { back() }) },
+      actions = {
+        IconButton(icon = DittoIcons.search, contentDescription = "Search", onClick = { })
+      },
+    )
+  },
+) { padding ->
+  LazyColumn(contentPadding = padding) { /* … */ }
+}
+```
+
+## Collapsing large titles
+
+`TopBarVariant.Large` starts tall and collapses into the row as the content scrolls. It needs the
+scroll to reach it, which is what the nested-scroll connection is for:
+
+```kotlin
+val scroll = rememberTopBarScrollBehavior()
+
+Scaffold(
+  topBar = { TopBar("Library", variant = TopBarVariant.Large, scrollBehavior = scroll) },
+  modifier = Modifier.nestedScroll(scroll.connection),
+) { padding -> /* … */ }
+```
+
+Once scrolled, Android shifts the container to `surfaceOverlay` while Apple and Desktop draw a
+hairline — each idiom's way of saying there is content underneath.
+
+## Scaffold and insets
+
+`Scaffold` subcomposes: it measures the bars first, then gives the content `PaddingValues` equal to
+the bar heights plus any safe-drawing inset the bars do not already cover. Bars draw **under** the
+system bars and consume their own insets, so an edge-to-edge layout is the default rather than
+something you opt into. Pass `WindowInsets(0)` to opt out.
+
+<Aside type="caution" title="Apply the padding">
+  The `padding` the content lambda receives is the whole point. Dropping it puts your first row
+  under the top bar. Pass it to `contentPadding` on a lazy list rather than `Modifier.padding`, so
+  content scrolls under the bar instead of being clipped by it.
+</Aside>
+
+## Specification
+
+| | Android | Apple | Desktop |
+|---|---|---|---|
+| Row height | 64dp | 44dp | 48dp |
+| Large height | 152dp | 96dp | 96dp |
+| Title | `heading`, start-aligned | `subheading`, centred | `subheading`, start-aligned |
+| Large title | `title` | `display` | `title` |
+| Icon tint | `onSurfaceVariant` | `accent` | `onSurfaceVariant` |
+
+`BackButton` follows the same rule: on Apple it renders the iOS chevron with a label (ideally the
+previous screen's title), and an icon alone elsewhere.
+
+## Accessibility
+
+- The title is a heading for screen-reader navigation.
+- `BackButton` is labelled "Back" unless you give it a better one.
+- Actions are ordinary [icon buttons](/ditto/components/icon-button/) and each needs a description.
+
+## API
+
+```kotlin
+@Composable
+fun TopBar(
+  title: String,
+  modifier: Modifier = Modifier,
+  navigationIcon: (@Composable () -> Unit)? = null,
+  actions: @Composable RowScope.() -> Unit = {},
+  variant: TopBarVariant = TopBarVariant.Small,
+  scrollBehavior: TopBarScrollBehavior? = null,
+  windowInsets: WindowInsets = TopBarInsets,
+  style: TopBarStyle? = null,
+)   // a composable-title overload takes title and largeTitle slots
+
+@Composable
+fun Scaffold(
+  modifier: Modifier = Modifier,
+  topBar: @Composable () -> Unit = {},
+  bottomBar: @Composable () -> Unit = {},
+  snackbarHost: @Composable () -> Unit = {},
+  floatingAction: @Composable () -> Unit = {},
+  containerColor: Color = DittoTheme.colors.background,
+  contentColor: Color = contentColorFor(containerColor),
+  contentWindowInsets: WindowInsets = WindowInsets.safeDrawing,
+  content: @Composable (PaddingValues) -> Unit,
+)
+
+@Composable
+fun BackButton(onClick: () -> Unit, modifier: Modifier = Modifier, label: String? = null, contentDescription: String = label ?: "Back")
+```

@@ -1,0 +1,66 @@
+---
+title: Split pane
+description: Two resizable panes with a draggable divider.
+---
+
+import Demo from '../../../components/Demo.astro';
+
+A list beside a detail, an editor beside a preview — two panes the user can rebalance. A desktop
+pattern; on a phone, prefer navigating between the two.
+
+<Demo id="split-pane" height={290} caption="Drag the divider; the right pane has a scrollbar" />
+
+## Usage
+
+```kotlin
+val split = rememberSplitPaneState(initialFraction = 0.3f)
+
+HorizontalSplitPane(
+  state = split,
+  minFirst = 180.dp,
+  minSecond = 320.dp,
+  first = { FileTree() },
+  second = { Editor() },
+)
+```
+
+`VerticalSplitPane` is the same control stacked, for a console under an editor.
+
+The state is a `rememberSaveable`, so the position the user chose survives configuration changes
+and process death rather than snapping back to the default.
+
+## The divider
+
+A hairline in `outlineVariant` with an 8dp hit area around it — wider than it looks, because a
+1dp target is not grabbable. It thickens to 2dp and takes the accent colour on hover and while
+dragging. `minFirst` and `minSecond` stop either pane collapsing to nothing.
+
+## Accessibility
+
+Keyboard resizing is not implemented yet, so the divider is pointer-only today. Compose's common
+API also has no resize cursor, so the pointer does not change shape over the divider. Both are
+tracked as open work — do not make a split pane the only route to content.
+
+## API
+
+```kotlin
+@Composable
+fun HorizontalSplitPane(
+  first: @Composable () -> Unit,
+  second: @Composable () -> Unit,
+  modifier: Modifier = Modifier,
+  state: SplitPaneState = rememberSplitPaneState(),
+  minFirst: Dp = 120.dp,
+  minSecond: Dp = 120.dp,
+)
+
+@Composable
+fun VerticalSplitPane(
+  first: @Composable () -> Unit,
+  second: @Composable () -> Unit,
+  modifier: Modifier = Modifier,
+  state: SplitPaneState = rememberSplitPaneState(),
+  minFirst: Dp = 80.dp,
+  minSecond: Dp = 80.dp,
+)
+```

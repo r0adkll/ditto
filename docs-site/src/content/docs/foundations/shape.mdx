@@ -1,0 +1,76 @@
+---
+title: Shape
+description: Seven corner steps, set by the idiom.
+sidebar:
+  order: 4
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import Demo from '../../../components/Demo.astro';
+
+Seven steps from square to fully rounded. Components name a step rather than a radius, so the whole
+app rounds to the platform's taste — Material's generous corners, Apple's continuous-looking
+squircle radii, or the tighter geometry desktop UIs use.
+
+<Demo id="shapes" height={200} caption="The same six steps in each idiom" />
+
+## The scale
+
+| Token | Android | Apple | Desktop | Where it shows up |
+|---|---|---|---|---|
+| `none` | 0dp | 0dp | 0dp | full-bleed surfaces |
+| `extraSmall` | 4dp | 6dp | 4dp | text fields, menus, tooltips |
+| `small` | 8dp | 10dp | 6dp | chips, icon buttons on desktop |
+| `medium` | 12dp | 14dp | 8dp | cards, dialogs on desktop |
+| `large` | 16dp | 20dp | 12dp | sheets, FABs, cards on desktop |
+| `extraLarge` | 28dp | 28dp | 16dp | dialogs and sheets on Android |
+| `full` | 50% | 50% | 50% | pills, switches, avatars |
+
+```kotlin
+Surface(shape = DittoTheme.shapes.medium) { /* … */ }
+Box(Modifier.background(DittoTheme.colors.accent, DittoTheme.shapes.full))
+```
+
+`full` is `RoundedCornerShape(50)` — a percentage, so it stays a pill at any height rather than
+needing a radius that matches.
+
+## Overriding
+
+Shapes are a theme argument, so a house style is one call:
+
+```kotlin
+DittoTheme(
+  shapes = DittoShapes.forIdiom(idiom).copy(
+    medium = RoundedCornerShape(4.dp),
+    large = RoundedCornerShape(6.dp),
+  ),
+) { App() }
+```
+
+To change one component rather than every user of a step, pass a `style` to it or register a
+`DittoStyleOverrides` transform — those are keyed per component and per variant, so squaring off
+buttons does not also square off cards.
+
+<Aside type="tip" title="Corners are not decoration">
+  The radius scale is part of how each idiom is recognisable. Flattening everything to one radius
+  is a deliberate brand choice, and it will make all three idioms look like the same platform —
+  which may be exactly what you want, but decide it rather than drift into it.
+</Aside>
+
+## API
+
+```kotlin
+class DittoShapes(
+  val none: CornerBasedShape,
+  val extraSmall: CornerBasedShape,
+  val small: CornerBasedShape,
+  val medium: CornerBasedShape,
+  val large: CornerBasedShape,
+  val extraLarge: CornerBasedShape,
+  val full: CornerBasedShape,
+) {
+  fun copy(/* per-step overrides */): DittoShapes
+
+  companion object { fun forIdiom(idiom: Idiom): DittoShapes }
+}
+```

@@ -1,0 +1,98 @@
+---
+title: Combo box
+description: A field-shaped control that opens a list of options, optionally filtered as you type.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import Demo from '../../../components/Demo.astro';
+
+Picks one option from a list too long for a [segmented control](/ditto/components/segmented-control/)
+or a set of [radio buttons](/ditto/components/radio-button/). It borrows `TextFieldStyle`, so it
+lines up with the [text fields](/ditto/components/text-field/) around it in a form.
+
+<Demo id="combo-box" height={260} />
+
+## Usage
+
+```kotlin
+var appearance by remember { mutableStateOf<Int?>(null) }
+
+ComboBox(
+  options = listOf("Light", "Dark", "System"),
+  selectedIndex = appearance,
+  onSelect = { appearance = it },
+  label = "Appearance",
+  placeholder = "Select",
+)
+```
+
+`selectedIndex` is nullable: `null` means nothing is chosen yet and the placeholder shows.
+
+## Filtering as you type
+
+`EditableComboBox` combines a text field with a suggestion popup — for a long list where typing is
+faster than scrolling:
+
+```kotlin
+val author = rememberTextFieldState()
+
+EditableComboBox(
+  state = author,
+  options = allAuthors,
+  onSelect = { author.setTextAndPlaceCursorAtEnd(it) },
+  label = "Author",
+  placeholder = "Type to search",
+  maxSuggestions = 8,
+)
+```
+
+<Aside type="tip" title="The popup never takes focus">
+  The suggestion list is non-focusable, so the caret stays in the field while you arrow through it.
+  That is what makes ↓↓↵ work without the keyboard dismissing or the text losing its selection.
+</Aside>
+
+## Keyboard
+
+| Key | Closed | Open |
+|---|---|---|
+| ↓ / Space / Enter | opens the list | moves to the next option |
+| ↑ | — | moves to the previous option |
+| Enter | opens | commits the highlighted option |
+| Escape | — | closes without changing the selection |
+
+## Accessibility
+
+- `Role.DropdownList` on the trigger; the selected option is its value.
+- The open list is a [menu](/ditto/components/menu/), so it takes focus and traps it until dismissed.
+- The chosen option shows a check, not only a highlight.
+
+## API
+
+```kotlin
+@Composable
+fun ComboBox(
+  options: List<String>,
+  selectedIndex: Int?,
+  onSelect: (Int) -> Unit,
+  modifier: Modifier = Modifier,
+  enabled: Boolean = true,
+  label: String? = null,
+  placeholder: String = "Select",
+  style: TextFieldStyle? = null,
+  interactionSource: MutableInteractionSource? = null,
+)
+
+@Composable
+fun EditableComboBox(
+  state: TextFieldState,
+  options: List<String>,
+  modifier: Modifier = Modifier,
+  onSelect: (String) -> Unit = {},
+  enabled: Boolean = true,
+  label: String? = null,
+  placeholder: String? = null,
+  maxSuggestions: Int = 8,
+  style: TextFieldStyle? = null,
+  interactionSource: MutableInteractionSource? = null,
+)
+```

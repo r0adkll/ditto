@@ -1,0 +1,58 @@
+---
+title: Decorated window
+description: A JVM window with a Ditto-drawn title bar and per-OS controls.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+Replaces the operating system's window frame with one Ditto draws, so the title bar can hold your
+own content — a tab strip, a search field, toolbar actions. **JVM only**, and the one component
+with no live demo here: it needs a real desktop window.
+
+<Aside type="caution" title="On macOS, prefer the native frame">
+  macOS windows are consistent in a way users notice, and a drawn title bar gives up full-screen
+  behaviour, window snapping and accessibility affordances that come free with the real one. Reach
+  for this on Windows and Linux, or when the title bar genuinely has to hold app content.
+</Aside>
+
+## Usage
+
+```kotlin
+fun main() = application {
+  DecoratedWindow(
+    onCloseRequest = ::exitApplication,
+    title = "Ditto",
+    titleBarActions = {
+      IconButton(icon = DittoIcons.search, contentDescription = "Search", onClick = { })
+    },
+  ) {
+    App()
+  }
+}
+```
+
+## The title bar
+
+40dp tall, on `surfaceRaised` with a hairline underneath, draggable to move the window, and
+double-clickable to toggle maximise. The title is centred; `titleBarActions` fill the end.
+
+Window controls follow the host OS rather than the idiom:
+
+| | macOS | Windows / Linux |
+|---|---|---|
+| Placement | start | end |
+| Controls | 12dp traffic lights | minimise, maximise-restore, close glyphs |
+| Close hover | — | `#E81123` |
+
+## API
+
+```kotlin
+@Composable
+fun DecoratedWindow(
+  onCloseRequest: () -> Unit,
+  title: String,
+  state: WindowState = rememberWindowState(),
+  titleBarActions: @Composable () -> Unit = {},
+  content: @Composable FrameWindowScope.() -> Unit,
+)
+```

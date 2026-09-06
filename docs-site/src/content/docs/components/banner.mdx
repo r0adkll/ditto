@@ -1,0 +1,71 @@
+---
+title: Banner
+description: A persistent, in-page message in one of four kinds.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import Demo from '../../../components/Demo.astro';
+
+A message that stays on the page: a sync failure, a warning about the current state, a success
+confirmation that should not vanish. For something transient, use a
+[snackbar](/ditto/components/snackbar/); for something that must be answered before anything else,
+a [dialog](/ditto/components/dialog/).
+
+<Demo id="banner" height={300} />
+
+## Usage
+
+```kotlin
+Banner("Your library is up to date.", kind = BannerKind.Success)
+
+Banner(
+  "Sync failed. Check your connection and try again.",
+  kind = BannerKind.Error,
+  title = "Sync error",
+  onDismiss = { dismissed = true },
+  actions = { Button(text = "Retry", onClick = { retry() }, variant = ButtonVariant.Text) },
+)
+```
+
+`kind` — `Info`, `Success`, `Warning`, `Error` — sets the tint and the icon together. Pass `icon`
+to override the glyph; pass `onDismiss` to add a close button.
+
+<Aside type="caution" title="Say what to do next">
+  "Something went wrong" leaves the user with nowhere to go. Name what failed and give them the
+  action: a Retry button in `actions` is worth more than a longer message.
+</Aside>
+
+## Specification
+
+The container is the kind's tone at 10–12% over the surface, which keeps it legible in both colour
+modes without a second palette.
+
+| | Android | Apple | Desktop |
+|---|---|---|---|
+| Shape | 4dp stripe down the leading edge, `medium` corners | rounded card | `small` corners with a faint tone border |
+
+The row measures at `IntrinsicSize.Min` so Android's stripe matches the content height exactly,
+however many lines the message runs to.
+
+## Accessibility
+
+- A polite live region: a banner appearing mid-session is announced without cutting off whatever
+  the screen reader is currently saying.
+- The dismiss button is labelled and focusable; actions are ordinary buttons in the focus order.
+- Colour is never the only signal — each kind carries its own icon.
+
+## API
+
+```kotlin
+@Composable
+fun Banner(
+  text: String,
+  modifier: Modifier = Modifier,
+  kind: BannerKind = BannerKind.Info,
+  title: String? = null,
+  icon: ImageVector? = null,
+  onDismiss: (() -> Unit)? = null,
+  actions: (@Composable () -> Unit)? = null,
+  style: BannerStyle? = null,
+)
+```

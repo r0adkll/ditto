@@ -1,0 +1,92 @@
+---
+title: List item
+description: A row with a headline, supporting text and leading or trailing slots.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import Demo from '../../../components/Demo.astro';
+
+The standard row: a headline, optional supporting text, and slots at either end for an icon, a
+[switch](/ditto/components/switch/), a value or a chevron. Rows are the unit most apps are built
+from, so this is the component whose idiom differences you will see most often.
+
+<Demo id="list-item" height={300} />
+
+## Usage
+
+```kotlin
+ListItem(
+  headline = "Wi-Fi",
+  supporting = if (connected) "Connected" else "Off",
+  leading = { Icon(DittoIcons.check, contentDescription = null) },
+  trailing = { Switch(checked = connected, onCheckedChange = null) },
+  onClick = { toggle() },
+)
+```
+
+Note `onCheckedChange = null` on the switch: the row owns the tap, so the switch stays visual and
+the whole row is one control.
+
+## Separators are the container's job
+
+A list item draws no divider, because whether rows are separated — and how far the line is indented
+— belongs to the list, not the row:
+
+```kotlin
+Card(variant = CardVariant.Outlined) {
+  ListItem(headline = "Notifications", onClick = { })
+  HorizontalDivider(startIndent = DittoTheme.spacing.lg)
+  ListItem(headline = "About", onClick = { })
+}
+```
+
+<Aside type="tip" title="Apple adds the chevron for you">
+  On the Apple idiom a tappable row with no `trailing` slot gets a disclosure chevron
+  automatically, because that is how iOS says a row navigates. Pass a `trailing` and it steps out
+  of the way.
+</Aside>
+
+## Specification
+
+| | Android | Apple | Desktop |
+|---|---|---|---|
+| Height, one line | 56dp | 44dp | 40dp |
+| Height, two lines | 72dp | 60dp | 56dp |
+| Leading tint | `onSurfaceVariant` | `accent` | `onSurfaceVariant` |
+| Tapped | ripple | disclosure chevron, highlight | rounded hover highlight |
+
+Heights come from `DittoTheme.dimens.listRowHeight`, so the Compact desktop density shortens every
+row in the app at once.
+
+## Accessibility
+
+- A row with `onClick` is one control with one label: the headline and supporting text are merged.
+- A trailing control given `null` for its callback stays out of the focus order, so the row is a
+  single stop rather than two.
+- Hit target is at least the idiom minimum even at the shorter desktop heights.
+
+## API
+
+```kotlin
+@Composable
+fun ListItem(
+  headline: String,
+  modifier: Modifier = Modifier,
+  supporting: String? = null,
+  leading: (@Composable () -> Unit)? = null,
+  trailing: (@Composable () -> Unit)? = null,
+  onClick: (() -> Unit)? = null,
+  enabled: Boolean = true,
+  style: ListItemStyle? = null,
+  interactionSource: MutableInteractionSource? = null,
+)
+
+@Composable
+fun HorizontalDivider(
+  modifier: Modifier = Modifier,
+  thickness: Dp = DittoTheme.dimens.borderWidth,
+  color: Color = DittoTheme.colors.outlineVariant,
+  startIndent: Dp = 0.dp,
+  endIndent: Dp = 0.dp,
+)   // VerticalDivider takes topIndent / bottomIndent
+```

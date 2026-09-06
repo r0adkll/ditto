@@ -1,0 +1,48 @@
+---
+title: Badge
+description: A small count or dot, on its own or attached to something.
+---
+
+import Demo from '../../../components/Demo.astro';
+
+A count of things waiting, or a dot that says only "something is new".
+
+<Demo id="badge" height={170} />
+
+## Usage
+
+```kotlin
+Badge("3")
+Badge("99+")   // cap the number yourself; the badge does not truncate
+Badge()        // no text: a dot
+
+BadgedBox(badge = "7") {
+  Icon(DittoIcons.more, contentDescription = "Inbox")
+}
+```
+
+`BadgedBox` overlays the badge at the top end of its content. [Navigation items](/ditto/components/navigation/)
+take a `badge` parameter directly, which is the usual place one appears.
+
+## Specification
+
+16–18dp tall with caption text. Android and Apple colour it `error`, since a badge there is nearly
+always a notification count; Desktop uses `accent`, matching how desktop apps mark unread items
+without alarm.
+
+## Accessibility
+
+A badge is not a control and takes no focus. What it means has to reach the label of whatever it is
+attached to: pass `badge` to a navigation item and it is announced as part of that item ("Queue,
+12"). A bare `Badge` beside an icon is decorative — describe it in the icon's
+`contentDescription` instead of leaving a silent dot.
+
+## API
+
+```kotlin
+@Composable
+fun Badge(text: String? = null, modifier: Modifier = Modifier, style: BadgeStyle? = null)
+
+@Composable
+fun BadgedBox(badge: String?, modifier: Modifier = Modifier, showDot: Boolean = false, content: @Composable () -> Unit)
+```

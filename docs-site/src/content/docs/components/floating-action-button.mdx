@@ -1,0 +1,77 @@
+---
+title: Floating action button
+description: The one action a screen is about, floating above the content.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import Demo from '../../../components/Demo.astro';
+
+A single, screen-level action raised above the content. The FAB is an Android idea, so the other
+idioms translate rather than imitate: Apple and Desktop render a prominent round accent button
+instead of a Material FAB, because a floating circle over a list is not a convention there.
+
+<Demo id="fab" height={190} />
+
+## Usage
+
+```kotlin
+Scaffold(
+  floatingAction = {
+    FloatingActionButton(
+      onClick = { compose() },
+      icon = DittoIcons.check,
+      contentDescription = "New recording",
+    )
+  },
+) { padding -> /* … */ }
+```
+
+Passing `text` gives the extended form, which is worth using when the icon alone would be a guess:
+
+```kotlin
+FloatingActionButton(
+  onClick = { search() },
+  icon = DittoIcons.search,
+  contentDescription = null,   // the label already names the action
+  text = "Search",
+)
+```
+
+<Aside type="caution" title="One per screen">
+  A FAB claims to be *the* action of the screen. Two of them are two claims, and the user has to
+  work out which is the real one. If a second action matters that much, it belongs in the
+  [top bar](/ditto/components/top-bar/).
+</Aside>
+
+## Specification
+
+| | Android | Apple | Desktop |
+|---|---|---|---|
+| Size | 56dp | 56dp | 48dp |
+| Shape | `large` | `full` | `full` |
+| Elevation | level 3 shadow | flat accent | flat accent |
+
+`Scaffold(floatingAction = …)` anchors it to the bottom end, above the bottom bar and inside the
+safe-drawing insets, so it never lands under a navigation bar.
+
+## Accessibility
+
+- `Role.Button`; the label comes from `contentDescription`, or from `text` when both are present.
+- Hit target is at least the idiom minimum in every idiom.
+- Focus ring with a keyboard; on Apple, pressing fires the platform haptic.
+
+## API
+
+```kotlin
+@Composable
+fun FloatingActionButton(
+  onClick: () -> Unit,
+  icon: ImageVector,
+  contentDescription: String?,
+  modifier: Modifier = Modifier,
+  text: String? = null,
+  enabled: Boolean = true,
+  style: FabStyle? = null,
+  interactionSource: MutableInteractionSource? = null,
+)
+```

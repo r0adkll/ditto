@@ -1,0 +1,59 @@
+---
+title: Chip
+description: A compact, removable or filterable token.
+---
+
+import Demo from '../../../components/Demo.astro';
+
+A small token in a row: a filter you can switch on, a tag you can take off, or a read-only label.
+Which one it is depends entirely on which callbacks you give it.
+
+<Demo id="chip" height={210} />
+
+## Usage
+
+```kotlin
+// Filter: toggles, reports its checked state
+var on by remember { mutableStateOf(false) }
+Chip("Fiction", selected = on, onClick = { on = !on })
+
+// Removable: shows a clear glyph at the end
+Chip("Sherlock Holmes", onDismiss = { remove(tag) })
+
+// Read-only: neither callback, so it is a label, not a control
+Chip("Draft")
+```
+
+Passing `leadingIcon` puts a glyph before the label, sized to the chip.
+
+## Specification
+
+| | Android | Apple | Desktop |
+|---|---|---|---|
+| Shape / height | 8dp radius, 32dp | pill, 32dp | pill, 28dp |
+| Unselected | outlined | neutral step 3 fill | `surface` with an `outlineVariant` border |
+| Selected | tonal accent with a check glyph | accent fill, `onAccent` label | accent fill |
+
+## Accessibility
+
+- A chip with `onClick` gets `Role.Checkbox` and announces selected or not; **Space** toggles it.
+- A chip with neither callback carries no role, so it is read as text rather than offered as a
+  control that does nothing.
+- The dismiss glyph is part of the chip's target and is described as removing the chip.
+
+## API
+
+```kotlin
+@Composable
+fun Chip(
+  text: String,
+  modifier: Modifier = Modifier,
+  selected: Boolean = false,
+  onClick: (() -> Unit)? = null,
+  onDismiss: (() -> Unit)? = null,
+  enabled: Boolean = true,
+  leadingIcon: ImageVector? = null,
+  style: ChipStyle? = null,
+  interactionSource: MutableInteractionSource? = null,
+)
+```

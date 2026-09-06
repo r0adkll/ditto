@@ -1,0 +1,83 @@
+---
+title: Radio button
+description: One choice from a short, visible list — and the group that gives it meaning.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import Demo from '../../../components/Demo.astro';
+
+One of several mutually exclusive options, all visible at once. Past about five options a
+[combo box](/ditto/components/combo-box/) is kinder; for two or three short ones a
+[segmented control](/ditto/components/segmented-control/) takes less room.
+
+<Demo id="radio-button" height={250} caption="RadioGroup: labelled rows, one tab stop, arrows to move" />
+
+## Usage
+
+Reach for `RadioGroup` first. It builds the labelled rows, makes the whole row selectable, and —
+the part that is easy to get wrong by hand — wraps them in a `selectableGroup` so a screen reader
+can announce "2 of 3":
+
+```kotlin
+var selected by remember { mutableIntStateOf(0) }
+
+RadioGroup(
+  options = listOf("Small", "Medium", "Large"),
+  selectedIndex = selected,
+  onSelect = { selected = it },
+)
+```
+
+The bare `RadioButton` is for custom layouts. Give the circle `onClick = null` and let the row
+handle selection, so the two do not become separate targets:
+
+```kotlin
+Row(Modifier.selectable(selected = isSelected, onClick = { select() }, role = Role.RadioButton)) {
+  RadioButton(selected = isSelected, onClick = null)
+  Text(label)
+}
+```
+
+<Aside type="caution" title="A radio group needs a default">
+  A group where nothing is selected asks the user to notice an absence. Pick a sensible default, or
+  use [checkboxes](/ditto/components/checkbox/) if "none" is a real answer.
+</Aside>
+
+## Specification
+
+| | Android | Apple | Desktop |
+|---|---|---|---|
+| Ring | 20dp, 2dp | 22dp, 1.5dp | 16dp, 1dp |
+| Selected | accent ring + 10dp dot, springs in | accent fill + check glyph | accent ring + 8dp dot |
+
+Apple fills the circle and draws a check rather than a dot, matching the selection mark iOS uses
+in grouped lists. That is what `RadioButtonStyle.fillWhenSelected` switches between.
+
+## Accessibility
+
+- `Role.RadioButton` on each row, inside a `selectableGroup` so position in the set is announced.
+- `RadioGroup` is **one tab stop**; arrows move the selection, matching platform radio behaviour.
+- Apple fires a selection-tick haptic when the choice changes.
+
+## API
+
+```kotlin
+@Composable
+fun RadioGroup(
+  options: List<String>,
+  selectedIndex: Int,
+  onSelect: (Int) -> Unit,
+  modifier: Modifier = Modifier,
+  enabled: Boolean = true,
+)
+
+@Composable
+fun RadioButton(
+  selected: Boolean,
+  onClick: (() -> Unit)?,
+  modifier: Modifier = Modifier,
+  enabled: Boolean = true,
+  style: RadioButtonStyle? = null,
+  interactionSource: MutableInteractionSource? = null,
+)
+```

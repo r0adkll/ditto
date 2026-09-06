@@ -1,0 +1,60 @@
+---
+title: Range slider
+description: Two thumbs on one track, for a span rather than a value.
+---
+
+import Demo from '../../../components/Demo.astro';
+
+A [slider](/ditto/components/slider/) with a start and an end — a price band, a date window, a
+duration between two bounds. It shares `SliderStyle`, so it matches the single-value slider beside
+it without extra configuration.
+
+<Demo id="range-slider" height={200} />
+
+## Usage
+
+```kotlin
+var span by remember { mutableStateOf(0.2f..0.7f) }
+
+RangeSlider(
+  value = span,
+  onValueChange = { span = it },
+  valueRange = 0f..1f,
+  onValueChangeFinished = { commit(span) },
+)
+
+// Snapped to quarters: steps counts the stops *between* the ends
+RangeSlider(value = span, onValueChange = { span = it }, steps = 3)
+```
+
+## Behaviour
+
+- Pressing the track grabs the **nearer** thumb and jumps it to the press, then drags from there.
+- The thumbs cannot cross; each stops at the other.
+- Stepped ranges track an unsnapped internal position, so a drag keeps moving instead of sticking
+  to the stop it just snapped to.
+
+Use `onValueChangeFinished` for work you do not want to run on every frame of a drag — a network
+call, a database write.
+
+## Accessibility
+
+- Each thumb carries progress semantics with the current bounds.
+- Per-thumb `setProgress` actions and keyboard adjustment are not implemented yet; the single-value
+  [slider](/ditto/components/slider/) has both.
+
+## API
+
+```kotlin
+@Composable
+fun RangeSlider(
+  value: ClosedFloatingPointRange<Float>,
+  onValueChange: (ClosedFloatingPointRange<Float>) -> Unit,
+  modifier: Modifier = Modifier,
+  enabled: Boolean = true,
+  valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
+  steps: Int = 0,
+  onValueChangeFinished: (() -> Unit)? = null,
+  style: SliderStyle? = null,
+)
+```

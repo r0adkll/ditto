@@ -1,0 +1,50 @@
+---
+title: Scrollbar
+description: An overlay scrollbar that appears where a scrollbar belongs.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import Demo from '../../../components/Demo.astro';
+
+A draggable scrollbar for scrollable content. It shows on the **Desktop idiom, or wherever a
+pointer is present**, and stays out of the way on touch, where the platform draws its own scroll
+indicators.
+
+<Demo id="scrollbar" height={260} idiom="desktop" caption="Scroll the list, or drag the thumb" />
+
+## Usage
+
+Place it in a `Box` over the end edge of the content it scrolls:
+
+```kotlin
+val scroll = rememberScrollState()
+
+Box {
+  Column(Modifier.fillMaxSize().verticalScroll(scroll)) { /* … */ }
+  VerticalScrollbar(scroll, Modifier.align(Alignment.CenterEnd).fillMaxHeight())
+}
+```
+
+There are overloads for `ScrollState` and `LazyListState`, vertical and horizontal.
+
+<Aside type="tip" title="It overlays, it doesn't reserve">
+  The scrollbar draws on top of the content rather than taking a column of its own. Add trailing
+  padding to the content if the thumb would land on something you need to read.
+</Aside>
+
+## Specification
+
+An 8dp overlay thumb with full rounding, `onSurface` at 22% rising to 45% on hover, with a 24dp
+minimum thumb length so a very long list still leaves something grabbable.
+
+Behaviour comes from Compose Unstyled's scrollbar primitives, which is why this works on **every
+target including the web** — Ditto draws the thumb and decides when to show it.
+
+## API
+
+```kotlin
+@Composable fun VerticalScrollbar(scrollState: ScrollState, modifier: Modifier = Modifier)
+@Composable fun VerticalScrollbar(listState: LazyListState, modifier: Modifier = Modifier)
+@Composable fun HorizontalScrollbar(scrollState: ScrollState, modifier: Modifier = Modifier)
+@Composable fun HorizontalScrollbar(listState: LazyListState, modifier: Modifier = Modifier)
+```

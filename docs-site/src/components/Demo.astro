@@ -23,8 +23,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const params = new URLSearchParams({ id, ...(idiom ? { idiom } : {}), ...(mode ? { mode } : {}) });
 ---
 <figure class="ditto-demo">
-  {/* The frame clips the iframe: an iframe paints its own background over a border-radius, so the
-      rounding has to live on a wrapper with overflow hidden. */}
+  {/* The frame rounds the iframe. Its border is drawn as an ::after overlay in brand.css: a real
+      CSS border sits *under* the iframe's opaque background, which eats the inner edge along the
+      curve and makes the corners look clipped. */}
   <div class="ditto-demo-frame" style={`height:${height}px`}>
     <iframe
       loading="lazy"

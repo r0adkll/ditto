@@ -1,0 +1,110 @@
+---
+title: Typography
+description: Eight named styles, remapped per idiom, with one font family throughout.
+sidebar:
+  order: 2
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import Demo from '../../../components/Demo.astro';
+
+Eight styles, not thirty. Each idiom maps them onto its own sizes, weights and tracking, so
+`DittoTheme.typography.body` is 16sp on Android, 17sp on Apple and 13sp in a compact desktop
+window — the same role, the platform's own measure.
+
+<Demo id="typography" height={400} caption="Switch the idiom: the names stay, the metrics change" />
+
+## The scale
+
+| Style | Role |
+|---|---|
+| `display` | the largest thing on a screen — a collapsed large title, an empty state |
+| `title` | screen titles |
+| `heading` | section headings |
+| `subheading` | list headlines, emphasised rows, dialog titles |
+| `body` | running text; the default for `Text` |
+| `bodySmall` | supporting text under a field or row |
+| `label` | text inside controls — buttons, tabs, navigation items |
+| `caption` | metadata, timestamps, badges |
+
+## Per idiom
+
+| | Android | Apple | Desktop (Compact) |
+|---|---|---|---|
+| `display` | 45 / 52, Normal | 34 / 41, Bold | 25 / 30, Bold |
+| `title` | 28 / 36, Normal | 28 / 34, Bold | 22 / 28, Bold |
+| `heading` | 22 / 28, Medium | 22 / 28, SemiBold | 16 / 22, SemiBold |
+| `subheading` | 16 / 24, Medium | 17 / 22, SemiBold | 14 / 20, SemiBold |
+| `body` | 16 / 24, Normal | 17 / 22, Normal | 13 / 18, Normal |
+| `bodySmall` | 14 / 20, Normal | 15 / 20, Normal | 12 / 16, Normal |
+| `label` | 14 / 20, Medium | 17 / 22, Medium | 13 / 18, Medium |
+| `caption` | 12 / 16, Normal | 12 / 16, Normal | 11 / 14, Normal |
+
+Size / line height in sp. Tracking differs too: Android uses Material's positive letter spacing on
+body text, Apple the negative tracking of the system font at those sizes, Desktop none.
+
+The Desktop column is the **Compact** density, which is what a desktop window gets by default. At
+`Comfortable` the same idiom runs larger — 14sp body, 36sp display — for touch-capable desktops and
+kiosks. See [spacing](/ditto/foundations/spacing/) for how density is chosen.
+
+## Using it
+
+```kotlin
+Text("Hyperion", style = DittoTheme.typography.subheading)
+
+// Ambient: everything below reads this unless it says otherwise
+ProvideTextStyle(DittoTheme.typography.bodySmall) {
+  Column { Text("Dan Simmons"); Text("1989") }
+}
+```
+
+`Text` with no `style` reads `LocalTextStyle`, which containers set for their content — a button
+provides `label`, a list item provides `subheading` for its headline — so text written into a slot
+already matches.
+
+## Changing the font
+
+One family covers the whole scale. Swapping it is one argument:
+
+```kotlin
+val typography = DittoTypography.forIdiom(idiom, fontFamily = InterFamily)
+
+DittoTheme(typography = typography) { App() }
+```
+
+`map` transforms every style at once, for changes that are not just the family:
+
+```kotlin
+DittoTheme(typography = DittoTypography.forIdiom(idiom).map { it.copy(fontFeatureSettings = "tnum") })
+```
+
+<Aside type="caution" title="Respect the font scale">
+  Sizes are in `sp`, so they follow the platform's text-size setting. Do not put a fixed `height`
+  on anything wrapping text: at 200% scale it clips. Ditto's own controls grow instead.
+</Aside>
+
+## API
+
+```kotlin
+class DittoTypography(
+  val display: TextStyle,
+  val title: TextStyle,
+  val heading: TextStyle,
+  val subheading: TextStyle,
+  val body: TextStyle,
+  val bodySmall: TextStyle,
+  val label: TextStyle,
+  val caption: TextStyle,
+) {
+  fun copy(/* per-style overrides */): DittoTypography
+  fun map(transform: (TextStyle) -> TextStyle): DittoTypography
+
+  companion object {
+    fun forIdiom(
+      idiom: Idiom,
+      fontFamily: FontFamily = FontFamily.Default,
+      density: DittoDensity = DittoDensity.forIdiom(idiom),
+    ): DittoTypography
+  }
+}
+```

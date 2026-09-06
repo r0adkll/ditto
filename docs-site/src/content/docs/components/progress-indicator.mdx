@@ -1,0 +1,65 @@
+---
+title: Progress indicator
+description: Circular and linear, determinate when you know how far along you are.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import Demo from '../../../components/Demo.astro';
+
+Says that work is happening, and how much is left when that is knowable.
+
+<Demo id="progress-indicator" height={240} />
+
+## Usage
+
+```kotlin
+// Indeterminate: no progress argument
+CircularProgressIndicator()
+
+// Determinate: a lambda, so a changing value does not recompose the caller
+LinearProgressIndicator(progress = { downloaded / total })
+```
+
+`progress` is a function rather than a `Float` on purpose: a value that changes every frame would
+otherwise recompose whatever composable owns it, sixty times a second.
+
+<Aside type="tip" title="Determinate whenever you can">
+  A spinner with no end is indistinguishable from a hang. If you know the byte count, the page
+  number or the file index, use it — even a rough fraction is better than an animation that says
+  nothing.
+</Aside>
+
+## Specification
+
+| | Android | Apple | Desktop |
+|---|---|---|---|
+| Circular, indeterminate | 40dp breathing arc, 4dp stroke | 20dp eight-spoke activity indicator | 20dp arc, 2dp stroke |
+| Linear | 4dp, with an Expressive gap and stop dot | 4dp accent bar on a neutral track | 8dp accent bar on a neutral track |
+
+Apple's is the spoked iOS activity indicator rather than an arc, which is the difference between
+looking native and looking ported.
+
+## Accessibility
+
+- Determinate indicators carry progress semantics with the current fraction; indeterminate ones
+  announce as busy.
+- Pair a long operation with text saying what is happening. "Loading" alone tells a screen-reader
+  user nothing about what to expect.
+
+## API
+
+```kotlin
+@Composable
+fun CircularProgressIndicator(
+  progress: (() -> Float)? = null,
+  modifier: Modifier = Modifier,
+  style: ProgressIndicatorStyle? = null,
+)
+
+@Composable
+fun LinearProgressIndicator(
+  progress: (() -> Float)? = null,
+  modifier: Modifier = Modifier,
+  style: ProgressIndicatorStyle? = null,
+)
+```

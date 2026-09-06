@@ -1,0 +1,52 @@
+---
+title: Link
+description: Inline navigation that looks like a link on each platform.
+---
+
+import Demo from '../../../components/Demo.astro';
+
+Text that navigates. Ditto's link is a real control — focusable, hoverable, with a hand cursor —
+rather than styled text, so keyboard and screen-reader users can reach it.
+
+<Demo id="link" height={160} />
+
+## Usage
+
+```kotlin
+Link("Learn more", onClick = { navigate() })
+
+// Leaving the app: adds a small arrow glyph and says so to a screen reader
+Link("Read the licence", onClick = { openBrowser() }, external = true)
+```
+
+## Specification
+
+| | Android | Apple | Desktop |
+|---|---|---|---|
+| Colour | `accent` | `accent` | `accent` |
+| Underline | always | never | on hover |
+
+The underline rule is the platform convention rather than a preference: Material underlines links
+in body text, iOS relies on colour alone, and desktop UIs reveal the underline on hover.
+
+## Accessibility
+
+- `Role.Button` with the link text as its label; **Space** and **Enter** activate it.
+- `external = true` appends "opens externally" to the accessible description, so the destination
+  change is announced rather than only drawn.
+- Focus ring when a keyboard is present; hand cursor with a pointer.
+
+## API
+
+```kotlin
+@Composable
+fun Link(
+  text: String,
+  onClick: () -> Unit,
+  modifier: Modifier = Modifier,
+  enabled: Boolean = true,
+  external: Boolean = false,
+  style: TextStyle = LocalTextStyle.current,
+  interactionSource: MutableInteractionSource? = null,
+)
+```

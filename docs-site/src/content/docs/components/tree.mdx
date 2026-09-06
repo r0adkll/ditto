@@ -1,0 +1,93 @@
+---
+title: Tree
+description: A lazy, keyboard-navigable hierarchy.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import Demo from '../../../components/Demo.astro';
+
+Nested nodes that expand and collapse — a file tree, a table of contents, a settings hierarchy. It
+flattens the expanded nodes into a lazy list, so a tree with thousands of nodes only composes the
+rows on screen.
+
+<Demo id="tree" height={280} caption="Click to select, chevrons to expand; arrows work when focused" />
+
+## Usage
+
+```kotlin
+val state = rememberTreeState(expanded = setOf("library"), selected = "dune")
+
+Tree(
+  roots = listOf(
+    TreeNode(
+      id = "library",
+      label = "Library",
+      icon = DittoIcons.more,
+      children = listOf(
+        TreeNode("dune", "Dune"),
+        TreeNode("hyperion", "Hyperion"),
+      ),
+    ),
+  ),
+  state = state,
+  onSelect = { state.selected = it.id },
+  onActivate = { open(it.id) },
+)
+```
+
+`onSelect` fires on a single click or an arrow-key move; `onActivate` fires on **Enter**, **Space**
+or a double-click. Keep opening a file on `onActivate` — selecting is how people navigate, and
+opening on every arrow press makes the keyboard unusable.
+
+## Keyboard
+
+The tree is **one focus stop**; movement happens inside it.
+
+| Key | Action |
+|---|---|
+| ↑ / ↓ | previous / next visible row |
+| → | expand, or move to the first child |
+| ← | collapse, or move to the parent |
+| Home / End | first / last visible row |
+| Enter, Space | activate the selected node |
+
+<Aside type="caution" title="Ids must be stable and unique">
+  `TreeState` remembers expansion and selection by id. Ids derived from a list index shift when the
+  data changes, and the tree appears to expand the wrong node.
+</Aside>
+
+## Specification
+
+Rows use `dimens.listRowHeight` — 28dp at the Compact desktop density — with a 20dp indent per
+level. The chevron rotates as a node expands, and the selected row takes a tonal accent, drawing
+the focus ring while the tree is focused.
+
+## Accessibility
+
+- Each row exposes `expand` and `collapse` semantics actions, so assistive tech can open a node
+  without simulating a click on the chevron.
+- The selected row is the tree's accessible value.
+- Multi-select, lazy child loading and drag-and-drop are open work.
+
+## API
+
+```kotlin
+@Composable
+fun Tree(
+  roots: List<TreeNode>,
+  modifier: Modifier = Modifier,
+  state: TreeState = rememberTreeState(),
+  onSelect: (TreeNode) -> Unit = { state.selected = it.id },
+  onActivate: (TreeNode) -> Unit = {},
+  listState: LazyListState = rememberLazyListState(),
+  interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+)
+
+class TreeNode(
+  val id: String,
+  val label: String,
+  val icon: ImageVector? = null,
+  val children: List<TreeNode> = emptyList(),
+  val enabled: Boolean = true,
+)
+```

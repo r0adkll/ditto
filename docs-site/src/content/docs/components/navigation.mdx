@@ -1,0 +1,111 @@
+---
+title: Navigation
+description: Bar, rail and sidebar — the same destinations at three widths.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import Demo from '../../../components/Demo.astro';
+
+Top-level destinations, in the container that fits the window: a bar at the bottom on phones, a
+rail on tablets, a sidebar on desktops. All three share the same style tokens and the same item.
+
+<Demo id="navigation" height={360} caption="NavigationBar, NavigationRail and Sidebar" />
+
+## Usage
+
+```kotlin
+NavigationBar {
+  NavigationItem(
+    selected = tab == 0,
+    onClick = { tab = 0 },
+    icon = DittoIcons.search,
+    label = "Search",
+  )
+  NavigationItem(selected = tab == 1, onClick = { tab = 1 }, icon = DittoIcons.check, label = "Done", badge = "3")
+}
+```
+
+`NavigationRail` and `Sidebar` take the same items in a `ColumnScope`, plus an optional `header`
+slot for a logo or a compose button. `Sidebar` uses `SidebarItem`, which is label-first with an
+optional icon, because a sidebar has room for words.
+
+## Letting the width choose
+
+`NavigationSuite` picks the container for you and wires it to a `Scaffold`:
+
+```kotlin
+NavigationSuite(
+  destinations = listOf(
+    NavigationDestination("Library", DittoIcons.search),
+    NavigationDestination("Queue", DittoIcons.check, badge = "12"),
+  ),
+  selectedIndex = tab,
+  onSelect = { tab = it },
+  topBar = { TopBar("Library") },
+) { padding -> Content(padding) }
+```
+
+| Available width | Container |
+|---|---|
+| < 600dp | `NavigationBar` in `Scaffold(bottomBar = …)` |
+| < 1200dp | `NavigationRail` beside the scaffold |
+| ≥ 1200dp | `Sidebar` beside the scaffold |
+
+It measures with `BoxWithConstraints`, so it adapts to the space it is actually given — correct
+inside a split pane, not only against the window. Override the rule with `type` when a specific
+layout is wanted, such as forcing a rail on tablets.
+
+<Aside type="tip" title="Three to five destinations">
+  These are top-level places, not a menu. Past five, a bar's labels truncate and the targets get
+  thin; move the rest into the screens themselves.
+</Aside>
+
+## Specification
+
+| | Android | Apple | Desktop |
+|---|---|---|---|
+| Bar | 80dp, accent pill behind the icon | 49dp tab bar, hairline top, 10sp labels | 56dp, whole-item tonal highlight |
+| Rail | 80dp, 56×32 pill | 72dp, tonal item | 64dp, tonal rounded item |
+| Sidebar | 300dp, 56dp pill rows | 320dp, 44dp rows, accent icons | 240dp, 32dp rounded rows |
+
+`NavigationBar` consumes the bottom safe-drawing inset itself, so it sits above the gesture bar
+without extra padding.
+
+## Accessibility
+
+- `Role.Tab` with the selected state on each item.
+- A `badge` is announced as part of the item's label, so "Queue, 12" rather than a silent dot.
+- Apple fires a haptic tick when the destination changes.
+
+## API
+
+```kotlin
+@Composable fun NavigationBar(modifier: Modifier = Modifier, style: NavigationContainerStyle? = null, windowInsets: WindowInsets = BottomBarInsets, content: @Composable RowScope.() -> Unit)
+@Composable fun NavigationRail(modifier: Modifier = Modifier, style: NavigationContainerStyle? = null, header: (@Composable () -> Unit)? = null, windowInsets: WindowInsets = …, content: @Composable ColumnScope.() -> Unit)
+@Composable fun Sidebar(modifier: Modifier = Modifier, style: NavigationContainerStyle? = null, header: (@Composable () -> Unit)? = null, windowInsets: WindowInsets = …, content: @Composable ColumnScope.() -> Unit)
+
+@Composable
+fun NavigationItem(
+  selected: Boolean,
+  onClick: () -> Unit,
+  icon: ImageVector,
+  label: String?,
+  modifier: Modifier = Modifier,
+  enabled: Boolean = true,
+  badge: String? = null,
+  interactionSource: MutableInteractionSource? = null,
+)   // SidebarItem takes label first and icon optional
+
+@Composable
+fun NavigationSuite(
+  destinations: List<NavigationDestination>,
+  selectedIndex: Int,
+  onSelect: (Int) -> Unit,
+  modifier: Modifier = Modifier,
+  topBar: @Composable () -> Unit = {},
+  snackbarHost: @Composable () -> Unit = {},
+  floatingAction: @Composable () -> Unit = {},
+  type: ((Dp) -> NavigationSuiteType) = NavigationSuiteDefaults::typeFor,
+  content: @Composable (PaddingValues) -> Unit,
+)
+```

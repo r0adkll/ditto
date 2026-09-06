@@ -1,0 +1,79 @@
+---
+title: Dialog
+description: A modal window that interrupts, in each platform's shape.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import Demo from '../../../components/Demo.astro';
+
+Stops everything until it is answered. Worth it for a destructive confirmation or a decision the
+app genuinely cannot proceed without — and rarely worth it otherwise.
+
+<Demo id="dialog" height={220} caption="Switch the idiom, then open it: the layouts differ, not just the paint" />
+
+## Usage
+
+```kotlin
+if (confirming) {
+  AlertDialog(
+    onDismissRequest = { confirming = false },
+    title = "Delete recording?",
+    text = "This removes the file from every device. You can't undo this.",
+    confirmButton = { Button(text = "Delete", onClick = { delete(); confirming = false }) },
+    dismissButton = { Button(text = "Cancel", onClick = { confirming = false }, variant = ButtonVariant.Text) },
+  )
+}
+```
+
+For a custom layout, `Dialog` gives you the idiom's surface and modal behaviour with an empty
+content slot. `AlertDialogContent` renders the alert's body without the window, for previews or for
+embedding one in a [sheet](/ditto/components/sheet/).
+
+<Aside type="caution" title="Name the action on the button">
+  "OK" makes the user re-read the title to find out what they are agreeing to. Label the confirm
+  button with the verb — "Delete", "Discard", "Sign out" — so the button alone is unambiguous.
+</Aside>
+
+## Specification
+
+| | Android | Apple | Desktop |
+|---|---|---|---|
+| Surface | `surfaceRaised`, 28dp radius, 280–560dp wide | `surfaceRaised`, 14dp radius, 270dp fixed | `surface` with a border, 12dp radius, 320–512dp |
+| Layout | left-aligned text, buttons trailing | centred text, full-width buttons split by hairlines | left-aligned text, buttons trailing |
+
+Apple's action row is the reason the buttons you pass are only *suggestions* of emphasis: the
+idiom re-styles every variant into the stretched iOS text button through `LocalButtonStyles`, so
+the same call site produces a Material dialog and a UIAlertController-shaped one.
+
+## Accessibility
+
+- Focus moves into the dialog when it opens and is trapped there until it closes.
+- **Escape** and the platform back gesture both call `onDismissRequest`.
+- The title is the dialog's accessible name; announce the consequence in `text` rather than relying
+  on a red button.
+
+## API
+
+```kotlin
+@Composable
+fun AlertDialog(
+  onDismissRequest: () -> Unit,
+  confirmButton: @Composable () -> Unit,
+  modifier: Modifier = Modifier,
+  dismissButton: (@Composable () -> Unit)? = null,
+  icon: (@Composable () -> Unit)? = null,
+  title: String? = null,
+  text: String? = null,
+  properties: DialogProperties = DialogProperties(),
+  style: DialogStyle? = null,
+)
+
+@Composable
+fun Dialog(
+  onDismissRequest: () -> Unit,
+  modifier: Modifier = Modifier,
+  properties: DialogProperties = DialogProperties(),
+  style: DialogStyle? = null,
+  content: @Composable () -> Unit,
+)
+```

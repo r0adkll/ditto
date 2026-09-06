@@ -1,0 +1,89 @@
+---
+title: Checkbox
+description: A box that holds a choice until the form is submitted, with a third indeterminate state.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import Demo from '../../../components/Demo.astro';
+
+For a choice that is collected now and applied later — a form, a multi-select list, terms you have
+to agree to. When the change takes effect the moment it is made, use a
+[switch](/ditto/components/switch/) instead.
+
+<Demo id="checkbox" height={170} />
+
+## Usage
+
+```kotlin
+var agreed by remember { mutableStateOf(false) }
+
+Checkbox(checked = agreed, onCheckedChange = { agreed = it })
+
+// Read-only, or when the surrounding row owns the interaction
+Checkbox(checked = agreed, onCheckedChange = null)
+```
+
+## Three states
+
+A parent checkbox over a group of children is neither on nor off when only some are checked.
+`TriStateCheckbox` takes a `ToggleableState` for exactly that case:
+
+```kotlin
+val childStates = children.map { it.checked }
+val parent = when {
+  childStates.all { it } -> ToggleableState.On
+  childStates.none { it } -> ToggleableState.Off
+  else -> ToggleableState.Indeterminate
+}
+
+TriStateCheckbox(state = parent, onClick = { setAll(parent != ToggleableState.On) })
+```
+
+<Aside type="tip" title="Let the row own the tap">
+  In a list, pass `onCheckedChange = null` and put `toggleable` on the row. The box stays visual,
+  the label becomes part of the target, and a screen reader announces one control instead of two.
+</Aside>
+
+## Specification
+
+| | Android | Apple | Desktop |
+|---|---|---|---|
+| Box | 18dp, 2dp radius, 2dp `onSurfaceVariant` border | 22dp circle, 1.5dp ring | 16dp, 4dp radius, 1dp `outline` border |
+| Checked | accent fill, `onAccent` glyph | accent fill, `onAccent` glyph | accent fill, `onAccent` glyph |
+| Indeterminate | dash glyph | dash glyph | dash glyph |
+
+Apple's is a circle: iOS uses circular selection marks in lists, so a square box would read as
+foreign there even though the semantics are identical.
+
+The ripple or state layer draws in the minimum-size circle around the box, clipped to `shapes.full`,
+so the indication stays centred on a control that is smaller than its hit target.
+
+## Accessibility
+
+- `Role.Checkbox` carrying on / off / indeterminate; **Space** toggles.
+- Hit target at least the idiom minimum around a box that is deliberately smaller.
+- On the Apple idiom, toggling fires the platform haptic.
+
+## API
+
+```kotlin
+@Composable
+fun Checkbox(
+  checked: Boolean,
+  onCheckedChange: ((Boolean) -> Unit)?,
+  modifier: Modifier = Modifier,
+  enabled: Boolean = true,
+  style: CheckboxStyle? = null,
+  interactionSource: MutableInteractionSource? = null,
+)
+
+@Composable
+fun TriStateCheckbox(
+  state: ToggleableState,
+  onClick: (() -> Unit)?,
+  modifier: Modifier = Modifier,
+  enabled: Boolean = true,
+  style: CheckboxStyle? = null,
+  interactionSource: MutableInteractionSource? = null,
+)
+```

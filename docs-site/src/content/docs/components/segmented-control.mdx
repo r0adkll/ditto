@@ -1,0 +1,66 @@
+---
+title: Segmented control
+description: Two to four exclusive options in a single row.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import Demo from '../../../components/Demo.astro';
+
+A compact, exclusive choice — a view mode, a time range, a filter. It differs from
+[tabs](/ditto/components/tabs/) in intent rather than looks: a segmented control picks a *value*,
+tabs switch *pages*. On the Apple idiom, prefer this over tabs for switching a view within a screen.
+
+<Demo id="segmented-control" height={190} />
+
+## Usage
+
+```kotlin
+var range by remember { mutableIntStateOf(1) }
+
+SegmentedControl(
+  options = listOf("Day", "Week", "Month"),
+  selectedIndex = range,
+  onSelect = { range = it },
+)
+```
+
+Segments are equal width, so the widest label sets them all. Keep to two to four short ones — past
+that the labels truncate and a [combo box](/ditto/components/combo-box/) fits better.
+
+<Aside type="tip" title="Sliding works, not just tapping">
+  Press and slide across the segments and the selection follows your finger, the way iOS behaves.
+  The gesture observes in the initial pointer pass without consuming, so ordinary taps and
+  accessibility actions keep working.
+</Aside>
+
+## Specification
+
+| | Android | Apple | Desktop |
+|---|---|---|---|
+| Container | outlined pill with dividers | neutral step 4 well, 32dp | neutral step 3 well, 36dp |
+| Selection | tonal segment | sliding white thumb with a shadow | sliding `surface` thumb |
+| Motion | colour tween | spring on the thumb | spring on the thumb |
+
+The thumb animates the selected **index**, deriving its pixel offset from the measured segment
+width, so the first frame is already correct rather than sliding in from zero.
+
+## Accessibility
+
+- `selectableGroup` with `Role.RadioButton` on each segment, so position in the set is announced.
+- **One tab stop**; ←/→ move the selection, Home and End jump to the ends.
+- The focus ring draws on the selected segment while the control has focus.
+- Apple fires a selection-tick haptic on each change.
+
+## API
+
+```kotlin
+@Composable
+fun SegmentedControl(
+  options: List<String>,
+  selectedIndex: Int,
+  onSelect: (Int) -> Unit,
+  modifier: Modifier = Modifier,
+  enabled: Boolean = true,
+  style: SegmentedControlStyle? = null,
+)
+```

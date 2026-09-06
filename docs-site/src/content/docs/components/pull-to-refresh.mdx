@@ -1,0 +1,61 @@
+---
+title: Pull to refresh
+description: Drag past the top of a list to reload it.
+---
+
+import Demo from '../../../components/Demo.astro';
+
+Wraps scrolling content and reloads it when the user pulls past the top.
+
+<Demo id="pull-to-refresh" height={300} caption="Drag down inside the list" />
+
+## Usage
+
+```kotlin
+var refreshing by remember { mutableStateOf(false) }
+
+PullToRefreshBox(
+  isRefreshing = refreshing,
+  onRefresh = {
+    refreshing = true
+    scope.launch { reload(); refreshing = false }
+  },
+) {
+  LazyColumn { /* … */ }
+}
+```
+
+`isRefreshing` is yours to hold. The indicator stays up for as long as it is `true`, so forgetting
+to set it back leaves a spinner on screen forever.
+
+## Behaviour
+
+A nested-scroll connection accumulates over-pull at the top with increasing resistance. Releasing
+past 72dp calls `onRefresh`; releasing short of it springs back without firing.
+
+| | Android / Desktop | Apple |
+|---|---|---|
+| Indicator | floating elevated circle: progress arc that becomes a spinner | content shifts down and the spoked indicator appears in the revealed space |
+
+Apple's is the UIRefreshControl behaviour — the list itself moves rather than something floating
+over it.
+
+## Accessibility
+
+Pull-to-refresh is a gesture with no keyboard or screen-reader equivalent, so it must never be the
+only way to reload. Keep a refresh action in the [top bar](/ditto/components/top-bar/) or a
+[menu](/ditto/components/menu/) as well.
+
+## API
+
+```kotlin
+@Composable
+fun PullToRefreshBox(
+  isRefreshing: Boolean,
+  onRefresh: () -> Unit,
+  modifier: Modifier = Modifier,
+  state: PullToRefreshState = rememberPullToRefreshState(),
+  enabled: Boolean = true,
+  content: @Composable () -> Unit,
+)
+```

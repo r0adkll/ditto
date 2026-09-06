@@ -4,9 +4,9 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "build": "node scripts/check-demo-ids.mjs && astro build",
+    "build": "node scripts/check-docs.mjs && astro build",
     "preview": "astro preview",
-    "check:demos": "node scripts/check-demo-ids.mjs"
+    "check:docs": "node scripts/check-docs.mjs"
   },
   "dependencies": {
     "@astrojs/starlight": "^0.42.0",

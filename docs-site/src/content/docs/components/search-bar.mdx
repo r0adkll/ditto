@@ -1,0 +1,56 @@
+---
+title: Search bar
+description: A text field dressed for search, with a clear button and a Search action.
+---
+
+import Demo from '../../../components/Demo.astro';
+
+A [text field](/ditto/components/text-field/) set up for one job: a leading search glyph, a clear
+button once there is text, and a Search key on the software keyboard.
+
+<Demo id="search-bar" height={220} />
+
+## Usage
+
+```kotlin
+val query = rememberTextFieldState()
+
+SearchBar(
+  state = query,
+  placeholder = "Search your library",
+  onSearch = { runSearch(it) },
+)
+```
+
+`onSearch` fires on the keyboard's Search action. For search-as-you-type, read `query.text` in a
+`snapshotFlow` and debounce it rather than searching on every keystroke.
+
+## Specification
+
+| | Android | Apple | Desktop |
+|---|---|---|---|
+| Container | 56dp pill on `surfaceOverlay` | 36dp rounded neutral fill | the standard bordered input |
+
+`SearchBarDefaults.style()` returns the underlying `TextFieldStyle` if you need to match a custom
+field to it.
+
+## Accessibility
+
+- Announced as a search field; the placeholder is its accessible name when no label is given.
+- The clear button has its own description and only exists while there is text to clear.
+- **Enter** triggers `onSearch`; **Escape** clears on the Desktop idiom.
+
+## API
+
+```kotlin
+@Composable
+fun SearchBar(
+  state: TextFieldState,
+  modifier: Modifier = Modifier,
+  placeholder: String = "Search",
+  onSearch: ((String) -> Unit)? = null,
+  enabled: Boolean = true,
+  style: TextFieldStyle? = null,
+  interactionSource: MutableInteractionSource? = null,
+)
+```

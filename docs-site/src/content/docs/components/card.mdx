@@ -1,0 +1,65 @@
+---
+title: Card
+description: A grouped surface in three weights, tappable when you give it a click.
+---
+
+import Demo from '../../../components/Demo.astro';
+
+A container that groups related content on its own surface. Three variants set how strongly it
+separates from the background — elevated, filled, or outlined — and giving it an `onClick` turns it
+into a control.
+
+<Demo id="card" height={220} />
+
+## Usage
+
+```kotlin
+Card(variant = CardVariant.Outlined) {
+  Column(Modifier.padding(DittoTheme.spacing.lg)) {
+    Text("Hyperion", style = DittoTheme.typography.subheading)
+    Text("Dan Simmons", style = DittoTheme.typography.bodySmall)
+  }
+}
+
+// Tappable: gains indication, a focus ring and a hand cursor
+Card(onClick = { open(book) }) { /* … */ }
+```
+
+The content slot is a `ColumnScope`. Cards carry **no padding of their own** — an image that should
+bleed to the edges is common enough that built-in padding would be in the way more often than not.
+
+## Variants
+
+| Variant | Container | Use it for |
+|---|---|---|
+| `Elevated` | shadow, ramp step or border, per idiom | cards over a busy or scrolling background |
+| `Filled` | `surfaceOverlay` | grouping inside an already-quiet area |
+| `Outlined` | `surface` with an `outlineVariant` border | dense lists where shadows would stack up |
+
+Elevation renders per idiom rather than as a shadow everywhere: Android draws a shadow, Desktop a
+border, and Apple a step up the neutral ramp. Corners are `medium` on Android and Apple, `large` on
+Desktop.
+
+## Accessibility
+
+- A card with `onClick` gets `Role.Button` and is reachable by keyboard; without one it is a plain
+  container and adds no stop.
+- Interactive cards press-scale on Android, show a focus ring with a keyboard, and a hand cursor
+  with a pointer.
+- Keep the whole card one target: nested buttons inside a clickable card give screen readers two
+  overlapping controls.
+
+## API
+
+```kotlin
+@Composable
+fun Card(
+  modifier: Modifier = Modifier,
+  variant: CardVariant = CardVariant.Elevated,
+  onClick: (() -> Unit)? = null,
+  enabled: Boolean = true,
+  style: CardStyle? = null,
+  interactionSource: MutableInteractionSource? = null,
+  content: @Composable ColumnScope.() -> Unit,
+)
+```

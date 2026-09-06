@@ -1,0 +1,98 @@
+---
+title: Tabs
+description: Switching between sibling views, with an indicator that follows the measured tab.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import Demo from '../../../components/Demo.astro';
+
+Switches between peer views of the same screen. For picking a *value* rather than a page — a range,
+a mode — use a [segmented control](/ditto/components/segmented-control/), which is also the iOS
+convention for switching a view inside a screen.
+
+<Demo id="tabs" height={300} caption="Plain, icon + label, and scrollable rows" />
+
+## Usage
+
+```kotlin
+var tab by remember { mutableIntStateOf(0) }
+
+TabRow(
+  tabs = listOf("Books", "Authors", "Series"),
+  selectedIndex = tab,
+  onSelect = { tab = it },
+)
+```
+
+Icons come from the `TabItem` overload, which also turns on scrolling for a row that will not fit:
+
+```kotlin
+TabRow(
+  tabs = listOf(TabItem("Search", DittoIcons.search), TabItem("Done", DittoIcons.check)),
+  selectedIndex = tab,
+  onSelect = { tab = it },
+)
+
+TabRow(
+  tabs = sections.map { TabItem(it) },
+  selectedIndex = tab,
+  onSelect = { tab = it },
+  scrollable = true,
+)
+```
+
+Scrollable tabs size to their content with a 90dp minimum and scroll the selected tab into view —
+instantly on the first layout, animated afterwards.
+
+<Aside type="tip" title="Tabs do not scroll the content">
+  `TabRow` is only the strip. Put the panels in a `HorizontalPager` or a `when` below it, and keep
+  `selectedIndex` in sync so swiping and tapping agree.
+</Aside>
+
+## Specification
+
+| | Android | Apple | Desktop |
+|---|---|---|---|
+| Height | 48dp | 44dp | 40dp |
+| Indicator | 3dp pill hugging the label | 2dp, full tab width | 2dp, full tab width |
+| Selected colour | `accent` | `accent` | `onSurface` |
+| Width | stretched | stretched | content-sized, start-aligned |
+
+Desktop tabs are content-sized because a desktop window is wide enough that stretched tabs leave
+enormous gaps; `TabsStyle.stretch` controls it, and `scrollable = true` overrides either.
+
+Like the [segmented control](/ditto/components/segmented-control/), the indicator animates the
+selected **index** and derives its offset from measured bounds, so it is in the right place on the
+first frame. Icon-and-label tabs grow 16dp taller to fit both.
+
+## Accessibility
+
+- `Role.Tab` on each tab with its selected state.
+- **One tab stop**; ←/→ change tabs, Home and End jump to the ends.
+- Icon-only tabs announce "Tab n" so their position is still readable; give them labels where you
+  can.
+
+## API
+
+```kotlin
+@Composable
+fun TabRow(
+  tabs: List<String>,
+  selectedIndex: Int,
+  onSelect: (Int) -> Unit,
+  modifier: Modifier = Modifier,
+  enabled: Boolean = true,
+  style: TabsStyle? = null,
+)
+
+@Composable
+fun TabRow(
+  tabs: List<TabItem>,          // TabItem(label: String? = null, icon: ImageVector? = null)
+  selectedIndex: Int,
+  onSelect: (Int) -> Unit,
+  modifier: Modifier = Modifier,
+  enabled: Boolean = true,
+  scrollable: Boolean = false,
+  style: TabsStyle? = null,
+)
+```

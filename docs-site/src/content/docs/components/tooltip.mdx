@@ -1,0 +1,72 @@
+---
+title: Tooltip
+description: A short label revealed on hover, focus or long-press.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import Demo from '../../../components/Demo.astro';
+
+Names a control that is drawn as an icon. It supplements a label — it never replaces one, because
+a tooltip is unavailable to anyone who cannot hover or long-press.
+
+<Demo id="tooltip" height={180} caption="Hover the icon buttons, or long-press on touch" />
+
+## Usage
+
+Most tooltips come free with the [icon button](/ditto/components/icon-button/) shorthand, which
+reuses the content description as the tooltip text:
+
+```kotlin
+IconButton(icon = DittoIcons.search, contentDescription = "Search the library", onClick = { })
+```
+
+Wrap anything else:
+
+```kotlin
+Tooltip("Duplicate this recording") {
+  IconButton(onClick = { copy() }) { Icon(DittoIcons.more, contentDescription = "Duplicate") }
+}
+```
+
+`TooltipBubble` is the bare surface, for previews or custom anchoring.
+
+## Behaviour
+
+- **Pointer:** appears after a 500ms hover, hides when the pointer leaves.
+- **Touch:** appears on long-press and lingers 1.5s after release.
+- **Keyboard:** appears when the anchor takes focus, after the same delay, when a keyboard is present.
+
+Long-press detection observes in the initial pointer pass **without consuming**, so the anchor
+keeps its own clicks — a tooltip never costs you a tap handler.
+
+The bubble sits above the anchor, flipping below when there is no room.
+
+<Aside type="caution" title="Never the only label">
+  Anything that exists only in a tooltip is invisible to screen readers, to touch users who do not
+  guess to long-press, and in a screenshot. Keep the meaning in `contentDescription`.
+</Aside>
+
+## Specification
+
+An inverse surface in every idiom — dark on light, light on dark — with caption text: 4dp corners
+on Android, 6–10dp with slight elevation on Apple and Desktop.
+
+## Accessibility
+
+The tooltip text is not a substitute for the anchor's accessible name. The `IconButton` shorthand
+gets this right by construction: the description is both, so the two cannot drift apart.
+
+## API
+
+```kotlin
+@Composable
+fun Tooltip(
+  text: String,
+  modifier: Modifier = Modifier,
+  style: TooltipStyle? = null,
+  content: @Composable () -> Unit,
+)
+
+@Composable
+fun TooltipBubble(text: String, modifier: Modifier = Modifier, style: TooltipStyle? = null)
+```

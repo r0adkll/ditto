@@ -1,0 +1,97 @@
+---
+title: Sheet
+description: A modal bottom sheet with detents on mobile, a centred dialog on desktop.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import Demo from '../../../components/Demo.astro';
+
+A modal panel for a secondary task — a share target, a filter set, a detail view. On Android and
+Apple it rises from the bottom and can be dragged; on Desktop a bottom sheet would be strange, so
+it presents as a centred dialog instead.
+
+<Demo id="sheet" height={420} caption="Opens at the medium detent; drag up for full, down to dismiss" />
+
+## Usage
+
+```kotlin
+if (open) {
+  ModalSheet(onDismissRequest = { open = false }) {
+    Text("Share to", style = DittoTheme.typography.heading)
+    // …
+  }
+}
+```
+
+The content slot is a `ColumnScope`. `SheetContent` renders the surface alone, without the modal
+window, for previews.
+
+## Detents
+
+By default the sheet wraps its content. Give it detents to make it stop at defined heights:
+
+```kotlin
+val sheet = rememberSheetState(
+  detents = listOf(SheetDetent.Medium, SheetDetent.Full),
+  initial = SheetDetent.Medium,
+)
+
+ModalSheet(onDismissRequest = { open = false }, state = sheet) { /* … */ }
+
+// Programmatic moves; animateTo is not suspending, it retargets the engine
+sheet.animateTo(SheetDetent.Full)
+```
+
+| Detent | Height |
+|---|---|
+| `Content` | wraps the content — the default |
+| `Fraction(f)` | `f` of the container |
+| `Full` | up to the top inset |
+
+With any non-`Content` detent the sheet is sized to the tallest one and the content area to the
+visible height, so a scrolling list fills the detent rather than the whole sheet. Releasing snaps
+to the nearest detent, biased by fling velocity, and dismisses when dragged 30% below the smallest.
+`currentDetent` is observable.
+
+<Aside type="tip" title="Scrolling content hands over">
+  A scrollable inside the sheet takes the drag until it reaches its own top, then hands it to the
+  sheet, so pulling down on a list at the top moves the sheet rather than fighting it.
+</Aside>
+
+## Specification
+
+| | Android | Apple | Desktop |
+|---|---|---|---|
+| Corners | 28dp, top only | 12dp, top only | 12dp, all round |
+| Surface | `surfaceRaised`, level 1 | `surfaceRaised` | `surface`, level 3 |
+| Presentation | bottom sheet with scrim and drag handle | same | centred dialog |
+
+The drag physics — velocity and positional thresholds, decay, nested scroll, keyboard offset —
+come from Compose Unstyled's modal bottom sheet, wrapped so no third-party type appears in Ditto's
+API. That replaced about 300 lines of hand-rolled gesture code.
+
+## Accessibility
+
+- Focus is trapped in the sheet while it is open; **Escape** and the back gesture dismiss it.
+- The drag handle carries expand, collapse and dismiss semantics actions, so the detents are
+  reachable without dragging.
+- The scrim is not the only way out — always leave a visible dismiss path.
+
+## API
+
+```kotlin
+@Composable
+fun ModalSheet(
+  onDismissRequest: () -> Unit,
+  modifier: Modifier = Modifier,
+  state: SheetState = rememberSheetState(),
+  style: SheetStyle? = null,
+  content: @Composable ColumnScope.() -> Unit,
+)
+
+@Composable
+fun rememberSheetState(
+  detents: List<SheetDetent> = listOf(SheetDetent.Content),
+  initial: SheetDetent = detents.first(),
+): SheetState
+```

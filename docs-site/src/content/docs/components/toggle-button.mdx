@@ -1,0 +1,66 @@
+---
+title: Toggle button
+description: A button that stays pressed — an on/off state that looks like an action.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import Demo from '../../../components/Demo.astro';
+
+A button that holds its state. Use it for a formatting-bar sort of toggle — bold, mute, filter on —
+where the control should read as an action you can leave switched on. For a settings row, prefer a
+[switch](/ditto/components/switch/); for one of several options, a
+[segmented control](/ditto/components/segmented-control/).
+
+<Demo id="toggle-button" height={170} />
+
+## Usage
+
+```kotlin
+var muted by remember { mutableStateOf(false) }
+
+ToggleButton(checked = muted, onCheckedChange = { muted = it }) {
+  Icon(DittoIcons.close, contentDescription = null)
+  Text("Mute")
+}
+```
+
+The content slot is a `RowScope`, exactly as on [Button](/ditto/components/button/), and inherits
+the same content colour and icon size.
+
+## Specification
+
+| | Android | Apple | Desktop |
+|---|---|---|---|
+| Off | tonal container, `medium` corners | neutral step 3 fill | outlined |
+| On | accent fill, morphs to a pill | accent fill | neutral fill |
+| Motion | corner radii lerp between the two shapes | colour tween | colour tween |
+
+Android's shape change is the M3 Expressive behaviour: an internal `MorphShape` interpolates the
+corner radii, so the container visibly rounds as it turns on rather than only changing colour.
+
+<Aside type="tip" title="Say what it does, not what it is">
+  Label the button with the action it controls, and let the pressed state carry the on/off. A
+  button labelled "Muted" that is also visibly on says the same thing twice, and reads as
+  contradictory when it is off.
+</Aside>
+
+## Accessibility
+
+- `Role.Checkbox` with the checked state, so it announces as on or off; **Space** toggles it.
+- On the Apple idiom, toggling fires the platform haptic.
+- Focus ring when a keyboard is present; hand cursor with a pointer.
+
+## API
+
+```kotlin
+@Composable
+fun ToggleButton(
+  checked: Boolean,
+  onCheckedChange: (Boolean) -> Unit,
+  modifier: Modifier = Modifier,
+  enabled: Boolean = true,
+  style: ToggleButtonStyle? = null,
+  interactionSource: MutableInteractionSource? = null,
+  content: @Composable RowScope.() -> Unit,
+)
+```
