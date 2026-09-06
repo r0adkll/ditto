@@ -390,11 +390,7 @@ public fun SidebarItem(
   val labelColor by animateColorAsState(if (selected) style.selectedLabelColor else style.labelColor, tween(motion.durationShort))
   val indicator by animateColorAsState(if (selected) style.indicatorColor else Color.Transparent, tween(motion.durationShort))
   val spacing = DittoTheme.spacing
-  val height = when (DittoTheme.idiom) {
-    Idiom.Android -> 56.dp
-    Idiom.Apple -> 44.dp
-    Idiom.Desktop -> 32.dp
-  }
+  val height = DittoTheme.dimens.listRowHeight
 
   Row(
     modifier

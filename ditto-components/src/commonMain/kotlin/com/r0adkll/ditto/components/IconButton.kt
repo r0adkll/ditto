@@ -105,10 +105,10 @@ public object IconButtonDefaults {
     val dimens = DittoTheme.dimens
     val disabledContent = colors.onSurface.copy(alpha = colors.disabledAlpha)
     val disabledContainer = colors.onSurface.copy(alpha = 0.12f)
-    val (size, shape) = when (idiom) {
-      Idiom.Android -> 40.dp to shapes.full
-      Idiom.Apple -> 36.dp to shapes.full
-      Idiom.Desktop -> 32.dp to shapes.small
+    val size = dimens.iconButtonSize
+    val shape = when (idiom) {
+      Idiom.Android, Idiom.Apple -> shapes.full
+      Idiom.Desktop -> shapes.small
     }
     val standard = IconButtonStyle(
       containerColor = Color.Transparent,

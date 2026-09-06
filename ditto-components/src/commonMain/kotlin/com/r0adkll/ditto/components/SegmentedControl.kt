@@ -110,7 +110,7 @@ public object SegmentedControlDefaults {
     val dimens = DittoTheme.dimens
     return when (idiom) {
       Idiom.Android -> SegmentedControlStyle(
-        height = 40.dp,
+        height = dimens.controlHeight,
         shape = shapes.full,
         segmentShape = shapes.none,
         containerColor = Color.Transparent,
@@ -124,7 +124,7 @@ public object SegmentedControlDefaults {
         dividers = true,
       )
       Idiom.Apple -> SegmentedControlStyle(
-        height = 32.dp,
+        height = dimens.controlHeight - 12.dp,
         shape = shapes.small,
         segmentShape = shapes.extraSmall,
         containerColor = colors.neutrals[if (colors.isDark) 4 else 4],
@@ -138,7 +138,7 @@ public object SegmentedControlDefaults {
         dividers = false,
       )
       Idiom.Desktop -> SegmentedControlStyle(
-        height = 36.dp,
+        height = dimens.controlHeight,
         shape = shapes.small,
         segmentShape = shapes.extraSmall,
         containerColor = colors.neutrals[if (colors.isDark) 3 else 3],

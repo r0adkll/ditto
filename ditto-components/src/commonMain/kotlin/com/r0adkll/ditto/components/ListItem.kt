@@ -103,10 +103,11 @@ public object ListItemDefaults {
     val type = DittoTheme.typography
     val spacing = DittoTheme.spacing
     val shapes = DittoTheme.shapes
+    val dimens = DittoTheme.dimens
     return when (idiom) {
       Idiom.Android -> ListItemStyle(
-        minHeight = 56.dp,
-        minHeightTwoLine = 72.dp,
+        minHeight = dimens.listRowHeight,
+        minHeightTwoLine = dimens.listRowHeightTwoLine,
         contentPadding = PaddingValues(horizontal = spacing.lg, vertical = spacing.sm),
         shape = shapes.none,
         containerColor = Color.Transparent,
@@ -121,8 +122,8 @@ public object ListItemDefaults {
         disclosureIndicator = false,
       )
       Idiom.Apple -> ListItemStyle(
-        minHeight = 44.dp,
-        minHeightTwoLine = 60.dp,
+        minHeight = dimens.listRowHeight,
+        minHeightTwoLine = dimens.listRowHeightTwoLine,
         contentPadding = PaddingValues(horizontal = spacing.lg, vertical = spacing.sm),
         shape = shapes.none,
         containerColor = Color.Transparent,
@@ -137,8 +138,8 @@ public object ListItemDefaults {
         disclosureIndicator = true,
       )
       Idiom.Desktop -> ListItemStyle(
-        minHeight = 40.dp,
-        minHeightTwoLine = 56.dp,
+        minHeight = dimens.listRowHeight,
+        minHeightTwoLine = dimens.listRowHeightTwoLine,
         contentPadding = PaddingValues(horizontal = spacing.md, vertical = spacing.xs),
         shape = shapes.small,
         containerColor = Color.Transparent,

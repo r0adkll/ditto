@@ -28,6 +28,10 @@ configurations.all {
   }
 }
 
+tasks.withType<Test>().configureEach {
+  systemProperty("ditto.updateGoldens", providers.gradleProperty("ditto.updateGoldens").orNull ?: "false")
+}
+
 compose.desktop {
   application {
     mainClass = "com.r0adkll.ditto.spike.MainKt"

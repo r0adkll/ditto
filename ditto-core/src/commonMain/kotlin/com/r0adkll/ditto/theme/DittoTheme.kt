@@ -17,6 +17,7 @@ import com.r0adkll.ditto.foundation.LocalTextStyle
 import com.r0adkll.ditto.interaction.dittoIndication
 import com.r0adkll.ditto.tokens.ColorMode
 import com.r0adkll.ditto.tokens.DittoColors
+import com.r0adkll.ditto.tokens.DittoDensity
 import com.r0adkll.ditto.tokens.DittoDimens
 import com.r0adkll.ditto.tokens.DittoElevation
 import com.r0adkll.ditto.tokens.DittoMotion
@@ -39,6 +40,8 @@ public val LocalDittoMotion: ProvidableCompositionLocal<DittoMotion> =
   staticCompositionLocalOf { DittoMotion.forIdiom(Idiom.Desktop) }
 public val LocalDittoDimens: ProvidableCompositionLocal<DittoDimens> =
   staticCompositionLocalOf { DittoDimens.forIdiom(Idiom.Desktop) }
+public val LocalDittoDensity: ProvidableCompositionLocal<DittoDensity> =
+  staticCompositionLocalOf { DittoDensity.forIdiom(Idiom.Desktop) }
 
 /**
  * Optional hook applied to whatever typography a [DittoTheme] receives, including nested themes
@@ -73,14 +76,15 @@ public object DittoDefaults {
 public fun DittoTheme(
   idiom: Idiom = LocalIdiom.current,
   colorMode: ColorMode = ColorMode.System,
+  density: DittoDensity = DittoDensity.forIdiom(idiom),
   lightColors: DittoColors = remember { DittoColors.from(DittoDefaults.Accent, dark = false) },
   darkColors: DittoColors = remember { DittoColors.from(DittoDefaults.Accent, dark = true) },
-  typography: DittoTypography = remember(idiom) { DittoTypography.forIdiom(idiom) },
+  typography: DittoTypography = remember(idiom, density) { DittoTypography.forIdiom(idiom, density = density) },
   shapes: DittoShapes = remember(idiom) { DittoShapes.forIdiom(idiom) },
   spacing: DittoSpacing = remember(idiom) { DittoSpacing.forIdiom(idiom) },
   elevation: DittoElevation? = null,
   motion: DittoMotion = remember(idiom) { DittoMotion.forIdiom(idiom) },
-  dimens: DittoDimens = remember(idiom) { DittoDimens.forIdiom(idiom) },
+  dimens: DittoDimens = remember(idiom, density) { DittoDimens.forIdiom(idiom, density) },
   content: @Composable () -> Unit,
 ) {
   val dark = when (colorMode) {
@@ -108,6 +112,7 @@ public fun DittoTheme(
     LocalDittoElevation provides resolvedElevation,
     LocalDittoMotion provides motion,
     LocalDittoDimens provides dimens,
+    LocalDittoDensity provides density,
     LocalContentColor provides colors.onBackground,
     LocalTextStyle provides resolvedTypography.body,
     LocalIndication provides indication,
@@ -126,11 +131,12 @@ public fun DittoTheme(
   neutrals: Neutrals = Neutrals.Cool,
   idiom: Idiom = LocalIdiom.current,
   colorMode: ColorMode = ColorMode.System,
+  density: DittoDensity = DittoDensity.forIdiom(idiom),
   content: @Composable () -> Unit,
 ) {
   val light = remember(accent, neutrals) { DittoColors.from(accent, dark = false, neutrals = neutrals) }
   val dark = remember(accent, neutrals) { DittoColors.from(accent, dark = true, neutrals = neutrals) }
-  DittoTheme(idiom = idiom, colorMode = colorMode, lightColors = light, darkColors = dark, content = content)
+  DittoTheme(idiom = idiom, colorMode = colorMode, density = density, lightColors = light, darkColors = dark, content = content)
 }
 
 /** Accessors for the current theme's tokens. */
@@ -149,6 +155,8 @@ public object DittoTheme {
     @Composable @ReadOnlyComposable get() = LocalDittoMotion.current
   public val dimens: DittoDimens
     @Composable @ReadOnlyComposable get() = LocalDittoDimens.current
+  public val density: DittoDensity
+    @Composable @ReadOnlyComposable get() = LocalDittoDensity.current
   public val idiom: Idiom
     @Composable @ReadOnlyComposable get() = LocalIdiom.current
   public val isDark: Boolean

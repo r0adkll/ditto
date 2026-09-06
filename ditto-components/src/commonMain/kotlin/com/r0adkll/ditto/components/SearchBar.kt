@@ -29,7 +29,7 @@ public object SearchBarDefaults {
     return when (idiom) {
       Idiom.Android -> base.copy(
         shape = shapes.full,
-        minHeight = 56.dp,
+        minHeight = DittoTheme.dimens.fieldHeight,
         containerColor = colors.surfaceOverlay,
         borderWidth = 0.dp,
         borderColor = Color.Transparent,
@@ -38,7 +38,7 @@ public object SearchBarDefaults {
         contentPadding = PaddingValues(horizontal = DittoTheme.spacing.lg, vertical = DittoTheme.spacing.sm),
       )
       Idiom.Apple -> base.copy(
-        minHeight = 36.dp,
+        minHeight = DittoTheme.dimens.fieldHeight - 8.dp,
         shape = shapes.small,
         contentPadding = PaddingValues(horizontal = DittoTheme.spacing.sm, vertical = DittoTheme.spacing.xs),
         iconColor = colors.onSurfaceVariant,

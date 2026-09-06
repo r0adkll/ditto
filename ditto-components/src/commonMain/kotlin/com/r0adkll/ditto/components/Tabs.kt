@@ -67,6 +67,8 @@ public class TabsStyle(
   public val indicatorShape: Shape,
   /** Indicator hugs the label (Android Expressive) instead of spanning the tab. */
   public val indicatorFitsLabel: Boolean,
+  /** Tabs share the row width equally (mobile) instead of sizing to content (desktop). */
+  public val stretch: Boolean,
   public val selectedContentColor: Color,
   public val contentColor: Color,
   public val textStyle: TextStyle,
@@ -79,13 +81,14 @@ public class TabsStyle(
     indicatorColor: Color = this.indicatorColor,
     indicatorShape: Shape = this.indicatorShape,
     indicatorFitsLabel: Boolean = this.indicatorFitsLabel,
+    stretch: Boolean = this.stretch,
     selectedContentColor: Color = this.selectedContentColor,
     contentColor: Color = this.contentColor,
     textStyle: TextStyle = this.textStyle,
     dividerColor: Color = this.dividerColor,
     tabShape: Shape = this.tabShape,
   ): TabsStyle = TabsStyle(
-    height, indicatorHeight, indicatorColor, indicatorShape, indicatorFitsLabel, selectedContentColor, contentColor,
+    height, indicatorHeight, indicatorColor, indicatorShape, indicatorFitsLabel, stretch, selectedContentColor, contentColor,
     textStyle, dividerColor, tabShape,
   )
 
@@ -93,7 +96,7 @@ public class TabsStyle(
   override fun hashCode(): Int = fields().hashCode()
   override fun toString(): String = "TabsStyle(height=$height)"
   private fun fields(): List<Any?> = listOf(
-    height, indicatorHeight, indicatorColor, indicatorShape, indicatorFitsLabel, selectedContentColor, contentColor,
+    height, indicatorHeight, indicatorColor, indicatorShape, indicatorFitsLabel, stretch, selectedContentColor, contentColor,
     textStyle, dividerColor, tabShape,
   )
 }
@@ -107,13 +110,15 @@ public object TabsDefaults {
     val colors = DittoTheme.colors
     val type = DittoTheme.typography
     val shapes = DittoTheme.shapes
+    val dimens = DittoTheme.dimens
     return when (idiom) {
       Idiom.Android -> TabsStyle(
-        height = 48.dp,
+        height = dimens.tabHeight,
         indicatorHeight = 3.dp,
         indicatorColor = colors.accent,
         indicatorShape = shapes.full,
         indicatorFitsLabel = true,
+        stretch = true,
         selectedContentColor = colors.accent,
         contentColor = colors.onSurfaceVariant,
         textStyle = type.label,
@@ -121,11 +126,12 @@ public object TabsDefaults {
         tabShape = shapes.none,
       )
       Idiom.Apple -> TabsStyle(
-        height = 44.dp,
+        height = dimens.tabHeight,
         indicatorHeight = 2.dp,
         indicatorColor = colors.accent,
         indicatorShape = shapes.full,
         indicatorFitsLabel = false,
+        stretch = true,
         selectedContentColor = colors.accent,
         contentColor = colors.onSurfaceVariant,
         textStyle = type.label,
@@ -133,11 +139,12 @@ public object TabsDefaults {
         tabShape = shapes.none,
       )
       Idiom.Desktop -> TabsStyle(
-        height = 40.dp,
+        height = dimens.tabHeight,
         indicatorHeight = 2.dp,
         indicatorColor = colors.accent,
         indicatorShape = shapes.none,
         indicatorFitsLabel = false,
+        stretch = false,
         selectedContentColor = colors.onSurface,
         contentColor = colors.onSurfaceVariant,
         textStyle = type.label,
@@ -271,7 +278,13 @@ public fun TabRow(
           val tint = if (enabled) color else color.copy(alpha = DittoTheme.colors.disabledAlpha)
           Column(
             Modifier
-              .then(if (scrollable) Modifier.widthIn(min = 90.dp) else Modifier.weight(1f))
+              .then(
+                when {
+                  scrollable -> Modifier.widthIn(min = 90.dp)
+                  style.stretch -> Modifier.weight(1f)
+                  else -> Modifier
+                },
+              )
               .height(height)
               .onPlaced { coords -> bounds[index] = coords.positionInParent().x.toInt() to coords.size.width }
               .focusRing(interactionSource, style.tabShape)

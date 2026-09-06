@@ -53,7 +53,11 @@ public class DittoTypography(
      * Default scale for [idiom]. All idioms use [fontFamily] (system default unless given), differing
      * in size, weight and tracking (ADR-026).
      */
-    public fun forIdiom(idiom: Idiom, fontFamily: FontFamily = FontFamily.Default): DittoTypography = when (idiom) {
+    public fun forIdiom(
+      idiom: Idiom,
+      fontFamily: FontFamily = FontFamily.Default,
+      density: DittoDensity = DittoDensity.forIdiom(idiom),
+    ): DittoTypography = when (idiom) {
       Idiom.Android -> DittoTypography(
         display = style(fontFamily, 45.sp, 52.sp, FontWeight.Normal, 0.sp),
         title = style(fontFamily, 28.sp, 36.sp, FontWeight.Normal, 0.sp),
@@ -74,7 +78,19 @@ public class DittoTypography(
         label = style(fontFamily, 17.sp, 22.sp, FontWeight.Medium, (-0.41).sp),
         caption = style(fontFamily, 12.sp, 16.sp, FontWeight.Normal, 0.sp),
       )
-      Idiom.Desktop -> DittoTypography(
+      Idiom.Desktop -> if (density == DittoDensity.Compact) {
+        // Int UI-class density: 13sp body, small 11, headings 16/22/25.
+        DittoTypography(
+          display = style(fontFamily, 25.sp, 30.sp, FontWeight.Bold, (-0.25).sp),
+          title = style(fontFamily, 22.sp, 28.sp, FontWeight.Bold, (-0.25).sp),
+          heading = style(fontFamily, 16.sp, 22.sp, FontWeight.SemiBold, 0.sp),
+          subheading = style(fontFamily, 14.sp, 20.sp, FontWeight.SemiBold, 0.sp),
+          body = style(fontFamily, 13.sp, 18.sp, FontWeight.Normal, 0.sp),
+          bodySmall = style(fontFamily, 12.sp, 16.sp, FontWeight.Normal, 0.sp),
+          label = style(fontFamily, 13.sp, 18.sp, FontWeight.Medium, 0.sp),
+          caption = style(fontFamily, 11.sp, 14.sp, FontWeight.Normal, 0.sp),
+        )
+      } else DittoTypography(
         display = style(fontFamily, 36.sp, 40.sp, FontWeight.SemiBold, (-0.5).sp),
         title = style(fontFamily, 24.sp, 32.sp, FontWeight.SemiBold, (-0.25).sp),
         heading = style(fontFamily, 18.sp, 26.sp, FontWeight.SemiBold, 0.sp),

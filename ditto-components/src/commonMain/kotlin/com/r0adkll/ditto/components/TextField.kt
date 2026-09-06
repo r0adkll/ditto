@@ -121,14 +121,15 @@ public object TextFieldDefaults {
     val shapes = DittoTheme.shapes
     val type = DittoTheme.typography
     val spacing = DittoTheme.spacing
+    val dimens = DittoTheme.dimens
     val base = TextFieldStyle(
       shape = shapes.small,
-      minHeight = 36.dp,
+      minHeight = dimens.fieldHeight,
       contentPadding = PaddingValues(horizontal = spacing.md, vertical = spacing.sm),
       containerColor = colors.surface,
-      borderWidth = DittoTheme.dimens.borderWidth,
+      borderWidth = dimens.borderWidth,
       borderColor = colors.outlineVariant,
-      focusedBorderWidth = DittoTheme.dimens.borderWidth,
+      focusedBorderWidth = dimens.borderWidth,
       focusedBorderColor = colors.accent,
       errorColor = colors.error,
       textStyle = type.body,
@@ -145,7 +146,7 @@ public object TextFieldDefaults {
     return when (idiom) {
       Idiom.Android -> base.copy(
         shape = shapes.extraSmall,
-        minHeight = 56.dp,
+        minHeight = dimens.fieldHeight,
         contentPadding = PaddingValues(horizontal = spacing.lg, vertical = spacing.sm),
         containerColor = Color.Transparent,
         borderColor = colors.outline,
@@ -156,7 +157,7 @@ public object TextFieldDefaults {
       )
       Idiom.Apple -> base.copy(
         shape = shapes.small,
-        minHeight = 44.dp,
+        minHeight = dimens.fieldHeight,
         contentPadding = PaddingValues(horizontal = spacing.md, vertical = spacing.sm),
         containerColor = colors.surfaceOverlay,
         borderWidth = 0.dp,

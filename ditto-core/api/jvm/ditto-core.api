@@ -228,6 +228,7 @@ public final class com/r0adkll/ditto/theme/DittoTheme {
 	public static final field $stable I
 	public static final field INSTANCE Lcom/r0adkll/ditto/theme/DittoTheme;
 	public final fun getColors (Landroidx/compose/runtime/Composer;I)Lcom/r0adkll/ditto/tokens/DittoColors;
+	public final fun getDensity (Landroidx/compose/runtime/Composer;I)Lcom/r0adkll/ditto/tokens/DittoDensity;
 	public final fun getDimens (Landroidx/compose/runtime/Composer;I)Lcom/r0adkll/ditto/tokens/DittoDimens;
 	public final fun getElevation (Landroidx/compose/runtime/Composer;I)Lcom/r0adkll/ditto/tokens/DittoElevation;
 	public final fun getIdiom (Landroidx/compose/runtime/Composer;I)Lcom/r0adkll/ditto/Idiom;
@@ -239,9 +240,10 @@ public final class com/r0adkll/ditto/theme/DittoTheme {
 }
 
 public final class com/r0adkll/ditto/theme/DittoThemeKt {
-	public static final fun DittoTheme (Lcom/r0adkll/ditto/Idiom;Lcom/r0adkll/ditto/tokens/ColorMode;Lcom/r0adkll/ditto/tokens/DittoColors;Lcom/r0adkll/ditto/tokens/DittoColors;Lcom/r0adkll/ditto/tokens/DittoTypography;Lcom/r0adkll/ditto/tokens/DittoShapes;Lcom/r0adkll/ditto/tokens/DittoSpacing;Lcom/r0adkll/ditto/tokens/DittoElevation;Lcom/r0adkll/ditto/tokens/DittoMotion;Lcom/r0adkll/ditto/tokens/DittoDimens;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;III)V
-	public static final fun DittoTheme-yWKOrZg (JLcom/r0adkll/ditto/tokens/Neutrals;Lcom/r0adkll/ditto/Idiom;Lcom/r0adkll/ditto/tokens/ColorMode;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+	public static final fun DittoTheme (Lcom/r0adkll/ditto/Idiom;Lcom/r0adkll/ditto/tokens/ColorMode;Lcom/r0adkll/ditto/tokens/DittoDensity;Lcom/r0adkll/ditto/tokens/DittoColors;Lcom/r0adkll/ditto/tokens/DittoColors;Lcom/r0adkll/ditto/tokens/DittoTypography;Lcom/r0adkll/ditto/tokens/DittoShapes;Lcom/r0adkll/ditto/tokens/DittoSpacing;Lcom/r0adkll/ditto/tokens/DittoElevation;Lcom/r0adkll/ditto/tokens/DittoMotion;Lcom/r0adkll/ditto/tokens/DittoDimens;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;III)V
+	public static final fun DittoTheme-ZPw9REg (JLcom/r0adkll/ditto/tokens/Neutrals;Lcom/r0adkll/ditto/Idiom;Lcom/r0adkll/ditto/tokens/ColorMode;Lcom/r0adkll/ditto/tokens/DittoDensity;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
 	public static final fun getLocalDittoColors ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+	public static final fun getLocalDittoDensity ()Landroidx/compose/runtime/ProvidableCompositionLocal;
 	public static final fun getLocalDittoDimens ()Landroidx/compose/runtime/ProvidableCompositionLocal;
 	public static final fun getLocalDittoElevation ()Landroidx/compose/runtime/ProvidableCompositionLocal;
 	public static final fun getLocalDittoMotion ()Landroidx/compose/runtime/ProvidableCompositionLocal;
@@ -314,27 +316,55 @@ public final class com/r0adkll/ditto/tokens/DittoColors$Companion {
 	public static synthetic fun from-ek8zF_U$default (Lcom/r0adkll/ditto/tokens/DittoColors$Companion;JZLcom/r0adkll/ditto/tokens/Neutrals;ILjava/lang/Object;)Lcom/r0adkll/ditto/tokens/DittoColors;
 }
 
+public final class com/r0adkll/ditto/tokens/DittoDensity : java/lang/Enum {
+	public static final field Comfortable Lcom/r0adkll/ditto/tokens/DittoDensity;
+	public static final field Compact Lcom/r0adkll/ditto/tokens/DittoDensity;
+	public static final field Companion Lcom/r0adkll/ditto/tokens/DittoDensity$Companion;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/r0adkll/ditto/tokens/DittoDensity;
+	public static fun values ()[Lcom/r0adkll/ditto/tokens/DittoDensity;
+}
+
+public final class com/r0adkll/ditto/tokens/DittoDensity$Companion {
+	public final fun forIdiom (Lcom/r0adkll/ditto/Idiom;)Lcom/r0adkll/ditto/tokens/DittoDensity;
+}
+
 public final class com/r0adkll/ditto/tokens/DittoDimens {
 	public static final field $stable I
 	public static final field Companion Lcom/r0adkll/ditto/tokens/DittoDimens$Companion;
-	public synthetic fun <init> (FFFFLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (FFFFFFFFFFFLkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1-D9Ej5fM ()F
+	public final fun component10-D9Ej5fM ()F
+	public final fun component11-D9Ej5fM ()F
 	public final fun component2-D9Ej5fM ()F
 	public final fun component3-D9Ej5fM ()F
 	public final fun component4-D9Ej5fM ()F
-	public final fun copy-a9UjIt4 (FFFF)Lcom/r0adkll/ditto/tokens/DittoDimens;
-	public static synthetic fun copy-a9UjIt4$default (Lcom/r0adkll/ditto/tokens/DittoDimens;FFFFILjava/lang/Object;)Lcom/r0adkll/ditto/tokens/DittoDimens;
+	public final fun component5-D9Ej5fM ()F
+	public final fun component6-D9Ej5fM ()F
+	public final fun component7-D9Ej5fM ()F
+	public final fun component8-D9Ej5fM ()F
+	public final fun component9-D9Ej5fM ()F
+	public final fun copy-kBVM9y0 (FFFFFFFFFFF)Lcom/r0adkll/ditto/tokens/DittoDimens;
+	public static synthetic fun copy-kBVM9y0$default (Lcom/r0adkll/ditto/tokens/DittoDimens;FFFFFFFFFFFILjava/lang/Object;)Lcom/r0adkll/ditto/tokens/DittoDimens;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getBorderWidth-D9Ej5fM ()F
+	public final fun getControlHeight-D9Ej5fM ()F
+	public final fun getFieldHeight-D9Ej5fM ()F
 	public final fun getFocusRingWidth-D9Ej5fM ()F
+	public final fun getIconButtonSize-D9Ej5fM ()F
 	public final fun getIconSize-D9Ej5fM ()F
+	public final fun getListRowHeight-D9Ej5fM ()F
+	public final fun getListRowHeightTwoLine-D9Ej5fM ()F
+	public final fun getMenuItemHeight-D9Ej5fM ()F
 	public final fun getMinInteractiveSize-D9Ej5fM ()F
+	public final fun getTabHeight-D9Ej5fM ()F
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
 public final class com/r0adkll/ditto/tokens/DittoDimens$Companion {
-	public final fun forIdiom (Lcom/r0adkll/ditto/Idiom;)Lcom/r0adkll/ditto/tokens/DittoDimens;
+	public final fun forIdiom (Lcom/r0adkll/ditto/Idiom;Lcom/r0adkll/ditto/tokens/DittoDensity;)Lcom/r0adkll/ditto/tokens/DittoDimens;
+	public static synthetic fun forIdiom$default (Lcom/r0adkll/ditto/tokens/DittoDimens$Companion;Lcom/r0adkll/ditto/Idiom;Lcom/r0adkll/ditto/tokens/DittoDensity;ILjava/lang/Object;)Lcom/r0adkll/ditto/tokens/DittoDimens;
 }
 
 public final class com/r0adkll/ditto/tokens/DittoElevation {
@@ -448,8 +478,8 @@ public final class com/r0adkll/ditto/tokens/DittoTypography {
 }
 
 public final class com/r0adkll/ditto/tokens/DittoTypography$Companion {
-	public final fun forIdiom (Lcom/r0adkll/ditto/Idiom;Landroidx/compose/ui/text/font/FontFamily;)Lcom/r0adkll/ditto/tokens/DittoTypography;
-	public static synthetic fun forIdiom$default (Lcom/r0adkll/ditto/tokens/DittoTypography$Companion;Lcom/r0adkll/ditto/Idiom;Landroidx/compose/ui/text/font/FontFamily;ILjava/lang/Object;)Lcom/r0adkll/ditto/tokens/DittoTypography;
+	public final fun forIdiom (Lcom/r0adkll/ditto/Idiom;Landroidx/compose/ui/text/font/FontFamily;Lcom/r0adkll/ditto/tokens/DittoDensity;)Lcom/r0adkll/ditto/tokens/DittoTypography;
+	public static synthetic fun forIdiom$default (Lcom/r0adkll/ditto/tokens/DittoTypography$Companion;Lcom/r0adkll/ditto/Idiom;Landroidx/compose/ui/text/font/FontFamily;Lcom/r0adkll/ditto/tokens/DittoDensity;ILjava/lang/Object;)Lcom/r0adkll/ditto/tokens/DittoTypography;
 }
 
 public final class com/r0adkll/ditto/tokens/ElevationLevel : java/lang/Enum {

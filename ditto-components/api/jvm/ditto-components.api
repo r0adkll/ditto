@@ -923,9 +923,9 @@ public final class com/r0adkll/ditto/components/TabsKt {
 
 public final class com/r0adkll/ditto/components/TabsStyle {
 	public static final field $stable I
-	public synthetic fun <init> (FFJLandroidx/compose/ui/graphics/Shape;ZJJLandroidx/compose/ui/text/TextStyle;JLandroidx/compose/ui/graphics/Shape;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun copy-dExEIEE (FFJLandroidx/compose/ui/graphics/Shape;ZJJLandroidx/compose/ui/text/TextStyle;JLandroidx/compose/ui/graphics/Shape;)Lcom/r0adkll/ditto/components/TabsStyle;
-	public static synthetic fun copy-dExEIEE$default (Lcom/r0adkll/ditto/components/TabsStyle;FFJLandroidx/compose/ui/graphics/Shape;ZJJLandroidx/compose/ui/text/TextStyle;JLandroidx/compose/ui/graphics/Shape;ILjava/lang/Object;)Lcom/r0adkll/ditto/components/TabsStyle;
+	public synthetic fun <init> (FFJLandroidx/compose/ui/graphics/Shape;ZZJJLandroidx/compose/ui/text/TextStyle;JLandroidx/compose/ui/graphics/Shape;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy-tf59N1I (FFJLandroidx/compose/ui/graphics/Shape;ZZJJLandroidx/compose/ui/text/TextStyle;JLandroidx/compose/ui/graphics/Shape;)Lcom/r0adkll/ditto/components/TabsStyle;
+	public static synthetic fun copy-tf59N1I$default (Lcom/r0adkll/ditto/components/TabsStyle;FFJLandroidx/compose/ui/graphics/Shape;ZZJJLandroidx/compose/ui/text/TextStyle;JLandroidx/compose/ui/graphics/Shape;ILjava/lang/Object;)Lcom/r0adkll/ditto/components/TabsStyle;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getContentColor-0d7_KjU ()J
 	public final fun getDividerColor-0d7_KjU ()J
@@ -935,6 +935,7 @@ public final class com/r0adkll/ditto/components/TabsStyle {
 	public final fun getIndicatorHeight-D9Ej5fM ()F
 	public final fun getIndicatorShape ()Landroidx/compose/ui/graphics/Shape;
 	public final fun getSelectedContentColor-0d7_KjU ()J
+	public final fun getStretch ()Z
 	public final fun getTabShape ()Landroidx/compose/ui/graphics/Shape;
 	public final fun getTextStyle ()Landroidx/compose/ui/text/TextStyle;
 	public fun hashCode ()I
