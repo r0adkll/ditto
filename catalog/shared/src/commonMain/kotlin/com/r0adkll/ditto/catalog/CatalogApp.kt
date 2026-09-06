@@ -110,6 +110,12 @@ import com.r0adkll.ditto.foundation.Text
 import com.r0adkll.ditto.icons.DittoIcons
 import com.r0adkll.ditto.platformIdiom
 import com.r0adkll.ditto.theme.DittoTheme
+import com.r0adkll.ditto.theme.DittoStyleOverrides
+import com.r0adkll.ditto.theme.dittoStyleOverrides
+import com.r0adkll.ditto.components.ButtonStyle
+import com.r0adkll.ditto.components.CardStyle
+import com.r0adkll.ditto.components.TextFieldStyle
+import androidx.compose.foundation.shape.RoundedCornerShape
 import com.r0adkll.ditto.tokens.ColorMode
 import com.r0adkll.ditto.tokens.ElevationLevel
 import com.r0adkll.ditto.tokens.Neutrals
@@ -130,8 +136,17 @@ fun CatalogApp() {
   var colorMode by remember { mutableStateOf(ColorMode.System) }
   var accent by remember { mutableStateOf(Accents.first().second) }
   var neutrals by remember { mutableStateOf(Neutrals.Cool) }
+  var sharpCorners by remember { mutableStateOf(false) }
+  // App-wide tweak as a transform of each idiom's default (ADR-029): survives idiom/density switches.
+  val overrides = remember(sharpCorners) {
+    if (!sharpCorners) DittoStyleOverrides.Empty else dittoStyleOverrides {
+      override<ButtonStyle> { it.copy(shape = RoundedCornerShape(2.dp)) }
+      override<TextFieldStyle> { it.copy(shape = RoundedCornerShape(2.dp)) }
+      override<CardStyle> { it.copy(shape = RoundedCornerShape(4.dp)) }
+    }
+  }
 
-  DittoTheme(accent = accent, neutrals = neutrals, idiom = idiom, colorMode = colorMode) {
+  DittoTheme(accent = accent, neutrals = neutrals, idiom = idiom, colorMode = colorMode, styleOverrides = overrides) {
     val scroll = rememberTopBarScrollBehavior()
     val snackbars = remember { SnackbarHostState() }
     var refreshing by remember { mutableStateOf(false) }
@@ -175,6 +190,7 @@ fun CatalogApp() {
           colorMode = colorMode, onColorMode = { colorMode = it },
           accent = accent, onAccent = { accent = it },
           neutrals = neutrals, onNeutrals = { neutrals = it },
+          sharpCorners = sharpCorners, onSharpCorners = { sharpCorners = it },
         )
         Section("Buttons") { ButtonsDemo() }
         Section("Icon buttons") { IconButtonsDemo() }
@@ -206,6 +222,7 @@ private fun Header(
   colorMode: ColorMode, onColorMode: (ColorMode) -> Unit,
   accent: Color, onAccent: (Color) -> Unit,
   neutrals: Neutrals, onNeutrals: (Neutrals) -> Unit,
+  sharpCorners: Boolean, onSharpCorners: (Boolean) -> Unit,
 ) {
   Column(verticalArrangement = Arrangement.spacedBy(DittoTheme.spacing.md)) {
     Text(
@@ -216,6 +233,11 @@ private fun Header(
     Chooser("Idiom", Idiom.entries, idiom, { it.name }, onIdiom)
     Chooser("Color mode", ColorMode.entries, colorMode, { it.name }, onColorMode)
     Chooser("Neutrals", Neutrals.entries, neutrals, { it.name }, onNeutrals)
+    Row(horizontalArrangement = Arrangement.spacedBy(DittoTheme.spacing.sm), verticalAlignment = Alignment.CenterVertically) {
+      Text("Overrides", style = DittoTheme.typography.label, modifier = Modifier.width(88.dp))
+      Switch(checked = sharpCorners, onCheckedChange = onSharpCorners)
+      Text("Sharp corners app-wide", style = DittoTheme.typography.bodySmall, color = DittoTheme.colors.onSurfaceVariant)
+    }
     Row(horizontalArrangement = Arrangement.spacedBy(DittoTheme.spacing.sm), verticalAlignment = Alignment.CenterVertically) {
       Text("Accent", style = DittoTheme.typography.label, modifier = Modifier.width(88.dp))
       Accents.forEach { (name, color) ->

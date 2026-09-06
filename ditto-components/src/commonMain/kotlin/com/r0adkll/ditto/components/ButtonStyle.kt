@@ -221,5 +221,5 @@ public object ButtonDefaults {
   @Composable
   @ReadOnlyComposable
   internal fun resolve(explicit: ButtonStyle?, variant: ButtonVariant): ButtonStyle =
-    explicit ?: LocalButtonStyles.current[variant] ?: style(variant)
+    explicit ?: LocalButtonStyles.current[variant] ?: DittoTheme.styleOverrides.resolve(style(variant), variant)
 }

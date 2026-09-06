@@ -115,7 +115,7 @@ public object CardDefaults {
   @Composable
   @ReadOnlyComposable
   internal fun resolve(explicit: CardStyle?, variant: CardVariant): CardStyle =
-    explicit ?: LocalCardStyles.current[variant] ?: style(variant)
+    explicit ?: LocalCardStyles.current[variant] ?: DittoTheme.styleOverrides.resolve(style(variant), variant)
 }
 
 /** A grouped surface. Pass [onClick] to make the whole card interactive. */

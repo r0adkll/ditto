@@ -721,7 +721,7 @@ public final class com/r0adkll/ditto/components/ScaffoldKt {
 	public static final fun getTopBarInsets (Landroidx/compose/runtime/Composer;I)Landroidx/compose/foundation/layout/WindowInsets;
 }
 
-public final class com/r0adkll/ditto/components/Scrollbar_jvmKt {
+public final class com/r0adkll/ditto/components/ScrollbarKt {
 	public static final fun HorizontalScrollbar (Landroidx/compose/foundation/ScrollState;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
 	public static final fun HorizontalScrollbar (Landroidx/compose/foundation/lazy/LazyListState;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
 	public static final fun VerticalScrollbar (Landroidx/compose/foundation/ScrollState;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
@@ -822,7 +822,6 @@ public final class com/r0adkll/ditto/components/SheetKt {
 
 public final class com/r0adkll/ditto/components/SheetState {
 	public static final field $stable I
-	public fun <init> (Ljava/util/List;Lcom/r0adkll/ditto/components/SheetDetent;)V
 	public final fun animateTo (Lcom/r0adkll/ditto/components/SheetDetent;)V
 	public final fun getCurrentDetent ()Lcom/r0adkll/ditto/components/SheetDetent;
 	public final fun getDetents ()Ljava/util/List;

@@ -51,3 +51,5 @@ maven-publish-gradlePlugin = { module = "com.vanniktech:gradle-maven-publish-plu
 binary-compatibility-validator-gradlePlugin = { module = "org.jetbrains.kotlinx:binary-compatibility-validator", version.ref = "binary-compatibility-validator" }
 compose-material-ripple = { module = "org.jetbrains.compose.material:material-ripple", version.ref = "compose-multiplatform" }
 compose-unstyled = { module = "com.composables:composeunstyled", version = "2.9.2" }
+compose-unstyled-bottom-sheet = { module = "com.composables:composeunstyled-modal-bottom-sheet", version = "2.9.2" }
+compose-unstyled-scrollbars = { module = "com.composables:composeunstyled-scrollbars", version = "2.9.2" }

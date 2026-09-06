@@ -256,6 +256,34 @@ public final class com/r0adkll/ditto/theme/DittoDefaults {
 	public final fun getAccent-0d7_KjU ()J
 }
 
+public final class com/r0adkll/ditto/theme/DittoStyleOverrides {
+	public static final field $stable I
+	public static final field Companion Lcom/r0adkll/ditto/theme/DittoStyleOverrides$Companion;
+	public synthetic fun <init> (Ljava/util/Map;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public final fun isEmpty ()Z
+	public final fun plus (Lcom/r0adkll/ditto/theme/DittoStyleOverrides;)Lcom/r0adkll/ditto/theme/DittoStyleOverrides;
+	public final fun resolve (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public static synthetic fun resolve$default (Lcom/r0adkll/ditto/theme/DittoStyleOverrides;Ljava/lang/Object;Ljava/lang/Object;ILjava/lang/Object;)Ljava/lang/Object;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/r0adkll/ditto/theme/DittoStyleOverrides$Builder {
+	public static final field $stable I
+	public final fun build ()Lcom/r0adkll/ditto/theme/DittoStyleOverrides;
+	public final fun getEntries ()Ljava/util/Map;
+}
+
+public final class com/r0adkll/ditto/theme/DittoStyleOverrides$Companion {
+	public final fun getEmpty ()Lcom/r0adkll/ditto/theme/DittoStyleOverrides;
+}
+
+public final class com/r0adkll/ditto/theme/DittoStyleOverridesKt {
+	public static final fun dittoStyleOverrides (Lkotlin/jvm/functions/Function1;)Lcom/r0adkll/ditto/theme/DittoStyleOverrides;
+	public static final fun getLocalDittoStyleOverrides ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+}
+
 public final class com/r0adkll/ditto/theme/DittoTheme {
 	public static final field $stable I
 	public static final field INSTANCE Lcom/r0adkll/ditto/theme/DittoTheme;
@@ -267,13 +295,14 @@ public final class com/r0adkll/ditto/theme/DittoTheme {
 	public final fun getMotion (Landroidx/compose/runtime/Composer;I)Lcom/r0adkll/ditto/tokens/DittoMotion;
 	public final fun getShapes (Landroidx/compose/runtime/Composer;I)Lcom/r0adkll/ditto/tokens/DittoShapes;
 	public final fun getSpacing (Landroidx/compose/runtime/Composer;I)Lcom/r0adkll/ditto/tokens/DittoSpacing;
+	public final fun getStyleOverrides (Landroidx/compose/runtime/Composer;I)Lcom/r0adkll/ditto/theme/DittoStyleOverrides;
 	public final fun getTypography (Landroidx/compose/runtime/Composer;I)Lcom/r0adkll/ditto/tokens/DittoTypography;
 	public final fun isDark (Landroidx/compose/runtime/Composer;I)Z
 }
 
 public final class com/r0adkll/ditto/theme/DittoThemeKt {
-	public static final fun DittoTheme (Lcom/r0adkll/ditto/Idiom;Lcom/r0adkll/ditto/tokens/ColorMode;Lcom/r0adkll/ditto/tokens/DittoDensity;Lcom/r0adkll/ditto/tokens/DittoColors;Lcom/r0adkll/ditto/tokens/DittoColors;Lcom/r0adkll/ditto/tokens/DittoTypography;Lcom/r0adkll/ditto/tokens/DittoShapes;Lcom/r0adkll/ditto/tokens/DittoSpacing;Lcom/r0adkll/ditto/tokens/DittoElevation;Lcom/r0adkll/ditto/tokens/DittoMotion;Lcom/r0adkll/ditto/tokens/DittoDimens;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;III)V
-	public static final fun DittoTheme-ZPw9REg (JLcom/r0adkll/ditto/tokens/Neutrals;Lcom/r0adkll/ditto/Idiom;Lcom/r0adkll/ditto/tokens/ColorMode;Lcom/r0adkll/ditto/tokens/DittoDensity;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+	public static final fun DittoTheme (Lcom/r0adkll/ditto/Idiom;Lcom/r0adkll/ditto/tokens/ColorMode;Lcom/r0adkll/ditto/tokens/DittoDensity;Lcom/r0adkll/ditto/tokens/DittoColors;Lcom/r0adkll/ditto/tokens/DittoColors;Lcom/r0adkll/ditto/tokens/DittoTypography;Lcom/r0adkll/ditto/tokens/DittoShapes;Lcom/r0adkll/ditto/tokens/DittoSpacing;Lcom/r0adkll/ditto/tokens/DittoElevation;Lcom/r0adkll/ditto/tokens/DittoMotion;Lcom/r0adkll/ditto/tokens/DittoDimens;Lcom/r0adkll/ditto/theme/DittoStyleOverrides;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;III)V
+	public static final fun DittoTheme-Pd0R-II (JLcom/r0adkll/ditto/tokens/Neutrals;Lcom/r0adkll/ditto/Idiom;Lcom/r0adkll/ditto/tokens/ColorMode;Lcom/r0adkll/ditto/tokens/DittoDensity;Lcom/r0adkll/ditto/theme/DittoStyleOverrides;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
 	public static final fun getLocalDittoColors ()Landroidx/compose/runtime/ProvidableCompositionLocal;
 	public static final fun getLocalDittoDensity ()Landroidx/compose/runtime/ProvidableCompositionLocal;
 	public static final fun getLocalDittoDimens ()Landroidx/compose/runtime/ProvidableCompositionLocal;

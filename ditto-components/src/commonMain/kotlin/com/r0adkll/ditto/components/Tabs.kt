@@ -213,7 +213,7 @@ public fun TabRow(
 ) {
   require(tabs.isNotEmpty()) { "TabRow needs at least one tab" }
   @Suppress("NAME_SHADOWING")
-  val style = style ?: LocalTabsStyle.current ?: TabsDefaults.style()
+  val style = style ?: LocalTabsStyle.current ?: DittoTheme.styleOverrides.resolve(TabsDefaults.style())
   val motion = DittoTheme.motion
   val pointer = LocalInputCapabilities.current.pointer
   val haptics = rememberToggleHaptics()

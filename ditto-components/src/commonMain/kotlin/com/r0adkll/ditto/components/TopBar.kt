@@ -222,7 +222,7 @@ public fun TopBar(
   style: TopBarStyle? = null,
 ) {
   @Suppress("NAME_SHADOWING")
-  val style = style ?: LocalTopBarStyle.current ?: TopBarDefaults.style()
+  val style = style ?: LocalTopBarStyle.current ?: DittoTheme.styleOverrides.resolve(TopBarDefaults.style())
   TopBar(
     title = { Text(title, style = style.titleStyle, color = style.titleColor, maxLines = 1, overflow = TextOverflow.Ellipsis) },
     largeTitle = { Text(title, style = style.largeTitleStyle, color = style.titleColor, maxLines = 1, overflow = TextOverflow.Ellipsis) },
@@ -253,7 +253,7 @@ public fun TopBar(
   style: TopBarStyle? = null,
 ) {
   @Suppress("NAME_SHADOWING")
-  val style = style ?: LocalTopBarStyle.current ?: TopBarDefaults.style()
+  val style = style ?: LocalTopBarStyle.current ?: DittoTheme.styleOverrides.resolve(TopBarDefaults.style())
   val motion = DittoTheme.motion
   val large = variant == TopBarVariant.Large
   val density = LocalDensity.current

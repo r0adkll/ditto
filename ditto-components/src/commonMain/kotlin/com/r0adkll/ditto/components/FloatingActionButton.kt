@@ -100,7 +100,7 @@ public fun FloatingActionButton(
   interactionSource: MutableInteractionSource? = null,
 ) {
   @Suppress("NAME_SHADOWING")
-  val style = style ?: LocalFabStyle.current ?: FabDefaults.style()
+  val style = style ?: LocalFabStyle.current ?: DittoTheme.styleOverrides.resolve(FabDefaults.style())
   @Suppress("NAME_SHADOWING")
   val interactionSource = interactionSource ?: remember { MutableInteractionSource() }
   val pointer = LocalInputCapabilities.current.pointer

@@ -234,7 +234,7 @@ public fun NavigationBar(
   content: @Composable RowScope.() -> Unit,
 ) {
   @Suppress("NAME_SHADOWING")
-  val style = style ?: LocalNavigationBarStyle.current ?: NavigationDefaults.barStyle()
+  val style = style ?: LocalNavigationBarStyle.current ?: DittoTheme.styleOverrides.resolve(NavigationDefaults.barStyle(), "barStyle")
   Surface(modifier.fillMaxWidth(), color = style.containerColor, contentColor = style.contentColor, elevation = style.elevation) {
     Column {
       if (style.hairline) HorizontalDivider()
@@ -260,7 +260,7 @@ public fun NavigationRail(
   content: @Composable ColumnScope.() -> Unit,
 ) {
   @Suppress("NAME_SHADOWING")
-  val style = style ?: LocalNavigationRailStyle.current ?: NavigationDefaults.railStyle()
+  val style = style ?: LocalNavigationRailStyle.current ?: DittoTheme.styleOverrides.resolve(NavigationDefaults.railStyle(), "railStyle")
   Surface(modifier.fillMaxHeight(), color = style.containerColor, contentColor = style.contentColor, elevation = style.elevation) {
     Row {
       CompositionLocalProvider(LocalNavigationItemStyle provides style.itemStyle) {
@@ -291,7 +291,7 @@ public fun Sidebar(
   content: @Composable ColumnScope.() -> Unit,
 ) {
   @Suppress("NAME_SHADOWING")
-  val style = style ?: LocalSidebarStyle.current ?: NavigationDefaults.sidebarStyle()
+  val style = style ?: LocalSidebarStyle.current ?: DittoTheme.styleOverrides.resolve(NavigationDefaults.sidebarStyle(), "sidebarStyle")
   Surface(modifier.fillMaxHeight(), color = style.containerColor, contentColor = style.contentColor, elevation = style.elevation) {
     Row {
       CompositionLocalProvider(LocalNavigationItemStyle provides style.itemStyle.copy(indicatorBehindIcon = false)) {

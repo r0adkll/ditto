@@ -172,7 +172,8 @@ public object TextFieldDefaults {
 
   @Composable
   @ReadOnlyComposable
-  internal fun resolve(explicit: TextFieldStyle?): TextFieldStyle = explicit ?: LocalTextFieldStyle.current ?: style()
+  internal fun resolve(explicit: TextFieldStyle?): TextFieldStyle =
+    explicit ?: LocalTextFieldStyle.current ?: DittoTheme.styleOverrides.resolve(style())
 }
 
 /**

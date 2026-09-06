@@ -1,15 +1,9 @@
 package com.r0adkll.ditto.components
 
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.draggable
-import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.Column
@@ -18,7 +12,6 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.width
@@ -26,31 +19,28 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.snapshotFlow
+import com.composeunstyled.DragIndication
+import com.composeunstyled.ModalBottomSheetState
+import com.composeunstyled.Scrim
+import com.composeunstyled.Sheet
+import com.composeunstyled.UnstyledModalBottomSheet
+import com.composeunstyled.rememberModalBottomSheetState
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.input.nestedscroll.NestedScrollSource
-import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.unit.Velocity
-import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog as ComposeDialog
 import androidx.compose.ui.window.DialogProperties
@@ -58,9 +48,6 @@ import com.r0adkll.ditto.Idiom
 import com.r0adkll.ditto.foundation.Surface
 import com.r0adkll.ditto.theme.DittoTheme
 import com.r0adkll.ditto.tokens.ElevationLevel
-import kotlinx.coroutines.launch
-import kotlin.math.abs
-import kotlin.math.roundToInt
 
 @Immutable
 public class SheetStyle(
@@ -113,32 +100,51 @@ public sealed interface SheetDetent {
 
 /** Current and target detent for a [ModalSheet] with several [SheetDetent]s. */
 @Stable
-public class SheetState(
+public class SheetState internal constructor(
   public val detents: List<SheetDetent>,
   initial: SheetDetent,
+  internal val engine: ModalBottomSheetState,
 ) {
   init {
     require(detents.isNotEmpty()) { "A sheet needs at least one detent" }
     require(initial in detents) { "initial detent must be one of detents" }
   }
 
-  public var currentDetent: SheetDetent by mutableStateOf(initial)
-    internal set
+  internal val initial: SheetDetent = initial
 
-  /** Set to request a programmatic move; the sheet animates and clears it. */
-  internal var requested: SheetDetent? by mutableStateOf(null)
+  /** The detent the sheet is resting at (or heading to). */
+  public val currentDetent: SheetDetent
+    get() = detents.firstOrNull { it.identifier() == engine.currentDetent.identifier } ?: initial
 
+  /** Animates to [detent]. */
   public fun animateTo(detent: SheetDetent) {
     require(detent in detents) { "detent must be one of detents" }
-    requested = detent
+    engine.targetDetent = detent.toEngine()
   }
+}
+
+internal fun SheetDetent.identifier(): String = when (this) {
+  SheetDetent.Content -> "content"
+  is SheetDetent.Fraction -> "fraction-$fraction"
+  SheetDetent.Full -> "full"
+}
+
+/** Ditto detents → Unstyled detents (height lambdas of container/sheet height). */
+internal fun SheetDetent.toEngine(): com.composeunstyled.SheetDetent = when (this) {
+  SheetDetent.Content -> com.composeunstyled.SheetDetent(identifier()) { _, sheetHeight -> sheetHeight }
+  is SheetDetent.Fraction -> com.composeunstyled.SheetDetent(identifier()) { containerHeight, _ -> containerHeight * fraction.coerceIn(0f, 1f) }
+  SheetDetent.Full -> com.composeunstyled.SheetDetent.FullyExpanded
 }
 
 @Composable
 public fun rememberSheetState(
   detents: List<SheetDetent> = listOf(SheetDetent.Content),
   initial: SheetDetent = detents.first(),
-): SheetState = remember(detents) { SheetState(detents, initial) }
+): SheetState {
+  val engineDetents = remember(detents) { listOf(com.composeunstyled.SheetDetent.Hidden) + detents.map { it.toEngine() } }
+  val engine = rememberModalBottomSheetState(initialDetent = com.composeunstyled.SheetDetent.Hidden, detents = engineDetents)
+  return remember(detents, engine) { SheetState(detents, initial, engine) }
+}
 
 public object SheetDefaults {
   @Composable
@@ -197,7 +203,11 @@ public fun ModalSheet(
   content: @Composable ColumnScope.() -> Unit,
 ) {
   @Suppress("NAME_SHADOWING")
-  val style = style ?: LocalSheetStyle.current ?: SheetDefaults.style()
+  val style = style ?: LocalSheetStyle.current ?: DittoTheme.styleOverrides.resolve(SheetDefaults.style())
+  if (!style.centered) {
+    BottomSheetLayout(onDismissRequest, modifier, state, style, content)
+    return
+  }
   ComposeDialog(
     onDismissRequest = onDismissRequest,
     properties = DialogProperties(usePlatformDefaultWidth = false, dismissOnClickOutside = false),
@@ -213,8 +223,6 @@ public fun ModalSheet(
           Column(content = content)
         }
       }
-    } else {
-      BottomSheetLayout(onDismissRequest, modifier, state, style, content)
     }
   }
 }
@@ -227,115 +235,30 @@ private fun BottomSheetLayout(
   style: SheetStyle,
   content: @Composable ColumnScope.() -> Unit,
 ) {
-  val motion = DittoTheme.motion
-  val scope = rememberCoroutineScope()
-  BoxWithConstraints(Modifier.fillMaxSize()) {
-    val density = LocalDensity.current
-    val topInset = with(density) { WindowInsets.safeDrawing.getTop(this).toFloat() }
-    val containerPx = constraints.maxHeight.toFloat()
-    val availablePx = (containerPx - topInset).coerceAtLeast(1f)
-    var contentHeightPx by remember { mutableIntStateOf(0) }
-    val maxHeightPx = state.detents.maxOf { detentHeight(it, availablePx, contentHeightPx.toFloat()) }
-    fun heightOf(detent: SheetDetent) = detentHeight(detent, availablePx, contentHeightPx.toFloat())
-    // Offset is measured from the fully-expanded position (offset 0 = tallest detent visible).
-    fun offsetOf(detent: SheetDetent) = (maxHeightPx - heightOf(detent)).coerceAtLeast(0f)
-
-    val offset = remember { Animatable(containerPx) }
-    var entered by remember { mutableStateOf(false) }
-    LaunchedEffect(contentHeightPx > 0 || state.detents.none { it is SheetDetent.Content }) {
-      if (!entered && (contentHeightPx > 0 || state.detents.none { it is SheetDetent.Content })) {
-        entered = true
-        offset.snapTo(maxHeightPx.coerceAtLeast(1f))
-        offset.animateTo(offsetOf(state.currentDetent), tween(motion.durationMedium, easing = motion.easingDecelerate))
-      }
-    }
-    LaunchedEffect(state.requested) {
-      val target = state.requested ?: return@LaunchedEffect
-      state.currentDetent = target
-      offset.animateTo(offsetOf(target), motion.spring)
-      state.requested = null
-    }
-
-    fun dismiss() {
-      scope.launch {
-        offset.animateTo(maxHeightPx.coerceAtLeast(1f), tween(motion.durationShort, easing = motion.easingAccelerate))
-        onDismissRequest()
-      }
-    }
-    suspend fun settle(velocity: Float) {
-      val smallest = state.detents.minByOrNull { heightOf(it) } ?: state.currentDetent
-      val dismissLine = offsetOf(smallest) + heightOf(smallest) * 0.3f
-      if (offset.value > dismissLine || velocity > 1800f) { dismiss(); return }
-      // Nearest detent, biased by fling direction.
-      val projected = offset.value + velocity * 0.15f
-      val target = state.detents.minByOrNull { abs(offsetOf(it) - projected) } ?: state.currentDetent
-      state.currentDetent = target
-      offset.animateTo(offsetOf(target), motion.spring)
-    }
-    val drag = rememberDraggableState { delta -> scope.launch { offset.snapTo((offset.value + delta).coerceAtLeast(0f)) } }
-    val scrimAlpha = if (maxHeightPx <= 0f) 1f else (1f - (offset.value - offsetOf(state.detents.minByOrNull { heightOf(it) }!!)).coerceAtLeast(0f) / heightOf(state.detents.minByOrNull { heightOf(it) }!!).coerceAtLeast(1f)).coerceIn(0f, 1f)
-    val nested = remember {
-      object : NestedScrollConnection {
-        override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-          if (available.y < 0f && offset.value > 0f) {
-            val consumed = maxOf(available.y, -offset.value)
-            scope.launch { offset.snapTo(offset.value + consumed) }
-            return Offset(0f, consumed)
-          }
-          return Offset.Zero
-        }
-
-        override fun onPostScroll(consumed: Offset, available: Offset, source: NestedScrollSource): Offset {
-          if (available.y > 0f && source == NestedScrollSource.UserInput) {
-            scope.launch { offset.snapTo(offset.value + available.y) }
-            return Offset(0f, available.y)
-          }
-          return Offset.Zero
-        }
-
-        override suspend fun onPreFling(available: Velocity): Velocity {
-          val resting = state.detents.any { abs(offsetOf(it) - offset.value) < 0.5f }
-          if (!resting || offset.value > 0f && available.y > 0f) {
-            settle(available.y)
-            return available
-          }
-          return Velocity.Zero
-        }
-      }
-    }
-    val visibleHeightDp = with(density) { (maxHeightPx - offset.value).coerceAtLeast(0f).toDp() }
-    val fixedHeight = state.detents.any { it !is SheetDetent.Content }
-
-    Box(
-      Modifier
-        .fillMaxSize()
-        .background(style.scrimColor.copy(alpha = style.scrimColor.alpha * scrimAlpha))
-        .clickable(remember { MutableInteractionSource() }, null) { dismiss() },
-      contentAlignment = Alignment.BottomCenter,
-    ) {
-      Surface(
-        modifier = modifier
-          .widthIn(max = style.maxWidth)
-          .fillMaxWidth()
-          .then(if (fixedHeight) Modifier.height(with(density) { maxHeightPx.toDp() }) else Modifier)
-          .onSizeChanged { contentHeightPx = it.height }
-          .offset { IntOffset(0, offset.value.roundToInt()) }
-          .draggable(state = drag, orientation = Orientation.Vertical, onDragStopped = { velocity -> settle(velocity) })
-          .nestedScroll(nested)
-          .clickable(remember { MutableInteractionSource() }, null) {},
-        shape = style.shape,
-        color = style.containerColor,
-        elevation = style.elevation,
-      ) {
+  val engine = state.engine
+  // Slide in on first composition; the engine animates from Hidden to the initial detent.
+  LaunchedEffect(engine) { engine.animateTo(state.initial.toEngine()) }
+  // Dismissed when the engine settles at Hidden (swipe past the lowest detent or scrim tap).
+  LaunchedEffect(engine) {
+    snapshotFlow { engine.isIdle && engine.currentDetent == com.composeunstyled.SheetDetent.Hidden }
+      .collect { hidden -> if (hidden) onDismissRequest() }
+  }
+  UnstyledModalBottomSheet(
+    state = engine,
+    onDismiss = onDismissRequest,
+    overlay = { Scrim(scrimColor = style.scrimColor) },
+  ) {
+    Sheet(modifier.widthIn(max = style.maxWidth).fillMaxWidth()) {
+      Surface(shape = style.shape, color = style.containerColor, elevation = style.elevation, modifier = Modifier.fillMaxWidth()) {
         Column(
           Modifier
-            .then(if (fixedHeight) Modifier.height(visibleHeightDp.coerceAtLeast(0.dp)) else Modifier)
             .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom + WindowInsetsSides.Horizontal))
             .padding(style.contentPadding),
         ) {
           if (style.dragHandle) {
+            // DragIndication carries the expand/collapse/dismiss semantics; the pill is its modifier.
             Box(Modifier.fillMaxWidth().padding(vertical = DittoTheme.spacing.md), contentAlignment = Alignment.Center) {
-              Box(Modifier.width(36.dp).height(4.dp).background(style.dragHandleColor, DittoTheme.shapes.full))
+              DragIndication(Modifier.width(36.dp).height(4.dp).background(style.dragHandleColor, DittoTheme.shapes.full))
             }
           }
           content()
@@ -343,12 +266,6 @@ private fun BottomSheetLayout(
       }
     }
   }
-}
-
-private fun detentHeight(detent: SheetDetent, availablePx: Float, contentPx: Float): Float = when (detent) {
-  SheetDetent.Content -> contentPx.coerceAtMost(availablePx)
-  is SheetDetent.Fraction -> availablePx * detent.fraction.coerceIn(0f, 1f)
-  SheetDetent.Full -> availablePx
 }
 
 /** The sheet surface alone, for previews. */
@@ -359,7 +276,7 @@ public fun SheetContent(
   content: @Composable ColumnScope.() -> Unit,
 ) {
   @Suppress("NAME_SHADOWING")
-  val style = style ?: LocalSheetStyle.current ?: SheetDefaults.style()
+  val style = style ?: LocalSheetStyle.current ?: DittoTheme.styleOverrides.resolve(SheetDefaults.style())
   Surface(modifier = modifier.fillMaxWidth(), shape = style.shape, color = style.containerColor, elevation = style.elevation) {
     Column {
       if (style.dragHandle) {

@@ -177,7 +177,7 @@ public fun SegmentedControl(
 ) {
   require(options.isNotEmpty()) { "SegmentedControl needs at least one option" }
   @Suppress("NAME_SHADOWING")
-  val style = style ?: LocalSegmentedControlStyle.current ?: SegmentedControlDefaults.style()
+  val style = style ?: LocalSegmentedControlStyle.current ?: DittoTheme.styleOverrides.resolve(SegmentedControlDefaults.style())
   val motion = DittoTheme.motion
   val pointer = LocalInputCapabilities.current.pointer
   val alpha = if (enabled) 1f else DittoTheme.colors.disabledAlpha

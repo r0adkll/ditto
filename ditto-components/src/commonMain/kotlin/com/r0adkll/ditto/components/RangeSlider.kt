@@ -54,7 +54,7 @@ public fun RangeSlider(
 ) {
   require(steps >= 0) { "steps must be >= 0" }
   @Suppress("NAME_SHADOWING")
-  val style = style ?: LocalSliderStyle.current ?: SliderDefaults.style()
+  val style = style ?: LocalSliderStyle.current ?: DittoTheme.styleOverrides.resolve(SliderDefaults.style())
   val pointer = LocalInputCapabilities.current.pointer
   val rtl = LocalLayoutDirection.current == LayoutDirection.Rtl
   val alpha = if (enabled) 1f else DittoTheme.colors.disabledAlpha

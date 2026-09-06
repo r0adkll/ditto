@@ -192,7 +192,8 @@ public object MenuDefaults {
 
   @Composable
   @ReadOnlyComposable
-  internal fun resolve(explicit: MenuStyle?): MenuStyle = explicit ?: LocalMenuStyle.current ?: style()
+  internal fun resolve(explicit: MenuStyle?): MenuStyle =
+    explicit ?: LocalMenuStyle.current ?: DittoTheme.styleOverrides.resolve(style())
 }
 
 /**

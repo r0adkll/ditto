@@ -139,7 +139,7 @@ public fun Tooltip(
   content: @Composable () -> Unit,
 ) {
   @Suppress("NAME_SHADOWING")
-  val style = style ?: LocalTooltipStyle.current ?: TooltipDefaults.style()
+  val style = style ?: LocalTooltipStyle.current ?: DittoTheme.styleOverrides.resolve(TooltipDefaults.style())
   val hoverSource = remember { MutableInteractionSource() }
   val hovered by hoverSource.collectIsHoveredAsState()
   val pointer = LocalInputCapabilities.current.pointer
@@ -204,7 +204,7 @@ public fun TooltipBubble(
   style: TooltipStyle? = null,
 ) {
   @Suppress("NAME_SHADOWING")
-  val style = style ?: LocalTooltipStyle.current ?: TooltipDefaults.style()
+  val style = style ?: LocalTooltipStyle.current ?: DittoTheme.styleOverrides.resolve(TooltipDefaults.style())
   Surface(
     color = style.containerColor,
     contentColor = style.contentColor,

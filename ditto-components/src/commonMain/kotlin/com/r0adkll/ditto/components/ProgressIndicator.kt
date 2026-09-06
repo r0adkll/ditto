@@ -114,7 +114,7 @@ public object ProgressIndicatorDefaults {
   @Composable
   @ReadOnlyComposable
   internal fun resolve(explicit: ProgressIndicatorStyle?): ProgressIndicatorStyle =
-    explicit ?: LocalProgressIndicatorStyle.current ?: style()
+    explicit ?: LocalProgressIndicatorStyle.current ?: DittoTheme.styleOverrides.resolve(style())
 }
 
 /**

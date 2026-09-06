@@ -143,7 +143,8 @@ public object DialogDefaults {
 
   @Composable
   @ReadOnlyComposable
-  internal fun resolve(explicit: DialogStyle?): DialogStyle = explicit ?: LocalDialogStyle.current ?: style()
+  internal fun resolve(explicit: DialogStyle?): DialogStyle =
+    explicit ?: LocalDialogStyle.current ?: DittoTheme.styleOverrides.resolve(style())
 }
 
 /** A modal container with idiom-appropriate surface, sizing and scrim. [content] is free-form. */

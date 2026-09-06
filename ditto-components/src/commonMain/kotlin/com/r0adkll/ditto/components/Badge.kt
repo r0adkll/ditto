@@ -73,7 +73,7 @@ public fun Badge(
   style: BadgeStyle? = null,
 ) {
   @Suppress("NAME_SHADOWING")
-  val style = style ?: LocalBadgeStyle.current ?: BadgeDefaults.style()
+  val style = style ?: LocalBadgeStyle.current ?: DittoTheme.styleOverrides.resolve(BadgeDefaults.style())
   val shape = DittoTheme.shapes.full
   if (text == null) {
     Box(modifier.size(style.dotSize).background(style.containerColor, shape))

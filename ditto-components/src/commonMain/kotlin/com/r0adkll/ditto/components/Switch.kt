@@ -159,7 +159,7 @@ public fun Switch(
   interactionSource: MutableInteractionSource? = null,
 ) {
   @Suppress("NAME_SHADOWING")
-  val style = style ?: LocalSwitchStyle.current ?: SwitchDefaults.style()
+  val style = style ?: LocalSwitchStyle.current ?: DittoTheme.styleOverrides.resolve(SwitchDefaults.style())
   @Suppress("NAME_SHADOWING")
   val interactionSource = interactionSource ?: remember { MutableInteractionSource() }
   val motion = DittoTheme.motion

@@ -163,7 +163,7 @@ public fun Chip(
   interactionSource: MutableInteractionSource? = null,
 ) {
   @Suppress("NAME_SHADOWING")
-  val style = style ?: LocalChipStyle.current ?: ChipDefaults.style()
+  val style = style ?: LocalChipStyle.current ?: DittoTheme.styleOverrides.resolve(ChipDefaults.style())
   @Suppress("NAME_SHADOWING")
   val interactionSource = interactionSource ?: remember { MutableInteractionSource() }
   val motion = DittoTheme.motion

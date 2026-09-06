@@ -186,7 +186,7 @@ private fun CheckboxImpl(
   explicitStyle: CheckboxStyle?,
   interactionSource: MutableInteractionSource,
 ) {
-  val style = explicitStyle ?: LocalCheckboxStyle.current ?: CheckboxDefaults.style()
+  val style = explicitStyle ?: LocalCheckboxStyle.current ?: DittoTheme.styleOverrides.resolve(CheckboxDefaults.style())
   val motion = DittoTheme.motion
   val alpha = if (enabled) 1f else DittoTheme.colors.disabledAlpha
   val on = state != ToggleableState.Off

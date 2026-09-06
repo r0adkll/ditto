@@ -186,7 +186,7 @@ public fun SnackbarHost(
   style: SnackbarStyle? = null,
 ) {
   @Suppress("NAME_SHADOWING")
-  val style = style ?: LocalSnackbarStyle.current ?: SnackbarDefaults.style()
+  val style = style ?: LocalSnackbarStyle.current ?: DittoTheme.styleOverrides.resolve(SnackbarDefaults.style())
   val current = state.current
   LaunchedEffect(current) {
     if (current != null && current.duration != SnackbarDuration.Indefinite) {
@@ -216,7 +216,7 @@ public fun Snackbar(
   style: SnackbarStyle? = null,
 ) {
   @Suppress("NAME_SHADOWING")
-  val style = style ?: LocalSnackbarStyle.current ?: SnackbarDefaults.style()
+  val style = style ?: LocalSnackbarStyle.current ?: DittoTheme.styleOverrides.resolve(SnackbarDefaults.style())
   Surface(
     modifier = modifier.widthIn(max = style.maxWidth).semantics { liveRegion = LiveRegionMode.Polite },
     shape = style.shape,

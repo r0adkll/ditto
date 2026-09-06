@@ -158,7 +158,7 @@ public fun ToggleButton(
   content: @Composable RowScope.() -> Unit,
 ) {
   @Suppress("NAME_SHADOWING")
-  val style = style ?: LocalToggleButtonStyle.current ?: ToggleButtonDefaults.style()
+  val style = style ?: LocalToggleButtonStyle.current ?: DittoTheme.styleOverrides.resolve(ToggleButtonDefaults.style())
   @Suppress("NAME_SHADOWING")
   val interactionSource = interactionSource ?: remember { MutableInteractionSource() }
   val motion = DittoTheme.motion

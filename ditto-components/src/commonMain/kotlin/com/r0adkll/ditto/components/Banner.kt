@@ -106,7 +106,7 @@ public fun Banner(
   style: BannerStyle? = null,
 ) {
   @Suppress("NAME_SHADOWING")
-  val style = style ?: LocalBannerStyle.current ?: BannerDefaults.style()
+  val style = style ?: LocalBannerStyle.current ?: DittoTheme.styleOverrides.resolve(BannerDefaults.style())
   val tone = BannerDefaults.color(kind)
   val colors = DittoTheme.colors
   val container = tone.copy(alpha = style.tintAlpha).compositeOver(colors.surface)

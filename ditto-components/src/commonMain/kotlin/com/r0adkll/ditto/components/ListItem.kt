@@ -175,7 +175,7 @@ public fun ListItem(
   interactionSource: MutableInteractionSource? = null,
 ) {
   @Suppress("NAME_SHADOWING")
-  val style = style ?: LocalListItemStyle.current ?: ListItemDefaults.style()
+  val style = style ?: LocalListItemStyle.current ?: DittoTheme.styleOverrides.resolve(ListItemDefaults.style())
   @Suppress("NAME_SHADOWING")
   val interactionSource = interactionSource ?: remember { MutableInteractionSource() }
   val pointer = LocalInputCapabilities.current.pointer

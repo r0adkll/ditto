@@ -71,6 +71,7 @@ public object DittoDefaults {
  * @param elevation defaults to [DittoElevation.forIdiom].
  * @param motion defaults to [DittoMotion.forIdiom].
  * @param dimens defaults to [DittoDimens.forIdiom].
+ * @param styleOverrides app-wide transforms applied to each component's idiom default (ADR-029).
  */
 @Composable
 public fun DittoTheme(
@@ -85,6 +86,7 @@ public fun DittoTheme(
   elevation: DittoElevation? = null,
   motion: DittoMotion = remember(idiom) { DittoMotion.forIdiom(idiom) },
   dimens: DittoDimens = remember(idiom, density) { DittoDimens.forIdiom(idiom, density) },
+  styleOverrides: DittoStyleOverrides = LocalDittoStyleOverrides.current,
   content: @Composable () -> Unit,
 ) {
   val dark = when (colorMode) {
@@ -113,6 +115,7 @@ public fun DittoTheme(
     LocalDittoMotion provides motion,
     LocalDittoDimens provides dimens,
     LocalDittoDensity provides density,
+    LocalDittoStyleOverrides provides styleOverrides,
     LocalContentColor provides colors.onBackground,
     LocalTextStyle provides resolvedTypography.body,
     LocalIndication provides indication,
@@ -132,11 +135,12 @@ public fun DittoTheme(
   idiom: Idiom = LocalIdiom.current,
   colorMode: ColorMode = ColorMode.System,
   density: DittoDensity = DittoDensity.forIdiom(idiom),
+  styleOverrides: DittoStyleOverrides = LocalDittoStyleOverrides.current,
   content: @Composable () -> Unit,
 ) {
   val light = remember(accent, neutrals) { DittoColors.from(accent, dark = false, neutrals = neutrals) }
   val dark = remember(accent, neutrals) { DittoColors.from(accent, dark = true, neutrals = neutrals) }
-  DittoTheme(idiom = idiom, colorMode = colorMode, density = density, lightColors = light, darkColors = dark, content = content)
+  DittoTheme(idiom = idiom, colorMode = colorMode, density = density, lightColors = light, darkColors = dark, styleOverrides = styleOverrides, content = content)
 }
 
 /** Accessors for the current theme's tokens. */
@@ -157,6 +161,9 @@ public object DittoTheme {
     @Composable @ReadOnlyComposable get() = LocalDittoDimens.current
   public val density: DittoDensity
     @Composable @ReadOnlyComposable get() = LocalDittoDensity.current
+  /** App-wide style transforms (ADR-029). Components apply them to their idiom defaults. */
+  public val styleOverrides: DittoStyleOverrides
+    @Composable @ReadOnlyComposable get() = LocalDittoStyleOverrides.current
   public val idiom: Idiom
     @Composable @ReadOnlyComposable get() = LocalIdiom.current
   public val isDark: Boolean

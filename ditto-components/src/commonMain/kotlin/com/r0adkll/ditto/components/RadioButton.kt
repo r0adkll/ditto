@@ -113,7 +113,7 @@ public fun RadioButton(
   interactionSource: MutableInteractionSource? = null,
 ) {
   @Suppress("NAME_SHADOWING")
-  val style = style ?: LocalRadioButtonStyle.current ?: RadioButtonDefaults.style()
+  val style = style ?: LocalRadioButtonStyle.current ?: DittoTheme.styleOverrides.resolve(RadioButtonDefaults.style())
   @Suppress("NAME_SHADOWING")
   val interactionSource = interactionSource ?: remember { MutableInteractionSource() }
   val haptics = rememberToggleHaptics()

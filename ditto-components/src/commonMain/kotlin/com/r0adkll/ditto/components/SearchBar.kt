@@ -63,7 +63,7 @@ public fun SearchBar(
   interactionSource: MutableInteractionSource? = null,
 ) {
   @Suppress("NAME_SHADOWING")
-  val style = style ?: SearchBarDefaults.style()
+  val style = style ?: DittoTheme.styleOverrides.resolve(SearchBarDefaults.style(), "search")
   TextField(
     state = state,
     modifier = modifier,

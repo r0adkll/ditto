@@ -142,7 +142,7 @@ public object IconButtonDefaults {
   @Composable
   @ReadOnlyComposable
   internal fun resolve(explicit: IconButtonStyle?, variant: IconButtonVariant): IconButtonStyle =
-    explicit ?: LocalIconButtonStyles.current[variant] ?: style(variant)
+    explicit ?: LocalIconButtonStyles.current[variant] ?: DittoTheme.styleOverrides.resolve(style(variant), variant)
 }
 
 /**
