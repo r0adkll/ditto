@@ -1,0 +1,88 @@
+---
+title: Menu
+description: A popup list of actions, with submenus, checkable rows and shortcut labels.
+sidebar:
+  order: 3
+---
+
+import IdiomDemos from '../../../components/IdiomDemos.astro';
+import Demo from '../../../components/Demo.astro';
+
+A list of actions anchored to whatever opened it. Supports icons, destructive rows, checkable
+items, submenus and keyboard shortcut labels.
+
+<Demo id="menu" height={260} caption="Open it, then try the arrow keys" />
+
+## Across the idioms
+
+Android uses a small-radius surface with 48dp rows. Apple uses a wider, more rounded panel with
+hairlines between rows. Desktop is compact, bordered, with rounded hover highlights.
+
+<IdiomDemos id="menu" height={260} />
+
+## Usage
+
+```kotlin
+var open by remember { mutableStateOf(false) }
+
+Box {
+  Button(text = "Actions", onClick = { open = true })
+  DropdownMenu(expanded = open, onDismissRequest = { open = false }) {
+    MenuItem("Share", onClick = { open = false }, leadingIcon = { Icon(DittoIcons.forward, null) })
+    MenuItem("Rename", onClick = { open = false }, shortcut = Shortcut(Key.R, primary = true))
+    MenuDivider()
+    CheckableMenuItem("Show completed", checked = showDone, onCheckedChange = { showDone = it })
+    SubmenuItem("Sort by") {
+      MenuItem("Title", onClick = { open = false })
+    }
+    MenuItem("Delete", onClick = { open = false }, destructive = true)
+  }
+}
+```
+
+Shortcut labels render per platform: `Shortcut(Key.R, primary = true)` shows as **⌘R** on macOS and
+**Ctrl+R** everywhere else.
+
+## Keyboard
+
+| Key | Effect |
+|---|---|
+| **↑ ↓** | move between items |
+| **→** | open a submenu |
+| **←** | close a submenu |
+| **Enter** / **Space** | activate |
+| **Esc** | dismiss |
+
+The first item takes focus when the menu opens with a keyboard present.
+
+## Accessibility
+
+Items carry `Role.Button`; checkable rows carry `Role.Checkbox` with their state. The check glyph
+occupies the leading slot whether or not it is set, so labels stay aligned. Destructive rows are
+tinted with the `error` role but also read as ordinary buttons, so colour is not the only signal.
+
+## API
+
+```kotlin
+@Composable fun DropdownMenu(
+  expanded: Boolean,
+  onDismissRequest: () -> Unit,
+  modifier: Modifier = Modifier,
+  offset: DpOffset = DpOffset.Zero,
+  style: MenuStyle? = null,
+  properties: PopupProperties = PopupProperties(focusable = true),
+  content: @Composable ColumnScope.() -> Unit,
+)
+
+@Composable fun MenuItem(
+  text: String,
+  onClick: () -> Unit,
+  enabled: Boolean = true,
+  leadingIcon: (@Composable () -> Unit)? = null,
+  trailingIcon: (@Composable () -> Unit)? = null,
+  destructive: Boolean = false,
+  shortcut: Shortcut? = null,
+)
+```
+
+`MenuContent` renders the same surface without a popup, for previews and custom anchoring.

@@ -1,0 +1,68 @@
+---
+title: Switch
+description: A binary toggle that takes effect immediately.
+sidebar:
+  order: 2
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import IdiomDemos from '../../../components/IdiomDemos.astro';
+import Demo from '../../../components/Demo.astro';
+
+Turns something on or off, applying the change at once. For a choice that only takes effect when a
+form is submitted, use a [checkbox](/ditto/components/checkbox/) instead.
+
+<Demo id="switch" height={120} />
+
+## Across the idioms
+
+The proportions differ more here than anywhere else in the library: Android's thumb grows when it
+turns on and carries a check glyph, Apple's is the familiar large white thumb with a shadow, and
+Desktop's is smaller and flatter.
+
+<IdiomDemos id="switch" height={120} />
+
+## Usage
+
+```kotlin
+var enabled by remember { mutableStateOf(true) }
+
+Switch(checked = enabled, onCheckedChange = { enabled = it })
+
+// Read-only, or when the whole row already handles the interaction
+Switch(checked = enabled, onCheckedChange = null)
+```
+
+<Aside type="tip" title="Let the row own the tap">
+  Inside a `ListItem`, pass `onCheckedChange = null` and put the toggle on the row. The switch stays
+  visual, the whole row becomes the target, and screen readers announce one control instead of two.
+</Aside>
+
+## Specification
+
+| | Android | Apple | Desktop |
+|---|---|---|---|
+| Track | 52×32dp, outlined when off | 51×31dp | 44×24dp |
+| Thumb | 16dp off, 24dp on, check glyph | 27dp, white, shadowed | 20dp |
+| Motion | spring on the thumb, tween on colour | same | same |
+
+## Accessibility
+
+- `Role.Switch` semantics with the checked state; toggled by **Space**.
+- Hit target at least the idiom minimum; a focus ring when a keyboard is present.
+- On the Apple idiom, toggling fires the platform haptic.
+- On pointer devices the track tints on hover so the control reads as live.
+
+## API
+
+```kotlin
+@Composable
+fun Switch(
+  checked: Boolean,
+  onCheckedChange: ((Boolean) -> Unit)?,
+  modifier: Modifier = Modifier,
+  enabled: Boolean = true,
+  style: SwitchStyle? = null,
+  interactionSource: MutableInteractionSource? = null,
+)
+```

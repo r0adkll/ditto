@@ -5,21 +5,19 @@ sidebar:
   order: 1
 ---
 
-import { Image } from 'astro:assets';
 import Demo from '../../../components/Demo.astro';
-import roles from '../../../assets/color-roles.png';
+import IdiomDemos from '../../../components/IdiomDemos.astro';
 
 Ditto has no tonal palettes. A theme is **one accent colour and a neutral ramp**; everything else
 is derived, and every derived pairing is checked against WCAG 2 contrast targets.
 
-<Demo id="colors" height={420} caption="The colour roles and the neutral ramp, live" />
 
 ## Roles
 
 About fifteen roles, deliberately fewer than Material's thirty. The brand colour is called
 `accent`, not `primary`, so the Material mental model doesn't come along with it.
 
-<Image src={roles} alt="Ditto colour roles rendered in all three idioms, light and dark" />
+<Demo id="colors" height={420} caption="Every role, plus the twelve-step ramp beneath" />
 
 ## The neutral ramp
 

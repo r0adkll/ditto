@@ -1,0 +1,83 @@
+---
+title: Button
+description: Four emphases, drawn to each platform's proportions.
+sidebar:
+  order: 0
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import IdiomDemos from '../../../components/IdiomDemos.astro';
+import Demo from '../../../components/Demo.astro';
+
+The main way to commit to an action. Four emphases share one shape and differ only in weight.
+
+<Demo id="button" height={170} />
+
+## Across the idioms
+
+Android takes a pill with a moderated Expressive press: a state-layer ripple and a slight scale.
+Apple is a rounded rectangle that fades its content on touch. Desktop is compact with a tighter
+radius and a hover highlight.
+
+<IdiomDemos id="button" height={170} />
+
+## Usage
+
+```kotlin
+Button(onClick = { save() }) { Text("Save") }
+
+TonalButton(onClick = { }) { Text("Secondary") }
+OutlinedButton(onClick = { }) { Text("Outlined") }
+TextButton(onClick = { }) { Text("Low emphasis") }
+
+// Label-and-icon convenience
+Button(text = "Continue", onClick = { }, leadingIcon = DittoIcons.check)
+```
+
+## Emphasis
+
+| Variant | Use it for | Container |
+|---|---|---|
+| `Button` | the one action a screen is about | accent fill |
+| `TonalButton` | a strong secondary action | accent at 12% over the surface |
+| `OutlinedButton` | a secondary action needing an edge | border, transparent fill |
+| `TextButton` | low-emphasis and inline actions | nothing until pressed |
+
+<Aside title="There is no second accent">
+  Tonal containers are the accent at low alpha over the surface rather than a separate colour, so a
+  theme only ever configures one accent.
+</Aside>
+
+## Specification
+
+| | Android | Apple | Desktop |
+|---|---|---|---|
+| Height | 40dp | 44dp | 28dp (compact) |
+| Shape | pill | 14dp radius | 6dp radius |
+| Label | label style | label style | label style |
+| Press | ripple + 0.96 scale | content fades to 55% | state layer |
+
+## Accessibility
+
+- `Role.Button` semantics, activated by **Enter** and **Space**.
+- The touch target is at least the idiom minimum (48dp on Android, 44pt on Apple) even when the
+  visible container is smaller.
+- A focus ring appears whenever a keyboard is present, and the cursor becomes a pointer on hover.
+- Disabled buttons drop to 38% and stop taking input.
+
+## API
+
+```kotlin
+@Composable
+fun Button(
+  onClick: () -> Unit,
+  modifier: Modifier = Modifier,
+  enabled: Boolean = true,
+  style: ButtonStyle? = null,
+  interactionSource: MutableInteractionSource? = null,
+  content: @Composable RowScope.() -> Unit,
+)
+```
+
+`TonalButton`, `OutlinedButton` and `TextButton` take the same parameters. Restyle one call with
+`style`, a subtree with `LocalButtonStyles`, or the whole app with a style transform.

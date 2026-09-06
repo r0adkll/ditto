@@ -1,3 +1,13 @@
+@import '@fontsource-variable/geist';
+@import '@fontsource-variable/geist-mono';
+
+/* Geist reads cleanly at documentation sizes and is visibly *designed*, which suits a page whose
+   job is to show design work. The demos inside the iframes keep their platform fonts. */
+:root {
+  --sl-font: 'Geist Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --sl-font-mono: 'Geist Mono Variable', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace;
+}
+
 /* Ditto brand. The mascot violet is the site accent; the darker palette violet carries text. */
 :root {
   --sl-color-accent-low: #3a155b;

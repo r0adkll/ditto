@@ -32,7 +32,7 @@ class DemoScreenTest {
     Row {
       listOf(Idiom.Android, Idiom.Apple, Idiom.Desktop).forEach { idiom ->
         Column(Modifier.size(300.dp, 340.dp)) {
-          DemoScreen(id = "selection-controls", idiom = idiom, colorMode = ColorMode.Light)
+          DemoScreen(id = "switch", idiom = idiom, colorMode = ColorMode.Light)
         }
       }
     }

@@ -6,12 +6,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.r0adkll.ditto.Idiom
 import com.r0adkll.ditto.catalog.brand.DittoBrand
-import com.r0adkll.ditto.components.SnackbarHost
-import com.r0adkll.ditto.components.SnackbarHostState
 import com.r0adkll.ditto.foundation.Surface
 import com.r0adkll.ditto.foundation.Text
 import com.r0adkll.ditto.platformIdiom
@@ -34,17 +31,48 @@ class DemoItem(
  * docs site embeds one at a time by [DemoItem.id].
  */
 @Composable
-fun catalogDemos(snackbars: SnackbarHostState = remember { SnackbarHostState() }): List<DemoItem> = listOf(
-  DemoItem("buttons", "Buttons") { ButtonsDemo() },
-  DemoItem("icon-buttons", "Icon buttons") { IconButtonsDemo() },
-  DemoItem("selection-controls", "Selection controls") { SelectionControlsDemo() },
-  DemoItem("text-fields", "Text fields") { TextFieldsDemo() },
-  DemoItem("controls", "Segments, tabs, sliders") { ControlsDemo() },
-  DemoItem("lists-cards", "Lists and cards") { ListsDemo() },
-  DemoItem("overlays", "Menus, dialogs, progress") { OverlaysDemo() },
-  DemoItem("navigation", "Navigation, chips, badges, sheets") { NavigationDemo() },
-  DemoItem("actions", "Toggles, FAB, search, snackbar, pull to refresh") { ActionsDemo(snackbars) },
-  DemoItem("desktop", "Combo box, links, banners, tree, split pane") { DesktopDemo() },
+fun catalogDemos(): List<DemoItem> = listOf(
+  // Actions
+  DemoItem("button", "Button") { ButtonDemo() },
+  DemoItem("icon-button", "Icon button") { IconButtonDemo() },
+  DemoItem("toggle-button", "Toggle button") { ToggleButtonDemo() },
+  DemoItem("fab", "Floating action button") { FabDemo() },
+  // Selection
+  DemoItem("switch", "Switch") { SwitchDemo() },
+  DemoItem("checkbox", "Checkbox") { CheckboxDemo() },
+  DemoItem("radio-button", "Radio button") { RadioButtonDemo() },
+  // Text input
+  DemoItem("text-field", "Text field") { TextFieldDemo() },
+  DemoItem("search-bar", "Search bar") { SearchBarDemo() },
+  DemoItem("combo-box", "Combo box") { ComboBoxDemo() },
+  // Value pickers
+  DemoItem("slider", "Slider") { SliderDemo() },
+  DemoItem("range-slider", "Range slider") { RangeSliderDemo() },
+  DemoItem("segmented-control", "Segmented control") { SegmentedControlDemo() },
+  DemoItem("tabs", "Tabs") { TabsDemo() },
+  // Containment
+  DemoItem("card", "Card") { CardDemo() },
+  DemoItem("list-item", "List item") { ListItemDemo() },
+  DemoItem("chip", "Chip") { ChipDemo() },
+  DemoItem("badge", "Badge") { BadgeDemo() },
+  DemoItem("banner", "Banner") { BannerDemo() },
+  // Overlays
+  DemoItem("tooltip", "Tooltip") { TooltipDemo() },
+  DemoItem("menu", "Menu") { MenuDemo() },
+  DemoItem("dialog", "Dialog") { DialogDemo() },
+  DemoItem("sheet", "Sheet") { SheetDemo() },
+  DemoItem("snackbar", "Snackbar") { SnackbarDemo() },
+  DemoItem("progress-indicator", "Progress indicator") { ProgressIndicatorDemo() },
+  DemoItem("pull-to-refresh", "Pull to refresh") { PullToRefreshDemo() },
+  // Navigation
+  DemoItem("navigation", "Navigation bar, rail and sidebar") { NavigationDemo2() },
+  DemoItem("top-bar", "Top bar and scaffold") { TopBarDemo() },
+  // Desktop
+  DemoItem("link", "Link") { LinkDemo() },
+  DemoItem("tree", "Tree") { TreeDemo() },
+  DemoItem("split-pane", "Split pane") { SplitPaneDemo() },
+  DemoItem("scrollbar", "Scrollbar") { ScrollbarDemo() },
+  // Foundations
   DemoItem("colors", "Colors") { ColorsDemo() },
   DemoItem("typography", "Typography") { TypographyDemo() },
   DemoItem("shapes", "Shapes") { ShapesDemo() },
@@ -64,17 +92,15 @@ fun DemoScreen(
   idiom: Idiom = platformIdiom(),
   colorMode: ColorMode = ColorMode.System,
 ) {
-  val snackbars = remember { SnackbarHostState() }
   DittoTheme(accent = DittoBrand.Violet, idiom = idiom, colorMode = colorMode) {
     Surface(color = DittoTheme.colors.background, modifier = Modifier.fillMaxSize()) {
       Box(Modifier.fillMaxSize().padding(DittoTheme.spacing.lg)) {
-        val demo = catalogDemos(snackbars).firstOrNull { it.id == id }
+        val demo = catalogDemos().firstOrNull { it.id == id }
         if (demo != null) {
           demo.content()
         } else {
           Text("No demo registered for id \"$id\"", color = DittoTheme.colors.error)
         }
-        SnackbarHost(snackbars, modifier = Modifier.align(Alignment.BottomCenter))
       }
     }
   }
