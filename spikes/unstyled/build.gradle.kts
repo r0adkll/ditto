@@ -21,3 +21,8 @@ kotlin {
     }
   }
 }
+
+// Spike parity tests write comparison images, not committed goldens; run them explicitly with -Pditto.spikes=true.
+tasks.withType<Test>().configureEach {
+  onlyIf("spike tests run only with -Pditto.spikes=true") { providers.gradleProperty("ditto.spikes").isPresent }
+}
