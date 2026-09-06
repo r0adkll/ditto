@@ -66,7 +66,9 @@ public fun render(width: Int, height: Int, time: Duration = 0.milliseconds, cont
     // Step real frames up to [time]: transitions that start after the first frame (e.g. an
     // AnimatedVisibility triggered from a LaunchedEffect) need intermediate frames to progress.
     var image = scene.render(0L)
-    val end = time.inWholeNanoseconds
+    // Always render at least one more frame: LaunchedEffects (initial scroll positions, focus,
+    // queued snackbars) run after the first frame and must be visible at time 0 too.
+    val end = maxOf(time.inWholeNanoseconds, FRAME_NANOS)
     var t = 0L
     while (t < end) {
       t = minOf(t + FRAME_NANOS, end)
