@@ -16,3 +16,10 @@ public expect fun VerticalScrollbar(scrollState: ScrollState, modifier: Modifier
 /** Lazy-list variant of [VerticalScrollbar]. */
 @Composable
 public expect fun VerticalScrollbar(listState: LazyListState, modifier: Modifier = Modifier)
+
+/** Horizontal counterpart of [VerticalScrollbar]. Place at the bottom of the `Box`. */
+@Composable
+public expect fun HorizontalScrollbar(scrollState: ScrollState, modifier: Modifier = Modifier)
+
+@Composable
+public expect fun HorizontalScrollbar(listState: LazyListState, modifier: Modifier = Modifier)

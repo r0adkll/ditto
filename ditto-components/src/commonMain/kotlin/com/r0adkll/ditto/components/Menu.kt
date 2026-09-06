@@ -70,6 +70,7 @@ import com.r0adkll.ditto.foundation.ProvideTextStyle
 import com.r0adkll.ditto.foundation.Surface
 import com.r0adkll.ditto.foundation.Text
 import com.r0adkll.ditto.input.LocalInputCapabilities
+import com.r0adkll.ditto.input.Shortcut
 import com.r0adkll.ditto.interaction.focusRing
 import com.r0adkll.ditto.theme.DittoTheme
 import com.r0adkll.ditto.tokens.ElevationLevel
@@ -205,6 +206,7 @@ public fun DropdownMenu(
   modifier: Modifier = Modifier,
   offset: DpOffset = DpOffset.Zero,
   style: MenuStyle? = null,
+  properties: PopupProperties = PopupProperties(focusable = true),
   content: @Composable ColumnScope.() -> Unit,
 ) {
   if (!expanded) return
@@ -217,9 +219,9 @@ public fun DropdownMenu(
   Popup(
     popupPositionProvider = provider,
     onDismissRequest = onDismissRequest,
-    properties = PopupProperties(focusable = true),
+    properties = properties,
   ) {
-    MenuContent(modifier, style, autoFocus = true, content = content)
+    MenuContent(modifier, style, autoFocus = properties.focusable, content = content)
   }
 }
 
@@ -282,6 +284,7 @@ public fun MenuItem(
   leadingIcon: (@Composable () -> Unit)? = null,
   trailingIcon: (@Composable () -> Unit)? = null,
   destructive: Boolean = false,
+  shortcut: Shortcut? = null,
   interactionSource: MutableInteractionSource? = null,
 ) {
   val style = MenuDefaults.resolve(null)
@@ -311,6 +314,10 @@ public fun MenuItem(
       Spacer(Modifier.width(style.itemIconSpacing))
     }
     Text(text, style = style.itemTextStyle, color = contentColor, modifier = Modifier.weight(1f))
+    if (shortcut != null) {
+      Spacer(Modifier.width(style.itemIconSpacing))
+      Text(shortcut.label(), style = style.itemTextStyle, color = style.itemIconColor.copy(alpha = alpha))
+    }
     if (trailingIcon != null) {
       Spacer(Modifier.width(style.itemIconSpacing))
       CompositionLocalProvider(LocalContentColor provides iconColor) {

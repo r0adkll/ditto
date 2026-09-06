@@ -31,6 +31,15 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.focus.focusProperties
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
+import androidx.compose.foundation.focusable
+import androidx.compose.foundation.border
+import androidx.compose.ui.input.key.type
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.Key
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.ReadOnlyComposable
@@ -56,7 +65,6 @@ import androidx.compose.ui.unit.dp
 import com.r0adkll.ditto.Idiom
 import com.r0adkll.ditto.foundation.Text
 import com.r0adkll.ditto.input.LocalInputCapabilities
-import com.r0adkll.ditto.interaction.focusRing
 import com.r0adkll.ditto.theme.DittoTheme
 
 @Immutable
@@ -214,6 +222,9 @@ public fun TabRow(
   val hasLabels = tabs.any { it.label != null }
   val height = if (hasIcons && hasLabels) style.height + 16.dp else style.height
   val scrollState = rememberScrollState()
+  val groupSource = remember { MutableInteractionSource() }
+  val groupFocused by groupSource.collectIsFocusedAsState()
+  val keyboard = LocalInputCapabilities.current.keyboard
 
   // Measured x/width per tab (px), for the indicator.
   val bounds = remember(tabs) { mutableStateMapOf<Int, Pair<Int, Int>>() }
@@ -261,7 +272,24 @@ public fun TabRow(
     }
   }
 
-  Column(modifier.fillMaxWidth()) {
+  Column(
+    modifier
+      .fillMaxWidth()
+      .onPreviewKeyEvent { event ->
+        if (!enabled || event.type != KeyEventType.KeyDown) return@onPreviewKeyEvent false
+        val next = when (event.key) {
+          Key.DirectionRight -> selectedIndex + 1
+          Key.DirectionLeft -> selectedIndex - 1
+          Key.MoveHome -> 0
+          Key.MoveEnd -> tabs.lastIndex
+          else -> return@onPreviewKeyEvent false
+        }.coerceIn(0, tabs.lastIndex)
+        if (next != selectedIndex) { haptics.selected(); onSelect(next) }
+        true
+      }
+      // One tab stop (ARIA tablist convention); arrows move between tabs.
+      .focusable(enabled = enabled, interactionSource = groupSource),
+  ) {
     Box(Modifier.fillMaxWidth().height(height).selectableGroup()) {
       Row(
         Modifier
@@ -287,8 +315,9 @@ public fun TabRow(
               )
               .height(height)
               .onPlaced { coords -> bounds[index] = coords.positionInParent().x.toInt() to coords.size.width }
-              .focusRing(interactionSource, style.tabShape)
+              .then(if (selected && groupFocused && keyboard) Modifier.border(DittoTheme.dimens.focusRingWidth, DittoTheme.colors.accent, style.tabShape) else Modifier)
               .clip(style.tabShape)
+              .focusProperties { canFocus = false }
               .selectable(
                 selected = selected,
                 interactionSource = interactionSource,

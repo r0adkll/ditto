@@ -20,6 +20,14 @@ import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.focus.focusProperties
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
+import androidx.compose.foundation.focusable
+import androidx.compose.ui.input.key.type
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.Key
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.ReadOnlyComposable
@@ -51,7 +59,6 @@ import androidx.compose.ui.unit.dp
 import com.r0adkll.ditto.Idiom
 import com.r0adkll.ditto.foundation.Text
 import com.r0adkll.ditto.input.LocalInputCapabilities
-import com.r0adkll.ditto.interaction.focusRing
 import com.r0adkll.ditto.theme.DittoTheme
 
 @Immutable
@@ -176,6 +183,9 @@ public fun SegmentedControl(
   val alpha = if (enabled) 1f else DittoTheme.colors.disabledAlpha
   val haptics = rememberToggleHaptics()
   var widthPx by remember { mutableIntStateOf(0) }
+  val groupSource = remember { MutableInteractionSource() }
+  val groupFocused by groupSource.collectIsFocusedAsState()
+  val keyboard = LocalInputCapabilities.current.keyboard
   val density = LocalDensity.current
   val innerWidth = with(density) { widthPx.toDp() } - style.containerPadding * 2
   val segmentWidth = if (options.isEmpty()) 0.dp else innerWidth / options.size
@@ -192,6 +202,20 @@ public fun SegmentedControl(
       .background(style.containerColor.copy(alpha = style.containerColor.alpha * alpha))
       .onSizeChanged { widthPx = it.width }
       .selectableGroup()
+      .onPreviewKeyEvent { event ->
+        if (!enabled || event.type != KeyEventType.KeyDown) return@onPreviewKeyEvent false
+        val next = when (event.key) {
+          Key.DirectionRight -> selectedIndex + 1
+          Key.DirectionLeft -> selectedIndex - 1
+          Key.MoveHome -> 0
+          Key.MoveEnd -> options.lastIndex
+          else -> return@onPreviewKeyEvent false
+        }.coerceIn(0, options.lastIndex)
+        if (next != selectedIndex) { haptics.selected(); onSelect(next) }
+        true
+      }
+      // One tab stop for the whole control (radiogroup convention); arrows move the selection.
+      .focusable(enabled = enabled, interactionSource = groupSource)
       .then(
         if (enabled) {
           // Slide the selection while a pointer is held down (iOS behaviour); taps still go to the segments.
@@ -247,9 +271,10 @@ public fun SegmentedControl(
           Modifier
             .weight(1f)
             .fillMaxHeight()
-            .focusRing(interactionSource, style.segmentShape)
+            .then(if (selected && groupFocused && keyboard) Modifier.border(DittoTheme.dimens.focusRingWidth, DittoTheme.colors.accent, style.segmentShape) else Modifier)
             .clip(style.segmentShape)
             .background(fill.copy(alpha = fill.alpha * alpha))
+            .focusProperties { canFocus = false }
             .selectable(
               selected = selected,
               interactionSource = interactionSource,

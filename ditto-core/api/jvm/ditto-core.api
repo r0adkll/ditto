@@ -96,6 +96,38 @@ public final class com/r0adkll/ditto/input/InputCapabilities_jvmKt {
 	public static final fun platformInputCapabilities ()Lcom/r0adkll/ditto/input/InputCapabilities;
 }
 
+public final class com/r0adkll/ditto/input/Shortcut {
+	public static final field $stable I
+	public synthetic fun <init> (JZZZZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (JZZZZLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-EK5gGoQ ()J
+	public final fun component2 ()Z
+	public final fun component3 ()Z
+	public final fun component4 ()Z
+	public final fun component5 ()Z
+	public final fun copy-yzqMiHI (JZZZZ)Lcom/r0adkll/ditto/input/Shortcut;
+	public static synthetic fun copy-yzqMiHI$default (Lcom/r0adkll/ditto/input/Shortcut;JZZZZILjava/lang/Object;)Lcom/r0adkll/ditto/input/Shortcut;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAlt ()Z
+	public final fun getCtrl ()Z
+	public final fun getKey-EK5gGoQ ()J
+	public final fun getPrimary ()Z
+	public final fun getShift ()Z
+	public fun hashCode ()I
+	public final fun label ()Ljava/lang/String;
+	public final fun matches-ZmokQxo (Ljava/lang/Object;)Z
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/r0adkll/ditto/input/ShortcutKt {
+	public static final fun onShortcut (Landroidx/compose/ui/Modifier;Lcom/r0adkll/ditto/input/Shortcut;Lkotlin/jvm/functions/Function0;)Landroidx/compose/ui/Modifier;
+	public static final fun onShortcuts (Landroidx/compose/ui/Modifier;[Lkotlin/Pair;)Landroidx/compose/ui/Modifier;
+}
+
+public final class com/r0adkll/ditto/input/Shortcut_jvmKt {
+	public static final fun platformUsesMetaForShortcuts ()Z
+}
+
 public final class com/r0adkll/ditto/interaction/FocusRingKt {
 	public static final fun focusRing-BndDDMc (Landroidx/compose/ui/Modifier;Landroidx/compose/foundation/interaction/InteractionSource;Landroidx/compose/ui/graphics/Shape;JFF)Landroidx/compose/ui/Modifier;
 	public static synthetic fun focusRing-BndDDMc$default (Landroidx/compose/ui/Modifier;Landroidx/compose/foundation/interaction/InteractionSource;Landroidx/compose/ui/graphics/Shape;JFFILjava/lang/Object;)Landroidx/compose/ui/Modifier;

@@ -264,7 +264,7 @@ public final class com/r0adkll/ditto/components/ComposableSingletons$BannerKt {
 public final class com/r0adkll/ditto/components/ComposableSingletons$ComboBoxKt {
 	public static final field INSTANCE Lcom/r0adkll/ditto/components/ComposableSingletons$ComboBoxKt;
 	public fun <init> ()V
-	public final fun getLambda$-1620425499$ditto_ditto_components ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$635078310$ditto_ditto_components ()Lkotlin/jvm/functions/Function2;
 }
 
 public final class com/r0adkll/ditto/components/ComposableSingletons$DecoratedWindowKt {
@@ -272,6 +272,13 @@ public final class com/r0adkll/ditto/components/ComposableSingletons$DecoratedWi
 	public fun <init> ()V
 	public final fun getLambda$-334251502$ditto_ditto_components ()Lkotlin/jvm/functions/Function2;
 	public final fun getLambda$68434973$ditto_ditto_components ()Lkotlin/jvm/functions/Function2;
+}
+
+public final class com/r0adkll/ditto/components/ComposableSingletons$EditableComboBoxKt {
+	public static final field INSTANCE Lcom/r0adkll/ditto/components/ComposableSingletons$EditableComboBoxKt;
+	public fun <init> ()V
+	public final fun getLambda$-1252946263$ditto_ditto_components ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$546408898$ditto_ditto_components ()Lkotlin/jvm/functions/Function2;
 }
 
 public final class com/r0adkll/ditto/components/ComposableSingletons$MenuKt {
@@ -355,6 +362,10 @@ public final class com/r0adkll/ditto/components/DialogStyle {
 public final class com/r0adkll/ditto/components/DividerKt {
 	public static final fun HorizontalDivider-orn9Ti0 (Landroidx/compose/ui/Modifier;FJFFLandroidx/compose/runtime/Composer;II)V
 	public static final fun VerticalDivider-orn9Ti0 (Landroidx/compose/ui/Modifier;FJFFLandroidx/compose/runtime/Composer;II)V
+}
+
+public final class com/r0adkll/ditto/components/EditableComboBoxKt {
+	public static final fun EditableComboBox (Landroidx/compose/foundation/text/input/TextFieldState;Ljava/util/List;Landroidx/compose/ui/Modifier;Lkotlin/jvm/functions/Function1;ZLjava/lang/String;Ljava/lang/String;ILcom/r0adkll/ditto/components/TextFieldStyle;Landroidx/compose/foundation/interaction/MutableInteractionSource;Landroidx/compose/runtime/Composer;II)V
 }
 
 public final class com/r0adkll/ditto/components/FabDefaults {
@@ -496,10 +507,10 @@ public final class com/r0adkll/ditto/components/MenuDefaults {
 
 public final class com/r0adkll/ditto/components/MenuKt {
 	public static final fun CheckableMenuItem (Ljava/lang/String;ZLkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;ZLkotlin/jvm/functions/Function2;Landroidx/compose/foundation/interaction/MutableInteractionSource;Landroidx/compose/runtime/Composer;II)V
-	public static final fun DropdownMenu-ILWXrKs (ZLkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;JLcom/r0adkll/ditto/components/MenuStyle;Lkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;II)V
+	public static final fun DropdownMenu-4kj-_NE (ZLkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;JLcom/r0adkll/ditto/components/MenuStyle;Landroidx/compose/ui/window/PopupProperties;Lkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;II)V
 	public static final fun MenuContent (Landroidx/compose/ui/Modifier;Lcom/r0adkll/ditto/components/MenuStyle;ZLkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;II)V
 	public static final fun MenuDivider (Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
-	public static final fun MenuItem (Ljava/lang/String;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;ZLkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;ZLandroidx/compose/foundation/interaction/MutableInteractionSource;Landroidx/compose/runtime/Composer;II)V
+	public static final fun MenuItem (Ljava/lang/String;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;ZLkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;ZLcom/r0adkll/ditto/input/Shortcut;Landroidx/compose/foundation/interaction/MutableInteractionSource;Landroidx/compose/runtime/Composer;II)V
 	public static final fun SubmenuItem (Ljava/lang/String;Landroidx/compose/ui/Modifier;ZLkotlin/jvm/functions/Function2;Lcom/r0adkll/ditto/components/MenuStyle;Lkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;II)V
 	public static final fun getLocalMenuStyle ()Landroidx/compose/runtime/ProvidableCompositionLocal;
 }
@@ -711,6 +722,8 @@ public final class com/r0adkll/ditto/components/ScaffoldKt {
 }
 
 public final class com/r0adkll/ditto/components/Scrollbar_jvmKt {
+	public static final fun HorizontalScrollbar (Landroidx/compose/foundation/ScrollState;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
+	public static final fun HorizontalScrollbar (Landroidx/compose/foundation/lazy/LazyListState;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
 	public static final fun VerticalScrollbar (Landroidx/compose/foundation/ScrollState;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
 	public static final fun VerticalScrollbar (Landroidx/compose/foundation/lazy/LazyListState;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
 }
@@ -832,6 +845,10 @@ public final class com/r0adkll/ditto/components/SheetStyle {
 	public final fun getShape ()Landroidx/compose/ui/graphics/Shape;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/r0adkll/ditto/components/ShortcutScopeKt {
+	public static final fun ShortcutScope ([Lkotlin/Pair;Landroidx/compose/ui/Modifier;ZLkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
 }
 
 public final class com/r0adkll/ditto/components/SliderDefaults {
@@ -1189,7 +1206,7 @@ public final class com/r0adkll/ditto/components/TopBarVariant : java/lang/Enum {
 }
 
 public final class com/r0adkll/ditto/components/TreeKt {
-	public static final fun Tree (Ljava/util/List;Landroidx/compose/ui/Modifier;Lcom/r0adkll/ditto/components/TreeState;Lkotlin/jvm/functions/Function1;Landroidx/compose/foundation/lazy/LazyListState;Landroidx/compose/runtime/Composer;II)V
+	public static final fun Tree (Ljava/util/List;Landroidx/compose/ui/Modifier;Lcom/r0adkll/ditto/components/TreeState;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Landroidx/compose/foundation/lazy/LazyListState;Landroidx/compose/foundation/interaction/MutableInteractionSource;Landroidx/compose/runtime/Composer;II)V
 	public static final fun rememberTreeState (Ljava/util/Set;Ljava/lang/String;Landroidx/compose/runtime/Composer;II)Lcom/r0adkll/ditto/components/TreeState;
 }
 

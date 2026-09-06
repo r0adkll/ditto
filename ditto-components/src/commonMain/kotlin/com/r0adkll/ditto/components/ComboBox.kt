@@ -15,6 +15,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.input.key.type
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.Key
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -79,6 +84,13 @@ public fun ComboBox(
           .background(style.containerColor.copy(alpha = style.containerColor.alpha * alpha), style.shape)
           .then(if (borderWidth > 0.dp) Modifier.border(borderWidth, borderColor, style.shape) else Modifier)
           .clickable(interactionSource, LocalIndication.current, enabled = enabled, role = Role.DropdownList) { open = true }
+          .onPreviewKeyEvent { event ->
+            if (!enabled || event.type != KeyEventType.KeyDown) return@onPreviewKeyEvent false
+            when (event.key) {
+              Key.DirectionDown, Key.Spacebar, Key.Enter -> { open = true; true }
+              else -> false
+            }
+          }
           .then(if (pointer && enabled) Modifier.pointerHoverIcon(PointerIcon.Hand) else Modifier)
           .semantics { contentDescription = selected ?: placeholder }
           .defaultMinSize(minHeight = style.minHeight)

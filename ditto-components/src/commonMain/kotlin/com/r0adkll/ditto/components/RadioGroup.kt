@@ -13,6 +13,17 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.runtime.Composable
+import com.r0adkll.ditto.input.LocalInputCapabilities
+import androidx.compose.ui.focus.focusProperties
+import androidx.compose.runtime.getValue
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
+import androidx.compose.foundation.focusable
+import androidx.compose.foundation.border
+import androidx.compose.ui.input.key.type
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.Key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,14 +46,34 @@ public fun RadioGroup(
 ) {
   val spacing = DittoTheme.spacing
   val haptics = rememberToggleHaptics()
-  Column(modifier.selectableGroup(), verticalArrangement = Arrangement.spacedBy(spacing.xxs)) {
+  val groupSource = remember { MutableInteractionSource() }
+  val groupFocused by groupSource.collectIsFocusedAsState()
+  val keyboard = LocalInputCapabilities.current.keyboard
+  Column(
+    modifier
+      .selectableGroup()
+      .onPreviewKeyEvent { event ->
+        if (!enabled || event.type != KeyEventType.KeyDown) return@onPreviewKeyEvent false
+        val next = when (event.key) {
+          Key.DirectionDown, Key.DirectionRight -> selectedIndex + 1
+          Key.DirectionUp, Key.DirectionLeft -> selectedIndex - 1
+          else -> return@onPreviewKeyEvent false
+        }.coerceIn(0, options.lastIndex)
+        if (next != selectedIndex) { haptics.selected(); onSelect(next) }
+        true
+      }
+      .focusable(enabled = enabled, interactionSource = groupSource),
+    verticalArrangement = Arrangement.spacedBy(spacing.xxs),
+  ) {
     options.forEachIndexed { index, label ->
       val selected = index == selectedIndex
       val interactionSource = remember { MutableInteractionSource() }
       Row(
         Modifier
           .fillMaxWidth()
+          .then(if (selected && groupFocused && keyboard) Modifier.border(DittoTheme.dimens.focusRingWidth, DittoTheme.colors.accent, DittoTheme.shapes.small) else Modifier)
           .clip(DittoTheme.shapes.small)
+          .focusProperties { canFocus = false }
           .selectable(
             selected = selected,
             interactionSource = interactionSource,

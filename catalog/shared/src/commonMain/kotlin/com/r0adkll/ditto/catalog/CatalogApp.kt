@@ -50,6 +50,10 @@ import com.r0adkll.ditto.components.Badge
 import com.r0adkll.ditto.components.Banner
 import com.r0adkll.ditto.components.BannerKind
 import com.r0adkll.ditto.components.ComboBox
+import com.r0adkll.ditto.components.EditableComboBox
+import com.r0adkll.ditto.components.ShortcutScope
+import com.r0adkll.ditto.input.Shortcut
+import androidx.compose.ui.input.key.Key
 import com.r0adkll.ditto.components.HorizontalSplitPane
 import com.r0adkll.ditto.components.Link
 import com.r0adkll.ditto.components.Tree
@@ -132,6 +136,11 @@ fun CatalogApp() {
     val snackbars = remember { SnackbarHostState() }
     var refreshing by remember { mutableStateOf(false) }
     LaunchedEffect(refreshing) { if (refreshing) { delay(1500); refreshing = false } }
+    val scope = rememberCoroutineScope()
+    ShortcutScope(
+      Shortcut(Key.D, primary = true) to { colorMode = if (colorMode == ColorMode.Dark) ColorMode.Light else ColorMode.Dark },
+      Shortcut(Key.K, primary = true) to { scope.launch { snackbars.showSnackbar("Shortcut ${Shortcut(Key.K, primary = true).label()} pressed") } },
+    ) {
     Scaffold(
       modifier = Modifier.fillMaxSize(),
       snackbarHost = { SnackbarHost(snackbars) },
@@ -186,6 +195,7 @@ fun CatalogApp() {
         ContrastReport()
       }
       }
+    }
     }
   }
 }
@@ -415,7 +425,7 @@ private fun OverlaysDemo() {
         Button(text = "Open menu", onClick = { menuOpen = true }, variant = ButtonVariant.Tonal, leadingIcon = DittoIcons.chevronDown)
         DropdownMenu(expanded = menuOpen, onDismissRequest = { menuOpen = false }) {
           MenuItem("Share", onClick = { menuOpen = false }, leadingIcon = { Icon(DittoIcons.forward, null) })
-          MenuItem("Rename", onClick = { menuOpen = false }, trailingIcon = { Text("⌘R") })
+          MenuItem("Rename", onClick = { menuOpen = false }, shortcut = Shortcut(Key.R, primary = true))
           MenuDivider()
           CheckableMenuItem("Show completed", checked = showCompleted, onCheckedChange = { showCompleted = it })
           SubmenuItem("Sort by") {
@@ -521,6 +531,7 @@ private fun DesktopDemo() {
   Column(verticalArrangement = Arrangement.spacedBy(DittoTheme.spacing.lg)) {
     Row(horizontalArrangement = Arrangement.spacedBy(DittoTheme.spacing.lg), verticalAlignment = Alignment.Bottom) {
       ComboBox(options = listOf("Light", "Dark", "System"), selectedIndex = appearance, onSelect = { appearance = it }, label = "Appearance", modifier = Modifier.width(220.dp))
+      EditableComboBox(state = rememberTextFieldState(), options = listOf("Sherlock Holmes", "Sherwood Anderson", "Mary Shelley", "Shakespeare"), label = "Author", placeholder = "Type to search", modifier = Modifier.width(240.dp))
       Row(horizontalArrangement = Arrangement.spacedBy(DittoTheme.spacing.md), modifier = Modifier.padding(bottom = 8.dp)) {
         Link("Learn more", onClick = {})
         Link("Docs", onClick = {}, external = true)

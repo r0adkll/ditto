@@ -15,9 +15,20 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.runtime.Composable
+import kotlinx.coroutines.launch
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.input.key.type
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.Key
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
+import androidx.compose.foundation.focusable
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.border
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
@@ -44,7 +55,6 @@ import com.r0adkll.ditto.foundation.Icon
 import com.r0adkll.ditto.foundation.Text
 import com.r0adkll.ditto.icons.DittoIcons
 import com.r0adkll.ditto.input.LocalInputCapabilities
-import com.r0adkll.ditto.interaction.focusRing
 import com.r0adkll.ditto.theme.DittoTheme
 
 /** A node in a [Tree]. [id] must be unique across the whole tree. */
@@ -81,10 +91,66 @@ public fun Tree(
   modifier: Modifier = Modifier,
   state: TreeState = rememberTreeState(),
   onSelect: (TreeNode) -> Unit = { state.selected = it.id },
+  onActivate: (TreeNode) -> Unit = {},
   listState: LazyListState = rememberLazyListState(),
+  interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
   val flat = remember(roots, state.expanded.toSet()) { flatten(roots, state.expanded) }
-  LazyColumn(modifier.selectableGroup(), state = listState) {
+  val focused by interactionSource.collectIsFocusedAsState()
+  val scope = rememberCoroutineScope()
+
+  fun indexOfSelected() = flat.indexOfFirst { it.node.id == state.selected }
+  fun select(index: Int) {
+    val row = flat.getOrNull(index) ?: return
+    state.selected = row.node.id
+    onSelect(row.node)
+    scope.launch { listState.animateScrollToItem(index.coerceAtLeast(0)) }
+  }
+  fun parentIndex(index: Int): Int {
+    val depth = flat[index].depth
+    for (i in index - 1 downTo 0) if (flat[i].depth < depth) return i
+    return -1
+  }
+
+  LazyColumn(
+    modifier
+      .selectableGroup()
+      // The tree is one focus stop; arrows move the selection inside it (desktop tree convention).
+      .onPreviewKeyEvent { event ->
+        if (event.type != KeyEventType.KeyDown || flat.isEmpty()) return@onPreviewKeyEvent false
+        val current = indexOfSelected()
+        when (event.key) {
+          Key.DirectionDown -> { select(if (current < 0) 0 else (current + 1).coerceAtMost(flat.lastIndex)); true }
+          Key.DirectionUp -> { select(if (current < 0) 0 else (current - 1).coerceAtLeast(0)); true }
+          Key.MoveHome -> { select(0); true }
+          Key.MoveEnd -> { select(flat.lastIndex); true }
+          Key.DirectionRight -> {
+            if (current < 0) return@onPreviewKeyEvent false
+            val node = flat[current].node
+            when {
+              node.children.isEmpty() -> false
+              node.id !in state.expanded -> { state.expanded.add(node.id); true }
+              else -> { select(current + 1); true }
+            }
+          }
+          Key.DirectionLeft -> {
+            if (current < 0) return@onPreviewKeyEvent false
+            val node = flat[current].node
+            if (node.id in state.expanded) { state.expanded.remove(node.id); true } else {
+              val parent = parentIndex(current)
+              if (parent >= 0) { select(parent); true } else false
+            }
+          }
+          Key.Enter, Key.Spacebar -> {
+            if (current < 0) return@onPreviewKeyEvent false
+            onActivate(flat[current].node); true
+          }
+          else -> false
+        }
+      }
+      .focusable(interactionSource = interactionSource),
+    state = listState,
+  ) {
     items(flat.size, key = { flat[it].node.id }) { index ->
       val row = flat[index]
       TreeRow(
@@ -92,8 +158,10 @@ public fun Tree(
         depth = row.depth,
         expanded = row.node.id in state.expanded,
         selected = state.selected == row.node.id,
+        treeFocused = focused,
         onToggle = { state.toggle(row.node.id) },
         onSelect = { onSelect(row.node) },
+        onActivate = { onActivate(row.node) },
       )
     }
   }
@@ -110,7 +178,16 @@ private fun flatten(nodes: List<TreeNode>, expanded: Set<String>, depth: Int = 0
 }
 
 @Composable
-private fun TreeRow(node: TreeNode, depth: Int, expanded: Boolean, selected: Boolean, onToggle: () -> Unit, onSelect: () -> Unit) {
+private fun TreeRow(
+  node: TreeNode,
+  depth: Int,
+  expanded: Boolean,
+  selected: Boolean,
+  treeFocused: Boolean,
+  onToggle: () -> Unit,
+  onSelect: () -> Unit,
+  onActivate: () -> Unit,
+) {
   val colors = DittoTheme.colors
   val dimens = DittoTheme.dimens
   val interactionSource = remember { MutableInteractionSource() }
@@ -124,10 +201,19 @@ private fun TreeRow(node: TreeNode, depth: Int, expanded: Boolean, selected: Boo
       .fillMaxWidth()
       .height(dimens.listRowHeight)
       .padding(horizontal = DittoTheme.spacing.xs)
-      .focusRing(interactionSource, shape)
       .clip(shape)
       .background(if (selected) colors.accent.copy(alpha = ButtonDefaults.TonalContainerAlpha) else Color.Transparent)
-      .selectable(selected, interactionSource, LocalIndication.current, enabled = node.enabled, role = Role.Button, onClick = onSelect)
+      // Keyboard focus is on the tree; the selected row shows the ring on its behalf.
+      .then(if (selected && treeFocused && LocalInputCapabilities.current.keyboard) Modifier.border(DittoTheme.dimens.focusRingWidth, colors.accent, shape) else Modifier)
+      .combinedClickable(
+        interactionSource = interactionSource,
+        indication = LocalIndication.current,
+        enabled = node.enabled,
+        role = Role.Button,
+        onDoubleClick = onActivate,
+        onClick = onSelect,
+      )
+      .semantics { this.selected = selected }
       .then(if (pointer && node.enabled) Modifier.pointerHoverIcon(PointerIcon.Hand) else Modifier)
       .semantics { if (node.children.isNotEmpty()) { if (expanded) collapse { onToggle(); true } else expand { onToggle(); true } } }
       .padding(start = indent * depth + DittoTheme.spacing.xs, end = DittoTheme.spacing.sm),

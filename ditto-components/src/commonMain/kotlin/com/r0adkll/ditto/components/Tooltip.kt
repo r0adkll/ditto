@@ -19,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -145,10 +146,17 @@ public fun Tooltip(
   var visible by remember { mutableStateOf(false) }
   var longPressed by remember { mutableStateOf(false) }
   var releases by remember { mutableStateOf(0) }
+  var focusedChild by remember { mutableStateOf(false) }
+  val keyboard = LocalInputCapabilities.current.keyboard
 
-  LaunchedEffect(hovered, longPressed, releases) {
+  LaunchedEffect(hovered, longPressed, releases, focusedChild) {
     when {
       longPressed -> visible = true
+      // Keyboard users get the tooltip when they tab onto the anchor.
+      focusedChild && keyboard -> {
+        delay(TooltipDefaults.HoverDelayMillis)
+        visible = true
+      }
       hovered -> {
         delay(TooltipDefaults.HoverDelayMillis)
         visible = true
@@ -165,6 +173,7 @@ public fun Tooltip(
   Box(
     modifier
       .then(if (pointer) Modifier.hoverable(hoverSource) else Modifier)
+      .onFocusChanged { focusedChild = it.hasFocus }
       .pointerInput(Unit) {
         awaitEachGesture {
           awaitFirstDownInitial()

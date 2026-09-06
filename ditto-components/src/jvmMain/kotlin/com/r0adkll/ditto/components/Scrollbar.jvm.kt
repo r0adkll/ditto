@@ -26,6 +26,20 @@ public actual fun VerticalScrollbar(listState: LazyListState, modifier: Modifier
 }
 
 @Composable
+public actual fun HorizontalScrollbar(scrollState: ScrollState, modifier: Modifier) {
+  CompositionLocalProvider(LocalScrollbarStyle provides dittoScrollbarStyle()) {
+    androidx.compose.foundation.HorizontalScrollbar(rememberScrollbarAdapter(scrollState), modifier)
+  }
+}
+
+@Composable
+public actual fun HorizontalScrollbar(listState: LazyListState, modifier: Modifier) {
+  CompositionLocalProvider(LocalScrollbarStyle provides dittoScrollbarStyle()) {
+    androidx.compose.foundation.HorizontalScrollbar(rememberScrollbarAdapter(listState), modifier)
+  }
+}
+
+@Composable
 private fun dittoScrollbarStyle(): ScrollbarStyle {
   val colors = DittoTheme.colors
   return ScrollbarStyle(
