@@ -23,6 +23,7 @@ kotlin {
 }
 
 // Spike parity tests write comparison images, not committed goldens; run them explicitly with -Pditto.spikes=true.
+// `enabled` is evaluated at configuration time, so it is configuration-cache safe (onlyIf lambdas are not).
 tasks.withType<Test>().configureEach {
-  onlyIf("spike tests run only with -Pditto.spikes=true") { providers.gradleProperty("ditto.spikes").isPresent }
+  enabled = providers.gradleProperty("ditto.spikes").isPresent
 }
