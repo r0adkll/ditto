@@ -22,12 +22,10 @@
     <img src="mascot.svg" alt="">
     <span>Loading the Ditto catalog…</span>
   </div>
-  <script>
-    // The Compose canvas replaces the body content once it mounts; drop the splash then.
-    const splash = document.getElementById('splash');
-    new MutationObserver((_, obs) => {
-      if (document.querySelector('canvas')) { splash.remove(); obs.disconnect(); }
-    }).observe(document.body, { childList: true, subtree: true });
-  </script>
+  <!--
+    No script needed to hide the splash: ComposeViewport() clears document.body before mounting,
+    which removes it. (Don't try to detect the canvas from here — Compose renders into a shadow
+    root, so document.querySelector('canvas') never matches.)
+  -->
 </body>
 </html>

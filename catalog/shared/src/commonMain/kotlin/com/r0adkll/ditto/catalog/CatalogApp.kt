@@ -200,23 +200,9 @@ fun CatalogApp() {
           neutrals = neutrals, onNeutrals = { neutrals = it },
           sharpCorners = sharpCorners, onSharpCorners = { sharpCorners = it },
         )
-        Section("Buttons") { ButtonsDemo() }
-        Section("Icon buttons") { IconButtonsDemo() }
-        Section("Selection controls") { SelectionControlsDemo() }
-        Section("Text fields") { TextFieldsDemo() }
-        Section("Segments, tabs, sliders") { ControlsDemo() }
-        Section("Lists and cards") { ListsDemo() }
-        Section("Menus, dialogs, progress") { OverlaysDemo() }
-        Section("Navigation, chips, badges, sheets") { NavigationDemo() }
-        Section("Toggles, FAB, search, snackbar, pull to refresh") { ActionsDemo(snackbars) }
-        Section("Desktop: combo box, links, banners, tree, split pane") { DesktopDemo() }
-        Section("Colors") { ColorsDemo() }
-        Section("Typography") { TypographyDemo() }
-        Section("Shapes") { ShapesDemo() }
-        Section("Spacing") { SpacingDemo() }
-        Section("Elevation") { ElevationDemo() }
-        Section("System icons") { IconsDemo() }
-        ContrastReport()
+        catalogDemos(snackbars).forEach { demo ->
+          Section(demo.title) { demo.content() }
+        }
       }
       }
     }
@@ -296,7 +282,7 @@ private fun Section(title: String, content: @Composable () -> Unit) {
 }
 
 @Composable
-private fun ButtonsDemo() {
+internal fun ButtonsDemo() {
   Column(verticalArrangement = Arrangement.spacedBy(DittoTheme.spacing.md)) {
     Row(horizontalArrangement = Arrangement.spacedBy(DittoTheme.spacing.sm), verticalAlignment = Alignment.CenterVertically) {
       Button(onClick = {}) { Text("Filled") }
@@ -319,7 +305,7 @@ private fun ButtonsDemo() {
 }
 
 @Composable
-private fun IconButtonsDemo() {
+internal fun IconButtonsDemo() {
   Row(horizontalArrangement = Arrangement.spacedBy(DittoTheme.spacing.sm), verticalAlignment = Alignment.CenterVertically) {
     IconButton(onClick = {}) { Icon(DittoIcons.more, "More") }
     FilledIconButton(onClick = {}) { Icon(DittoIcons.check, "Done") }
@@ -331,7 +317,7 @@ private fun IconButtonsDemo() {
 }
 
 @Composable
-private fun SelectionControlsDemo() {
+internal fun SelectionControlsDemo() {
   var switchOn by remember { mutableStateOf(true) }
   var switchOff by remember { mutableStateOf(false) }
   var checkA by remember { mutableStateOf(true) }
@@ -367,7 +353,7 @@ private fun SelectionControlsDemo() {
 }
 
 @Composable
-private fun ControlsDemo() {
+internal fun ControlsDemo() {
   var segment by remember { mutableStateOf(1) }
   var tab by remember { mutableStateOf(0) }
   var scrollTab by remember { mutableStateOf(2) }
@@ -393,7 +379,7 @@ private fun ControlsDemo() {
 }
 
 @Composable
-private fun TextFieldsDemo() {
+internal fun TextFieldsDemo() {
   Column(verticalArrangement = Arrangement.spacedBy(DittoTheme.spacing.md), modifier = Modifier.width(360.dp)) {
     TextField(state = rememberTextFieldState(), label = "Name", placeholder = "Ada Lovelace", modifier = Modifier.fillMaxWidth())
     TextField(
@@ -415,7 +401,7 @@ private fun TextFieldsDemo() {
 }
 
 @Composable
-private fun ListsDemo() {
+internal fun ListsDemo() {
   var wifi by remember { mutableStateOf(true) }
   Row(horizontalArrangement = Arrangement.spacedBy(DittoTheme.spacing.lg)) {
     Card(variant = CardVariant.Outlined, modifier = Modifier.width(340.dp)) {
@@ -444,7 +430,7 @@ private fun ListsDemo() {
 }
 
 @Composable
-private fun OverlaysDemo() {
+internal fun OverlaysDemo() {
   var menuOpen by remember { mutableStateOf(false) }
   var showCompleted by remember { mutableStateOf(true) }
   var dialogOpen by remember { mutableStateOf(false) }
@@ -489,7 +475,7 @@ private fun OverlaysDemo() {
 }
 
 @Composable
-private fun NavigationDemo() {
+internal fun NavigationDemo() {
   var dest by remember { mutableStateOf(0) }
   var chips by remember { mutableStateOf(setOf(0)) }
   var sheet by remember { mutableStateOf(false) }
@@ -536,7 +522,7 @@ private fun NavigationDemo() {
 }
 
 @Composable
-private fun ActionsDemo(snackbars: SnackbarHostState) {
+internal fun ActionsDemo(snackbars: SnackbarHostState) {
   var on by remember { mutableStateOf(true) }
   val scope = rememberCoroutineScope()
   Column(verticalArrangement = Arrangement.spacedBy(DittoTheme.spacing.lg)) {
@@ -555,7 +541,7 @@ private fun ActionsDemo(snackbars: SnackbarHostState) {
 }
 
 @Composable
-private fun DesktopDemo() {
+internal fun DesktopDemo() {
   var appearance by remember { mutableStateOf<Int?>(1) }
   var bannerShown by remember { mutableStateOf(true) }
   Column(verticalArrangement = Arrangement.spacedBy(DittoTheme.spacing.lg)) {
@@ -603,7 +589,7 @@ private fun DesktopDemo() {
 }
 
 @Composable
-private fun ColorsDemo() {
+internal fun ColorsDemo() {
   val c = DittoTheme.colors
   val roles = listOf(
     "accent" to c.accent, "onAccent" to c.onAccent, "background" to c.background, "onBackground" to c.onBackground,
@@ -630,7 +616,7 @@ private fun ColorsDemo() {
 }
 
 @Composable
-private fun TypographyDemo() {
+internal fun TypographyDemo() {
   val t = DittoTheme.typography
   Column(verticalArrangement = Arrangement.spacedBy(DittoTheme.spacing.xs)) {
     Text("Display", style = t.display)
@@ -645,7 +631,7 @@ private fun TypographyDemo() {
 }
 
 @Composable
-private fun ShapesDemo() {
+internal fun ShapesDemo() {
   val s = DittoTheme.shapes
   Row(horizontalArrangement = Arrangement.spacedBy(DittoTheme.spacing.md)) {
     listOf("xs" to s.extraSmall, "sm" to s.small, "md" to s.medium, "lg" to s.large, "xl" to s.extraLarge, "full" to s.full)
@@ -659,7 +645,7 @@ private fun ShapesDemo() {
 }
 
 @Composable
-private fun SpacingDemo() {
+internal fun SpacingDemo() {
   val sp = DittoTheme.spacing
   Column(verticalArrangement = Arrangement.spacedBy(DittoTheme.spacing.xs)) {
     listOf("xxs" to sp.xxs, "xs" to sp.xs, "sm" to sp.sm, "md" to sp.md, "lg" to sp.lg, "xl" to sp.xl, "xxl" to sp.xxl, "xxxl" to sp.xxxl)
@@ -675,7 +661,7 @@ private fun SpacingDemo() {
 }
 
 @Composable
-private fun ElevationDemo() {
+internal fun ElevationDemo() {
   Row(horizontalArrangement = Arrangement.spacedBy(DittoTheme.spacing.lg)) {
     ElevationLevel.entries.forEach { level ->
       Surface(shape = DittoTheme.shapes.medium, elevation = level, modifier = Modifier.size(72.dp)) {
@@ -686,7 +672,7 @@ private fun ElevationDemo() {
 }
 
 @Composable
-private fun IconsDemo() {
+internal fun IconsDemo() {
   val icons = listOf(
     "back" to DittoIcons.back, "forward" to DittoIcons.forward, "chevronDown" to DittoIcons.chevronDown,
     "chevronRight" to DittoIcons.chevronRight, "close" to DittoIcons.close, "check" to DittoIcons.check,
