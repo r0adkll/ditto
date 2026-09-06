@@ -26,12 +26,22 @@
   margin: 1.5rem 0;
 }
 .ditto-demo-frame {
-  border: 1px solid var(--sl-color-gray-5);
+  position: relative;
   border-radius: 0.5rem;
-  /* An iframe paints its own background over the parent's rounded corners; clipping here is what
-     actually rounds it. */
+  /* An iframe paints its own background over the parent's rounded corners, so the frame has to
+     clip it. */
   overflow: hidden;
   background: var(--sl-color-bg);
+}
+/* The border is drawn *over* the iframe. A real CSS border sits under the iframe's opaque
+   background, which eats its inner edge along the curve and makes the corners look clipped. */
+.ditto-demo-frame::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: inherit;
+  pointer-events: none;
 }
 .ditto-demo-frame iframe {
   display: block;

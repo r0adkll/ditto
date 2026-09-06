@@ -57,7 +57,17 @@ internal fun ButtonDemo() = Stack {
     TextButton(onClick = {}) { Text("Text") }
   }
   Line {
-    Button(text = "Continue", onClick = {}, leadingIcon = DittoIcons.check)
+    // Slot form: the content is a RowScope, so an icon is just an Icon before the Text.
+    Button(onClick = {}) {
+      Icon(DittoIcons.check, contentDescription = null)
+      Spacer(Modifier.width(DittoTheme.spacing.sm))
+      Text("Continue")
+    }
+    OutlinedButton(onClick = {}) {
+      Icon(DittoIcons.search, contentDescription = null)
+      Spacer(Modifier.width(DittoTheme.spacing.sm))
+      Text("Search")
+    }
     Button(text = "Disabled", onClick = {}, enabled = false)
   }
 }

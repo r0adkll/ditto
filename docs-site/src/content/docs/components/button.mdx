@@ -23,8 +23,27 @@ Button(onClick = { save() }) { Text("Save") }
 TonalButton(onClick = { }) { Text("Secondary") }
 OutlinedButton(onClick = { }) { Text("Outlined") }
 TextButton(onClick = { }) { Text("Low emphasis") }
+```
 
-// Label-and-icon convenience
+### With an icon
+
+The content slot is a `RowScope`, so an icon is an `Icon` placed before the label. Spacing comes
+from the theme rather than a magic number, and the icon inherits the button's content colour.
+
+```kotlin
+Button(onClick = { download() }) {
+  Icon(DittoIcons.check, contentDescription = null)
+  Spacer(Modifier.width(DittoTheme.spacing.sm))
+  Text("Continue")
+}
+```
+
+Give the icon a `contentDescription` of `null` when the label already says what the button does —
+otherwise a screen reader reads the action twice.
+
+There is a shorthand for exactly this arrangement:
+
+```kotlin
 Button(text = "Continue", onClick = { }, leadingIcon = DittoIcons.check)
 ```
 
