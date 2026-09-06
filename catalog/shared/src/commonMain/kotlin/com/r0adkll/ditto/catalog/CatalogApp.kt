@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -46,6 +47,16 @@ import com.r0adkll.ditto.components.SnackbarHostState
 import com.r0adkll.ditto.components.ToggleButton
 import com.r0adkll.ditto.components.BackButton
 import com.r0adkll.ditto.components.Badge
+import com.r0adkll.ditto.components.Banner
+import com.r0adkll.ditto.components.BannerKind
+import com.r0adkll.ditto.components.ComboBox
+import com.r0adkll.ditto.components.HorizontalSplitPane
+import com.r0adkll.ditto.components.Link
+import com.r0adkll.ditto.components.Tree
+import com.r0adkll.ditto.components.TreeNode
+import com.r0adkll.ditto.components.VerticalScrollbar
+import com.r0adkll.ditto.components.rememberSplitPaneState
+import com.r0adkll.ditto.components.rememberTreeState
 import com.r0adkll.ditto.components.RangeSlider
 import com.r0adkll.ditto.components.BadgedBox
 import com.r0adkll.ditto.components.CheckableMenuItem
@@ -165,6 +176,7 @@ fun CatalogApp() {
         Section("Menus, dialogs, progress") { OverlaysDemo() }
         Section("Navigation, chips, badges, sheets") { NavigationDemo() }
         Section("Toggles, FAB, search, snackbar, pull to refresh") { ActionsDemo(snackbars) }
+        Section("Desktop: combo box, links, banners, tree, split pane") { DesktopDemo() }
         Section("Colors") { ColorsDemo() }
         Section("Typography") { TypographyDemo() }
         Section("Shapes") { ShapesDemo() }
@@ -498,6 +510,53 @@ private fun ActionsDemo(snackbars: SnackbarHostState) {
     Row(horizontalArrangement = Arrangement.spacedBy(DittoTheme.spacing.sm)) {
       Button(text = "Show snackbar", onClick = { scope.launch { snackbars.showSnackbar("Saved to library", actionLabel = "Undo") } }, variant = ButtonVariant.Tonal)
       Text("Pull the page down to refresh.", style = DittoTheme.typography.bodySmall, color = DittoTheme.colors.onSurfaceVariant, modifier = Modifier.padding(top = 10.dp))
+    }
+  }
+}
+
+@Composable
+private fun DesktopDemo() {
+  var appearance by remember { mutableStateOf<Int?>(1) }
+  var bannerShown by remember { mutableStateOf(true) }
+  Column(verticalArrangement = Arrangement.spacedBy(DittoTheme.spacing.lg)) {
+    Row(horizontalArrangement = Arrangement.spacedBy(DittoTheme.spacing.lg), verticalAlignment = Alignment.Bottom) {
+      ComboBox(options = listOf("Light", "Dark", "System"), selectedIndex = appearance, onSelect = { appearance = it }, label = "Appearance", modifier = Modifier.width(220.dp))
+      Row(horizontalArrangement = Arrangement.spacedBy(DittoTheme.spacing.md), modifier = Modifier.padding(bottom = 8.dp)) {
+        Link("Learn more", onClick = {})
+        Link("Docs", onClick = {}, external = true)
+      }
+    }
+    if (bannerShown) {
+      Banner("Sync failed. Check your connection and try again.", kind = BannerKind.Error, title = "Sync error", onDismiss = { bannerShown = false },
+        actions = { Button(text = "Retry", onClick = {}, variant = ButtonVariant.Text) }, modifier = Modifier.width(520.dp))
+    }
+    Banner("Your library is up to date.", kind = BannerKind.Success, modifier = Modifier.width(520.dp))
+    Box(Modifier.width(520.dp).height(220.dp)) {
+      HorizontalSplitPane(
+        state = rememberSplitPaneState(0.4f),
+        first = {
+          val tree = rememberTreeState(expanded = setOf("lib"), selected = "books")
+          Tree(
+            roots = listOf(
+              TreeNode("lib", "Library", DittoIcons.more, children = listOf(
+                TreeNode("books", "Books", children = listOf(TreeNode("b1", "Dune"), TreeNode("b2", "Hyperion"))),
+                TreeNode("pod", "Podcasts"),
+              )),
+              TreeNode("set", "Settings", DittoIcons.check),
+            ),
+            state = tree,
+          )
+        },
+        second = {
+          val scroll = rememberScrollState()
+          Box(Modifier.fillMaxSize()) {
+            Column(Modifier.fillMaxSize().verticalScroll(scroll).padding(DittoTheme.spacing.md)) {
+              (1..30).forEach { Text("Detail line $it", style = DittoTheme.typography.bodySmall) }
+            }
+            VerticalScrollbar(scroll, Modifier.align(Alignment.CenterEnd).fillMaxHeight())
+          }
+        },
+      )
     }
   }
 }

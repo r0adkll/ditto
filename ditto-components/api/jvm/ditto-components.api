@@ -26,6 +26,43 @@ public final class com/r0adkll/ditto/components/BadgeStyle {
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class com/r0adkll/ditto/components/BannerDefaults {
+	public static final field $stable I
+	public static final field INSTANCE Lcom/r0adkll/ditto/components/BannerDefaults;
+	public final fun color-XeAY9LY (Lcom/r0adkll/ditto/components/BannerKind;Landroidx/compose/runtime/Composer;I)J
+	public final fun style (Lcom/r0adkll/ditto/Idiom;Landroidx/compose/runtime/Composer;II)Lcom/r0adkll/ditto/components/BannerStyle;
+}
+
+public final class com/r0adkll/ditto/components/BannerKind : java/lang/Enum {
+	public static final field Error Lcom/r0adkll/ditto/components/BannerKind;
+	public static final field Info Lcom/r0adkll/ditto/components/BannerKind;
+	public static final field Success Lcom/r0adkll/ditto/components/BannerKind;
+	public static final field Warning Lcom/r0adkll/ditto/components/BannerKind;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/r0adkll/ditto/components/BannerKind;
+	public static fun values ()[Lcom/r0adkll/ditto/components/BannerKind;
+}
+
+public final class com/r0adkll/ditto/components/BannerKt {
+	public static final fun Banner (Ljava/lang/String;Landroidx/compose/ui/Modifier;Lcom/r0adkll/ditto/components/BannerKind;Ljava/lang/String;Landroidx/compose/ui/graphics/vector/ImageVector;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function2;Lcom/r0adkll/ditto/components/BannerStyle;Landroidx/compose/runtime/Composer;II)V
+	public static final fun getLocalBannerStyle ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+}
+
+public final class com/r0adkll/ditto/components/BannerStyle {
+	public static final field $stable I
+	public synthetic fun <init> (Landroidx/compose/ui/graphics/Shape;FZFFLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy-oZzcvok (Landroidx/compose/ui/graphics/Shape;FZFF)Lcom/r0adkll/ditto/components/BannerStyle;
+	public static synthetic fun copy-oZzcvok$default (Lcom/r0adkll/ditto/components/BannerStyle;Landroidx/compose/ui/graphics/Shape;FZFFILjava/lang/Object;)Lcom/r0adkll/ditto/components/BannerStyle;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBorder ()Z
+	public final fun getPadding-D9Ej5fM ()F
+	public final fun getShape ()Landroidx/compose/ui/graphics/Shape;
+	public final fun getStripeWidth-D9Ej5fM ()F
+	public final fun getTintAlpha ()F
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class com/r0adkll/ditto/components/ButtonDefaults {
 	public static final field $stable I
 	public static final field INSTANCE Lcom/r0adkll/ditto/components/ButtonDefaults;
@@ -214,6 +251,29 @@ public final class com/r0adkll/ditto/components/ChipStyle {
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class com/r0adkll/ditto/components/ComboBoxKt {
+	public static final fun ComboBox (Ljava/util/List;Ljava/lang/Integer;Lkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;ZLjava/lang/String;Ljava/lang/String;Lcom/r0adkll/ditto/components/TextFieldStyle;Landroidx/compose/foundation/interaction/MutableInteractionSource;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class com/r0adkll/ditto/components/ComposableSingletons$BannerKt {
+	public static final field INSTANCE Lcom/r0adkll/ditto/components/ComposableSingletons$BannerKt;
+	public fun <init> ()V
+	public final fun getLambda$1897650960$ditto_ditto_components ()Lkotlin/jvm/functions/Function2;
+}
+
+public final class com/r0adkll/ditto/components/ComposableSingletons$ComboBoxKt {
+	public static final field INSTANCE Lcom/r0adkll/ditto/components/ComposableSingletons$ComboBoxKt;
+	public fun <init> ()V
+	public final fun getLambda$-1620425499$ditto_ditto_components ()Lkotlin/jvm/functions/Function2;
+}
+
+public final class com/r0adkll/ditto/components/ComposableSingletons$DecoratedWindowKt {
+	public static final field INSTANCE Lcom/r0adkll/ditto/components/ComposableSingletons$DecoratedWindowKt;
+	public fun <init> ()V
+	public final fun getLambda$-334251502$ditto_ditto_components ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$68434973$ditto_ditto_components ()Lkotlin/jvm/functions/Function2;
+}
+
 public final class com/r0adkll/ditto/components/ComposableSingletons$MenuKt {
 	public static final field INSTANCE Lcom/r0adkll/ditto/components/ComposableSingletons$MenuKt;
 	public fun <init> ()V
@@ -249,6 +309,11 @@ public final class com/r0adkll/ditto/components/ComposableSingletons$TopBarKt {
 	public fun <init> ()V
 	public final fun getLambda$-1648534782$ditto_ditto_components ()Lkotlin/jvm/functions/Function3;
 	public final fun getLambda$-2011549869$ditto_ditto_components ()Lkotlin/jvm/functions/Function3;
+}
+
+public final class com/r0adkll/ditto/components/DecoratedWindowKt {
+	public static final fun DecoratedWindow (Lkotlin/jvm/functions/Function0;Ljava/lang/String;Landroidx/compose/ui/window/WindowState;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;II)V
+	public static final fun TitleBar (Landroidx/compose/ui/window/FrameWindowScope;Ljava/lang/String;Landroidx/compose/ui/window/WindowState;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
 }
 
 public final class com/r0adkll/ditto/components/DialogDefaults {
@@ -382,6 +447,10 @@ public final class com/r0adkll/ditto/components/IconButtonVariant : java/lang/En
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lcom/r0adkll/ditto/components/IconButtonVariant;
 	public static fun values ()[Lcom/r0adkll/ditto/components/IconButtonVariant;
+}
+
+public final class com/r0adkll/ditto/components/LinkKt {
+	public static final fun Link (Ljava/lang/String;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;ZZLandroidx/compose/ui/text/TextStyle;Landroidx/compose/foundation/interaction/MutableInteractionSource;Landroidx/compose/runtime/Composer;II)V
 }
 
 public final class com/r0adkll/ditto/components/ListItemDefaults {
@@ -641,6 +710,11 @@ public final class com/r0adkll/ditto/components/ScaffoldKt {
 	public static final fun getTopBarInsets (Landroidx/compose/runtime/Composer;I)Landroidx/compose/foundation/layout/WindowInsets;
 }
 
+public final class com/r0adkll/ditto/components/Scrollbar_jvmKt {
+	public static final fun VerticalScrollbar (Landroidx/compose/foundation/ScrollState;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
+	public static final fun VerticalScrollbar (Landroidx/compose/foundation/lazy/LazyListState;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
+}
+
 public final class com/r0adkll/ditto/components/SearchBarDefaults {
 	public static final field $stable I
 	public static final field INSTANCE Lcom/r0adkll/ditto/components/SearchBarDefaults;
@@ -858,6 +932,19 @@ public final class com/r0adkll/ditto/components/SnackbarStyle {
 	public final fun getTextStyle ()Landroidx/compose/ui/text/TextStyle;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/r0adkll/ditto/components/SplitPaneKt {
+	public static final fun HorizontalSplitPane-AGcomas (Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Landroidx/compose/ui/Modifier;Lcom/r0adkll/ditto/components/SplitPaneState;FFLandroidx/compose/runtime/Composer;II)V
+	public static final fun VerticalSplitPane-AGcomas (Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Landroidx/compose/ui/Modifier;Lcom/r0adkll/ditto/components/SplitPaneState;FFLandroidx/compose/runtime/Composer;II)V
+	public static final fun rememberSplitPaneState (FLandroidx/compose/runtime/Composer;II)Lcom/r0adkll/ditto/components/SplitPaneState;
+}
+
+public final class com/r0adkll/ditto/components/SplitPaneState {
+	public static final field $stable I
+	public fun <init> (F)V
+	public final fun getFraction ()F
+	public final fun setFraction (F)V
 }
 
 public final class com/r0adkll/ditto/components/SwitchDefaults {
@@ -1099,5 +1186,40 @@ public final class com/r0adkll/ditto/components/TopBarVariant : java/lang/Enum {
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lcom/r0adkll/ditto/components/TopBarVariant;
 	public static fun values ()[Lcom/r0adkll/ditto/components/TopBarVariant;
+}
+
+public final class com/r0adkll/ditto/components/TreeKt {
+	public static final fun Tree (Ljava/util/List;Landroidx/compose/ui/Modifier;Lcom/r0adkll/ditto/components/TreeState;Lkotlin/jvm/functions/Function1;Landroidx/compose/foundation/lazy/LazyListState;Landroidx/compose/runtime/Composer;II)V
+	public static final fun rememberTreeState (Ljava/util/Set;Ljava/lang/String;Landroidx/compose/runtime/Composer;II)Lcom/r0adkll/ditto/components/TreeState;
+}
+
+public final class com/r0adkll/ditto/components/TreeNode {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Landroidx/compose/ui/graphics/vector/ImageVector;Ljava/util/List;Z)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Landroidx/compose/ui/graphics/vector/ImageVector;Ljava/util/List;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Landroidx/compose/ui/graphics/vector/ImageVector;
+	public final fun component4 ()Ljava/util/List;
+	public final fun component5 ()Z
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Landroidx/compose/ui/graphics/vector/ImageVector;Ljava/util/List;Z)Lcom/r0adkll/ditto/components/TreeNode;
+	public static synthetic fun copy$default (Lcom/r0adkll/ditto/components/TreeNode;Ljava/lang/String;Ljava/lang/String;Landroidx/compose/ui/graphics/vector/ImageVector;Ljava/util/List;ZILjava/lang/Object;)Lcom/r0adkll/ditto/components/TreeNode;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getChildren ()Ljava/util/List;
+	public final fun getEnabled ()Z
+	public final fun getIcon ()Landroidx/compose/ui/graphics/vector/ImageVector;
+	public final fun getId ()Ljava/lang/String;
+	public final fun getLabel ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/r0adkll/ditto/components/TreeState {
+	public static final field $stable I
+	public fun <init> (Ljava/util/Set;Ljava/lang/String;)V
+	public final fun getExpanded ()Ljava/util/Set;
+	public final fun getSelected ()Ljava/lang/String;
+	public final fun setSelected (Ljava/lang/String;)V
+	public final fun toggle (Ljava/lang/String;)V
 }
 
