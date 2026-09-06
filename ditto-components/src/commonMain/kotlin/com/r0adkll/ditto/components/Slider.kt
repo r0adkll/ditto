@@ -1,11 +1,12 @@
 package com.r0adkll.ditto.components
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.gestures.draggable
-import androidx.compose.foundation.gestures.rememberDraggableState
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.drag
+import androidx.compose.foundation.interaction.DragInteraction
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.interaction.collectIsDraggedAsState
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Box
@@ -18,6 +19,7 @@ import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
@@ -32,6 +34,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.semantics.disabled
@@ -195,14 +198,9 @@ public fun Slider(
   // Unsnapped drag position. Accumulating on the snapped `value` would round every small delta
   // straight back to the current step, so stepped sliders could never move.
   var rawValue by remember { mutableFloatStateOf(value) }
-  if (!dragged) rawValue = value
-  val draggable = rememberDraggableState { delta ->
-    if (widthPx <= 0f) return@rememberDraggableState
-    val deltaFraction = (if (rtl) -delta else delta) / widthPx
-    rawValue = (rawValue + deltaFraction * span).coerceIn(valueRange.start, valueRange.endInclusive)
-    val snapped = snap(rawValue)
-    if (snapped != value) onChange(snapped)
-  }
+  var dragging by remember { mutableStateOf(false) }
+  if (!dragging) rawValue = value
+  val active = dragging || pressed || dragged
 
   Box(
     modifier
@@ -218,14 +216,34 @@ public fun Slider(
       .then(
         if (enabled) {
           Modifier
-            .draggable(
-              state = draggable,
-              orientation = Orientation.Horizontal,
-              interactionSource = interactionSource,
-              onDragStopped = { onFinished?.invoke() },
-            )
-            .pointerInput(valueRange, steps) {
-              detectTapGestures(onTap = { offset -> onChange(valueAt(offset.x)); onFinished?.invoke() })
+            .pointerInput(valueRange, steps, rtl) {
+              // One gesture: press jumps the thumb to the pointer, then the same pointer drags it.
+              awaitEachGesture {
+                val down = awaitFirstDown()
+                down.consume()
+                val press = PressInteraction.Press(down.position)
+                interactionSource.tryEmit(press)
+                val start = DragInteraction.Start()
+                interactionSource.tryEmit(start)
+                dragging = true
+                rawValue = valueAt(down.position.x).let { snappedAt ->
+                  // Keep the unsnapped position under the finger, but emit the snapped value.
+                  val f = (down.position.x / widthPx).coerceIn(0f, 1f).let { if (rtl) 1f - it else it }
+                  onChange(snappedAt)
+                  valueRange.start + f * span
+                }
+                drag(down.id) { change ->
+                  val deltaFraction = (if (rtl) -change.positionChange().x else change.positionChange().x) / widthPx
+                  rawValue = (rawValue + deltaFraction * span).coerceIn(valueRange.start, valueRange.endInclusive)
+                  val snapped = snap(rawValue)
+                  if (snapped != value) onChange(snapped)
+                  change.consume()
+                }
+                dragging = false
+                interactionSource.tryEmit(DragInteraction.Stop(start))
+                interactionSource.tryEmit(PressInteraction.Release(press))
+                onFinished?.invoke()
+              }
             }
             .then(if (pointer) Modifier.pointerHoverIcon(PointerIcon.Hand) else Modifier)
         } else {
@@ -234,7 +252,7 @@ public fun Slider(
       ),
   ) {
     Canvas(Modifier.fillMaxWidth().height(style.touchHeight)) {
-      drawSlider(style, fraction, steps, rtl, alpha, active = dragged || pressed)
+      drawSlider(style, fraction, steps, rtl, alpha, active = active)
     }
   }
 }
