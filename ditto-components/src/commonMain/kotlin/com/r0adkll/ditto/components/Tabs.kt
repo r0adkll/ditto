@@ -1,12 +1,25 @@
 package com.r0adkll.ditto.components
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.Animatable
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.onPlaced
+import androidx.compose.ui.layout.positionInParent
+import com.r0adkll.ditto.foundation.Icon
+import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,7 +35,6 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
@@ -136,6 +148,15 @@ public object TabsDefaults {
   }
 }
 
+/** A tab with a label and/or an icon. */
+@Immutable
+public data class TabItem(
+  val label: String? = null,
+  val icon: ImageVector? = null,
+) {
+  init { require(label != null || icon != null) { "A tab needs a label or an icon" } }
+}
+
 /**
  * Equal-width text tabs with an animated indicator and a hairline underneath. On iOS, prefer
  * [SegmentedControl] for view switching inside a screen; tabs are still right for top-level
@@ -150,37 +171,109 @@ public fun TabRow(
   enabled: Boolean = true,
   style: TabsStyle? = null,
 ) {
+  TabRow(
+    tabs = remember(tabs) { tabs.map { TabItem(label = it) } },
+    selectedIndex = selectedIndex,
+    onSelect = onSelect,
+    modifier = modifier,
+    enabled = enabled,
+    scrollable = false,
+    style = style,
+  )
+}
+
+/**
+ * Tabs with icons and/or labels. Fixed tabs share the width equally; [scrollable] tabs size to
+ * their content and scroll horizontally, keeping the selection in view.
+ */
+@Composable
+public fun TabRow(
+  tabs: List<TabItem>,
+  selectedIndex: Int,
+  onSelect: (Int) -> Unit,
+  modifier: Modifier = Modifier,
+  enabled: Boolean = true,
+  scrollable: Boolean = false,
+  style: TabsStyle? = null,
+) {
   require(tabs.isNotEmpty()) { "TabRow needs at least one tab" }
   @Suppress("NAME_SHADOWING")
   val style = style ?: LocalTabsStyle.current ?: TabsDefaults.style()
   val motion = DittoTheme.motion
   val pointer = LocalInputCapabilities.current.pointer
   val haptics = rememberToggleHaptics()
-  var widthPx by remember { mutableIntStateOf(0) }
   val density = LocalDensity.current
-  val tabWidth = with(density) { widthPx.toDp() } / tabs.size
-  val labelWidths = remember(tabs) { mutableMapOf<Int, Int>() }
-  val selectedLabelWidth = with(density) { (labelWidths[selectedIndex] ?: 0).toDp() }
-  val indicatorWidth = if (style.indicatorFitsLabel && selectedLabelWidth > 0.dp) selectedLabelWidth else tabWidth
-  // Animate the index rather than the offset so the first frame is correct before the width is measured.
-  val animatedIndex by animateFloatAsState(selectedIndex.toFloat(), motion.spring)
-  val animatedIndicatorWidth by animateDpAsState(indicatorWidth, motion.springFor())
-  val indicatorOffset = tabWidth * animatedIndex + (tabWidth - animatedIndicatorWidth) / 2
+  val hasIcons = tabs.any { it.icon != null }
+  val hasLabels = tabs.any { it.label != null }
+  val height = if (hasIcons && hasLabels) style.height + 16.dp else style.height
+  val scrollState = rememberScrollState()
 
-  Column(modifier.fillMaxWidth().onSizeChanged { widthPx = it.width }) {
-    Box(Modifier.fillMaxWidth().height(style.height).selectableGroup()) {
-      Row(Modifier.fillMaxWidth().height(style.height)) {
-        tabs.forEachIndexed { index, label ->
+  // Measured x/width per tab (px), for the indicator.
+  val bounds = remember(tabs) { mutableStateMapOf<Int, Pair<Int, Int>>() }
+  val labelWidths = remember(tabs) { mutableStateMapOf<Int, Int>() }
+  val selectedBounds = bounds[selectedIndex]
+  val targetX = selectedBounds?.first ?: 0
+  val targetW = selectedBounds?.second ?: 0
+  val fitLabel = style.indicatorFitsLabel && (labelWidths[selectedIndex] ?: 0) > 0
+  val indicatorTargetW = if (fitLabel) labelWidths[selectedIndex]!! else targetW
+  val indicatorTargetX = targetX + (targetW - indicatorTargetW) / 2
+
+  // Snap on the first measurement, animate afterwards (first frame must be right).
+  val indicatorX = remember { Animatable(0f) }
+  val indicatorW = remember { Animatable(0f) }
+  var measured by remember { mutableStateOf(false) }
+  LaunchedEffect(indicatorTargetX, indicatorTargetW, targetW) {
+    if (targetW == 0) return@LaunchedEffect
+    if (!measured) {
+      measured = true
+      indicatorX.snapTo(indicatorTargetX.toFloat())
+      indicatorW.snapTo(indicatorTargetW.toFloat())
+    } else {
+      launch { indicatorX.animateTo(indicatorTargetX.toFloat(), motion.spring) }
+      launch { indicatorW.animateTo(indicatorTargetW.toFloat(), motion.spring) }
+    }
+  }
+  if (scrollable) {
+    var scrolledOnce by remember { mutableStateOf(false) }
+    LaunchedEffect(selectedIndex, selectedBounds, scrollState.viewportSize) {
+      val b = selectedBounds ?: return@LaunchedEffect
+      val viewport = scrollState.viewportSize
+      if (viewport <= 0) return@LaunchedEffect
+      val start = b.first
+      val end = b.first + b.second
+      val target = when {
+        start < scrollState.value -> start
+        end > scrollState.value + viewport -> end - viewport
+        else -> null
+      }
+      if (target != null) {
+        // First placement snaps so the initial frame is right; later selections animate.
+        if (scrolledOnce) scrollState.animateScrollTo(target) else scrollState.scrollTo(target)
+      }
+      scrolledOnce = true
+    }
+  }
+
+  Column(modifier.fillMaxWidth()) {
+    Box(Modifier.fillMaxWidth().height(height).selectableGroup()) {
+      Row(
+        Modifier
+          .then(if (scrollable) Modifier.horizontalScroll(scrollState) else Modifier.fillMaxWidth())
+          .height(height),
+      ) {
+        tabs.forEachIndexed { index, tab ->
           val selected = index == selectedIndex
           val interactionSource = remember { MutableInteractionSource() }
           val color by animateColorAsState(
             if (selected) style.selectedContentColor else style.contentColor,
             tween(motion.durationShort),
           )
-          Box(
+          val tint = if (enabled) color else color.copy(alpha = DittoTheme.colors.disabledAlpha)
+          Column(
             Modifier
-              .weight(1f)
-              .height(style.height)
+              .then(if (scrollable) Modifier.widthIn(min = 90.dp) else Modifier.weight(1f))
+              .height(height)
+              .onPlaced { coords -> bounds[index] = coords.positionInParent().x.toInt() to coords.size.width }
               .focusRing(interactionSource, style.tabShape)
               .clip(style.tabShape)
               .selectable(
@@ -191,28 +284,34 @@ public fun TabRow(
                 role = Role.Tab,
                 onClick = { if (!selected) { haptics.selected(); onSelect(index) } },
               )
-              .then(if (pointer && enabled) Modifier.pointerHoverIcon(PointerIcon.Hand) else Modifier),
-            contentAlignment = Alignment.Center,
+              .then(if (pointer && enabled) Modifier.pointerHoverIcon(PointerIcon.Hand) else Modifier)
+              .padding(horizontal = DittoTheme.spacing.sm),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
           ) {
-            Text(
-              label,
-              style = style.textStyle,
-              color = if (enabled) color else color.copy(alpha = DittoTheme.colors.disabledAlpha),
-              maxLines = 1,
-              overflow = TextOverflow.Ellipsis,
-              modifier = Modifier
-                .padding(horizontal = DittoTheme.spacing.sm)
-                .onSizeChanged { labelWidths[index] = it.width },
-            )
+            if (tab.icon != null) {
+              Icon(tab.icon, contentDescription = if (tab.label == null) "Tab ${index + 1}" else null, tint = tint, size = DittoTheme.dimens.iconSize)
+              if (tab.label != null) Spacer(Modifier.height(DittoTheme.spacing.xs))
+            }
+            if (tab.label != null) {
+              Text(
+                tab.label,
+                style = style.textStyle,
+                color = tint,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.onSizeChanged { labelWidths[index] = it.width },
+              )
+            }
           }
         }
       }
-      if (widthPx > 0) {
+      if (measured) {
         Box(
           Modifier
             .align(Alignment.BottomStart)
-            .offset { IntOffset(indicatorOffset.roundToPx(), 0) }
-            .width(animatedIndicatorWidth)
+            .offset { IntOffset(indicatorX.value.roundToInt() - (if (scrollable) scrollState.value else 0), 0) }
+            .width(with(density) { indicatorW.value.toDp() })
             .height(style.indicatorHeight)
             .background(style.indicatorColor, style.indicatorShape),
         )

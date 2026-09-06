@@ -1,6 +1,18 @@
 package com.r0adkll.ditto.components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.hoverable
+import androidx.compose.foundation.interaction.collectIsHoveredAsState
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.selection.toggleable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.unit.dp
+import com.r0adkll.ditto.Idiom
+import com.r0adkll.ditto.foundation.Icon
+import com.r0adkll.ditto.icons.DittoIcons
+import kotlinx.coroutines.delay
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -50,11 +62,9 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntRect
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupPositionProvider
 import androidx.compose.ui.window.PopupProperties
-import com.r0adkll.ditto.Idiom
 import com.r0adkll.ditto.foundation.LocalContentColor
 import com.r0adkll.ditto.foundation.ProvideTextStyle
 import com.r0adkll.ditto.foundation.Surface
@@ -330,6 +340,144 @@ private class BelowAnchor(private val dx: Int, private val dy: Int, private val 
     val x = preferredX.coerceIn(0, (windowSize.width - popupContentSize.width).coerceAtLeast(0))
     val below = anchorBounds.bottom + gap + dy
     val y = if (below + popupContentSize.height <= windowSize.height) below else (anchorBounds.top - gap - popupContentSize.height - dy).coerceAtLeast(0)
+    return IntOffset(x, y)
+  }
+}
+
+/**
+ * A menu row that toggles [checked]. The check glyph occupies the leading slot so labels stay
+ * aligned whether or not the row is currently checked.
+ */
+@Composable
+public fun CheckableMenuItem(
+  text: String,
+  checked: Boolean,
+  onCheckedChange: (Boolean) -> Unit,
+  modifier: Modifier = Modifier,
+  enabled: Boolean = true,
+  trailingIcon: (@Composable () -> Unit)? = null,
+  interactionSource: MutableInteractionSource? = null,
+) {
+  val style = MenuDefaults.resolve(null)
+  @Suppress("NAME_SHADOWING")
+  val interactionSource = interactionSource ?: remember { MutableInteractionSource() }
+  val pointer = LocalInputCapabilities.current.pointer
+  val alpha = if (enabled) 1f else DittoTheme.colors.disabledAlpha
+  val contentColor = style.itemContentColor.copy(alpha = alpha)
+  val haptics = rememberToggleHaptics()
+  val iconSize = DittoTheme.dimens.iconSize
+
+  Row(
+    modifier
+      .fillMaxWidth()
+      .focusRing(interactionSource, style.itemShape)
+      .clip(style.itemShape)
+      .toggleable(
+        value = checked,
+        interactionSource = interactionSource,
+        indication = LocalIndication.current,
+        enabled = enabled,
+        role = Role.Checkbox,
+        onValueChange = { haptics.toggled(it); onCheckedChange(it) },
+      )
+      .then(if (pointer && enabled) Modifier.pointerHoverIcon(PointerIcon.Hand) else Modifier)
+      .defaultMinSize(minHeight = style.itemMinHeight)
+      .padding(style.itemPadding),
+    verticalAlignment = Alignment.CenterVertically,
+  ) {
+    Box(Modifier.size(iconSize), contentAlignment = Alignment.Center) {
+      if (checked) Icon(DittoIcons.check, contentDescription = null, tint = if (DittoTheme.idiom == Idiom.Apple) style.itemContentColor.copy(alpha = alpha) else DittoTheme.colors.accent.copy(alpha = alpha))
+    }
+    Spacer(Modifier.width(style.itemIconSpacing))
+    Text(text, style = style.itemTextStyle, color = contentColor, modifier = Modifier.weight(1f))
+    if (trailingIcon != null) {
+      Spacer(Modifier.width(style.itemIconSpacing))
+      CompositionLocalProvider(LocalContentColor provides style.itemIconColor.copy(alpha = alpha)) {
+        ProvideTextStyle(style.itemTextStyle) { Box { trailingIcon() } }
+      }
+    }
+  }
+  if (style.separators) HorizontalDivider()
+}
+
+/**
+ * A row that opens a nested menu beside itself: on hover (pointer, after a short delay), tap,
+ * or the right arrow key. The nested menu closes on outside tap, Escape, or the left arrow key.
+ */
+@Composable
+public fun SubmenuItem(
+  text: String,
+  modifier: Modifier = Modifier,
+  enabled: Boolean = true,
+  leadingIcon: (@Composable () -> Unit)? = null,
+  style: MenuStyle? = null,
+  content: @Composable ColumnScope.() -> Unit,
+) {
+  val parentStyle = MenuDefaults.resolve(null)
+  var open by remember { mutableStateOf(false) }
+  val hoverSource = remember { MutableInteractionSource() }
+  val hovered by hoverSource.collectIsHoveredAsState()
+  val pointer = LocalInputCapabilities.current.pointer
+  LaunchedEffect(hovered) {
+    if (hovered) {
+      delay(SubmenuHoverDelayMillis)
+      open = true
+    }
+  }
+  val density = LocalDensity.current
+  val gap = with(density) { 4.dp.roundToPx() }
+  val padding = with(density) { parentStyle.contentPadding.calculateTopPadding().roundToPx() }
+
+  Box(
+    modifier
+      .then(if (pointer) Modifier.hoverable(hoverSource) else Modifier)
+      .onPreviewKeyEvent { event ->
+        if (event.type != KeyEventType.KeyDown) return@onPreviewKeyEvent false
+        when (event.key) {
+          Key.DirectionRight -> { if (enabled) open = true; true }
+          Key.DirectionLeft -> if (open) { open = false; true } else false
+          else -> false
+        }
+      },
+  ) {
+    MenuItem(
+      text = text,
+      onClick = { open = !open },
+      enabled = enabled,
+      leadingIcon = leadingIcon,
+      trailingIcon = { Icon(DittoIcons.chevronRight, contentDescription = null, size = 16.dp) },
+    )
+    if (open) {
+      Popup(
+        popupPositionProvider = remember(gap, padding) { BesideAnchor(gap, padding) },
+        onDismissRequest = { open = false },
+        properties = PopupProperties(focusable = true),
+      ) {
+        MenuContent(style = style, autoFocus = true, content = content)
+      }
+    }
+  }
+}
+
+private const val SubmenuHoverDelayMillis = 250L
+
+private class BesideAnchor(private val gap: Int, private val verticalPadding: Int) : PopupPositionProvider {
+  override fun calculatePosition(
+    anchorBounds: IntRect,
+    windowSize: IntSize,
+    layoutDirection: LayoutDirection,
+    popupContentSize: IntSize,
+  ): IntOffset {
+    val preferEnd = layoutDirection == LayoutDirection.Ltr
+    val endX = anchorBounds.right + gap
+    val startX = anchorBounds.left - gap - popupContentSize.width
+    val x = when {
+      preferEnd && endX + popupContentSize.width <= windowSize.width -> endX
+      preferEnd -> startX.coerceAtLeast(0)
+      startX >= 0 -> startX
+      else -> endX.coerceAtMost((windowSize.width - popupContentSize.width).coerceAtLeast(0))
+    }
+    val y = (anchorBounds.top - verticalPadding).coerceIn(0, (windowSize.height - popupContentSize.height).coerceAtLeast(0))
     return IntOffset(x, y)
   }
 }

@@ -48,7 +48,12 @@ import com.r0adkll.ditto.components.BackButton
 import com.r0adkll.ditto.components.Badge
 import com.r0adkll.ditto.components.RangeSlider
 import com.r0adkll.ditto.components.BadgedBox
+import com.r0adkll.ditto.components.CheckableMenuItem
 import com.r0adkll.ditto.components.Chip
+import com.r0adkll.ditto.components.SheetDetent
+import com.r0adkll.ditto.components.SubmenuItem
+import com.r0adkll.ditto.components.TabItem
+import com.r0adkll.ditto.components.rememberSheetState
 import com.r0adkll.ditto.components.ModalSheet
 import com.r0adkll.ditto.components.NavigationBar
 import com.r0adkll.ditto.components.NavigationItem
@@ -313,11 +318,20 @@ private fun SelectionControlsDemo() {
 private fun ControlsDemo() {
   var segment by remember { mutableStateOf(1) }
   var tab by remember { mutableStateOf(0) }
+  var scrollTab by remember { mutableStateOf(2) }
   var value by remember { mutableStateOf(0.35f) }
   var stepped by remember { mutableStateOf(0.5f) }
   Column(verticalArrangement = Arrangement.spacedBy(DittoTheme.spacing.lg), modifier = Modifier.width(420.dp)) {
     SegmentedControl(options = listOf("Day", "Week", "Month"), selectedIndex = segment, onSelect = { segment = it }, modifier = Modifier.fillMaxWidth())
     TabRow(tabs = listOf("Books", "Authors", "Series"), selectedIndex = tab, onSelect = { tab = it })
+    TabRow(
+      tabs = listOf(TabItem("Search", DittoIcons.search), TabItem("Done", DittoIcons.check), TabItem("More", DittoIcons.more)),
+      selectedIndex = tab, onSelect = { tab = it },
+    )
+    TabRow(
+      tabs = listOf("Recent", "Favorites", "Podcasts", "Audiobooks", "Series", "Authors", "Collections").map { TabItem(it) },
+      selectedIndex = scrollTab, onSelect = { scrollTab = it }, scrollable = true,
+    )
     Slider(value = value, onValueChange = { value = it })
     Slider(value = stepped, onValueChange = { stepped = it }, steps = 4)
     Slider(value = 0.8f, onValueChange = {}, enabled = false)
@@ -380,6 +394,7 @@ private fun ListsDemo() {
 @Composable
 private fun OverlaysDemo() {
   var menuOpen by remember { mutableStateOf(false) }
+  var showCompleted by remember { mutableStateOf(true) }
   var dialogOpen by remember { mutableStateOf(false) }
   var progress by remember { mutableStateOf(0.4f) }
   Column(verticalArrangement = Arrangement.spacedBy(DittoTheme.spacing.lg)) {
@@ -390,6 +405,10 @@ private fun OverlaysDemo() {
           MenuItem("Share", onClick = { menuOpen = false }, leadingIcon = { Icon(DittoIcons.forward, null) })
           MenuItem("Rename", onClick = { menuOpen = false }, trailingIcon = { Text("⌘R") })
           MenuDivider()
+          CheckableMenuItem("Show completed", checked = showCompleted, onCheckedChange = { showCompleted = it })
+          SubmenuItem("Sort by") {
+            listOf("Title", "Author", "Recent").forEach { MenuItem(it, onClick = { menuOpen = false }) }
+          }
           MenuItem("Disabled", onClick = {}, enabled = false)
           MenuItem("Delete", onClick = { menuOpen = false }, destructive = true, leadingIcon = { Icon(DittoIcons.close, null) })
         }
@@ -453,10 +472,12 @@ private fun NavigationDemo() {
       RadioGroup(options = listOf("Small", "Medium", "Large"), selectedIndex = size, onSelect = { size = it }, modifier = Modifier.width(200.dp))
     }
     if (sheet) {
-      ModalSheet(onDismissRequest = { sheet = false }) {
-        ListItem(headline = "Share", onClick = { sheet = false })
-        ListItem(headline = "Add to queue", onClick = { sheet = false })
-        ListItem(headline = "Cancel", onClick = { sheet = false })
+      val sheetState = rememberSheetState(detents = listOf(SheetDetent.Medium, SheetDetent.Full), initial = SheetDetent.Medium)
+      ModalSheet(onDismissRequest = { sheet = false }, state = sheetState) {
+        Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
+          Text("Drag up for the full detent", style = DittoTheme.typography.label, color = DittoTheme.colors.onSurfaceVariant, modifier = Modifier.padding(horizontal = DittoTheme.spacing.lg))
+          (1..30).forEach { ListItem(headline = "Row $it", onClick = { sheet = false }) }
+        }
       }
     }
   }
