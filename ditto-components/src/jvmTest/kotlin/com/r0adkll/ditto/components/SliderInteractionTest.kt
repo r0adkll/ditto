@@ -9,6 +9,7 @@ import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.runComposeUiTest
+import androidx.compose.ui.test.swipeLeft
 import androidx.compose.ui.test.swipeRight
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
@@ -68,5 +69,23 @@ class SliderPressTest {
     onNodeWithTag("slider").performTouchInput { swipeRight(startX = 60f, endX = 90f) }
     waitForIdle()
     assertTrue(value > 0.15f && value < 0.45f, "drag from 20% to 30% should land near 0.3, was $value")
+  }
+}
+
+@OptIn(ExperimentalTestApi::class)
+class RangeSliderInteractionTest {
+  @Test
+  fun pressGrabsNearestThumbAndDrags() = runComposeUiTest {
+    var range by androidx.compose.runtime.mutableStateOf(0.2f..0.8f)
+    setContent {
+      DittoTheme {
+        RangeSlider(value = range, onValueChange = { range = it }, modifier = Modifier.width(300.dp).testTag("range"))
+      }
+    }
+    // Press near the end thumb and drag left: only the end should move.
+    onNodeWithTag("range").performTouchInput { swipeLeft(startX = 230f, endX = 160f) }
+    waitForIdle()
+    assertEquals(0.2f, range.start, 0.05f)
+    assertTrue(range.endInclusive < 0.65f && range.endInclusive > 0.45f, "end should follow drag, was ${range.endInclusive}")
   }
 }

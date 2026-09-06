@@ -3,6 +3,7 @@ package com.r0adkll.ditto.components
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -313,14 +314,30 @@ public fun TopBar(
   }
 }
 
-/** The conventional navigation-back affordance for a [TopBar]. */
+/**
+ * The conventional navigation-back affordance for a [TopBar]. On the Apple idiom it renders the
+ * iOS chevron with a [label] (the previous screen's title, or "Back"); elsewhere an icon button.
+ */
 @Composable
 public fun BackButton(
   onClick: () -> Unit,
   modifier: Modifier = Modifier,
-  contentDescription: String = "Back",
+  label: String? = null,
+  contentDescription: String = label ?: "Back",
 ) {
-  IconButton(onClick = onClick, modifier = modifier) {
-    Icon(DittoIcons.back, contentDescription)
+  if (DittoTheme.idiom == Idiom.Apple) {
+    val style = ButtonDefaults.style(ButtonVariant.Text).copy(
+      contentPadding = PaddingValues(start = 0.dp, end = DittoTheme.spacing.sm),
+      minWidth = 0.dp,
+      iconSpacing = 2.dp,
+    )
+    TextButton(onClick = onClick, modifier = modifier, style = style) {
+      Icon(DittoIcons.back, contentDescription = null, size = 22.dp)
+      Text(label ?: "Back", maxLines = 1, overflow = TextOverflow.Ellipsis)
+    }
+  } else {
+    IconButton(onClick = onClick, modifier = modifier) {
+      Icon(DittoIcons.back, contentDescription)
+    }
   }
 }

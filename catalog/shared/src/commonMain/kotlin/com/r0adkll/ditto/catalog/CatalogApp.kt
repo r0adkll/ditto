@@ -44,7 +44,9 @@ import com.r0adkll.ditto.components.SearchBar
 import com.r0adkll.ditto.components.SnackbarHost
 import com.r0adkll.ditto.components.SnackbarHostState
 import com.r0adkll.ditto.components.ToggleButton
+import com.r0adkll.ditto.components.BackButton
 import com.r0adkll.ditto.components.Badge
+import com.r0adkll.ditto.components.RangeSlider
 import com.r0adkll.ditto.components.BadgedBox
 import com.r0adkll.ditto.components.Chip
 import com.r0adkll.ditto.components.ModalSheet
@@ -319,6 +321,8 @@ private fun ControlsDemo() {
     Slider(value = value, onValueChange = { value = it })
     Slider(value = stepped, onValueChange = { stepped = it }, steps = 4)
     Slider(value = 0.8f, onValueChange = {}, enabled = false)
+    var range by remember { mutableStateOf(0.2f..0.7f) }
+    RangeSlider(value = range, onValueChange = { range = it }, steps = 9)
   }
 }
 
@@ -430,6 +434,7 @@ private fun NavigationDemo() {
         NavigationItem(selected = dest == 0, onClick = { dest = 0 }, icon = DittoIcons.search, label = "Find")
         NavigationItem(selected = dest == 1, onClick = { dest = 1 }, icon = DittoIcons.check, label = "Done")
       }
+      Row(verticalAlignment = Alignment.CenterVertically) { BackButton(onClick = {}, label = "Library") }
       Sidebar(windowInsets = WindowInsets(0)) {
         SidebarItem(selected = dest == 0, onClick = { dest = 0 }, label = "Library", icon = DittoIcons.search)
         SidebarItem(selected = dest == 1, onClick = { dest = 1 }, label = "Queue", icon = DittoIcons.check, badge = "12")

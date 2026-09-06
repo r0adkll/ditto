@@ -1,7 +1,7 @@
 package com.r0adkll.ditto.components
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.LocalIndication
@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.runtime.Composable
@@ -32,7 +34,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.PointerIcon
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
@@ -173,7 +179,10 @@ public fun SegmentedControl(
   val density = LocalDensity.current
   val innerWidth = with(density) { widthPx.toDp() } - style.containerPadding * 2
   val segmentWidth = if (options.isEmpty()) 0.dp else innerWidth / options.size
-  val thumbOffset by animateDpAsState(segmentWidth * selectedIndex, motion.springFor())
+  // Animate the index, not the pixel offset: the width is unknown on first composition and an
+  // offset animation would start from zero and leave the thumb under the wrong segment.
+  val animatedIndex by animateFloatAsState(selectedIndex.toFloat(), motion.spring)
+  val thumbOffset = segmentWidth * animatedIndex
 
   Box(
     modifier
@@ -182,7 +191,31 @@ public fun SegmentedControl(
       .then(if (style.containerBorder != null) Modifier.border(style.containerBorder, style.shape) else Modifier)
       .background(style.containerColor.copy(alpha = style.containerColor.alpha * alpha))
       .onSizeChanged { widthPx = it.width }
-      .selectableGroup(),
+      .selectableGroup()
+      .then(
+        if (enabled) {
+          // Slide the selection while a pointer is held down (iOS behaviour); taps still go to the segments.
+          Modifier.pointerInput(options.size) {
+            awaitEachGesture {
+              awaitFirstDown(requireUnconsumed = false, pass = PointerEventPass.Initial)
+              while (true) {
+                val event = awaitPointerEvent(PointerEventPass.Initial)
+                val change = event.changes.firstOrNull() ?: break
+                if (!change.pressed) break
+                if (change.positionChange() != Offset.Zero && widthPx > 0) {
+                  val inner = (widthPx - with(density) { style.containerPadding.roundToPx() } * 2).coerceAtLeast(1)
+                  val x = change.position.x - with(density) { style.containerPadding.toPx() }
+                  val index = ((x / inner) * options.size).toInt().coerceIn(0, options.size - 1)
+                  if (index != selectedIndex) { haptics.selected(); onSelect(index) }
+                  change.consume()
+                }
+              }
+            }
+          }
+        } else {
+          Modifier
+        },
+      ),
   ) {
     if (!style.dividers && widthPx > 0) {
       Box(

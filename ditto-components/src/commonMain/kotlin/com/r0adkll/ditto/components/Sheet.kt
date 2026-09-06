@@ -36,7 +36,12 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
@@ -181,6 +186,38 @@ private fun BottomSheetLayout(
   }
   val drag = rememberDraggableState { delta -> scope.launch { offset.snapTo((offset.value + delta).coerceAtLeast(0f)) } }
   val scrimAlpha = if (sheetHeight == 0) 1f else (1f - offset.value / sheetHeight).coerceIn(0f, 1f)
+  suspend fun settle(velocity: Float) {
+    if (sheetHeight > 0 && (offset.value > sheetHeight * 0.3f || velocity > 1200f)) dismiss() else offset.animateTo(0f, motion.spring)
+  }
+  // Scrollable content inside the sheet: pulling down past its top drags the sheet instead.
+  val nested = remember {
+    object : NestedScrollConnection {
+      override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+        if (available.y < 0f && offset.value > 0f) {
+          val consumed = maxOf(available.y, -offset.value)
+          scope.launch { offset.snapTo(offset.value + consumed) }
+          return Offset(0f, consumed)
+        }
+        return Offset.Zero
+      }
+
+      override fun onPostScroll(consumed: Offset, available: Offset, source: NestedScrollSource): Offset {
+        if (available.y > 0f && source == NestedScrollSource.UserInput) {
+          scope.launch { offset.snapTo(offset.value + available.y) }
+          return Offset(0f, available.y)
+        }
+        return Offset.Zero
+      }
+
+      override suspend fun onPreFling(available: Velocity): Velocity {
+        if (offset.value > 0f) {
+          settle(available.y)
+          return available
+        }
+        return Velocity.Zero
+      }
+    }
+  }
 
   Box(
     Modifier
@@ -198,14 +235,9 @@ private fun BottomSheetLayout(
         .draggable(
           state = drag,
           orientation = Orientation.Vertical,
-          onDragStopped = { velocity ->
-            if (sheetHeight > 0 && (offset.value > sheetHeight * 0.3f || velocity > 1200f)) {
-              dismiss()
-            } else {
-              offset.animateTo(0f, motion.spring)
-            }
-          },
+          onDragStopped = { velocity -> settle(velocity) },
         )
+        .nestedScroll(nested)
         .clickable(remember { MutableInteractionSource() }, null) {},
       shape = style.shape,
       color = style.containerColor,

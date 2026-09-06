@@ -2,6 +2,7 @@ package com.r0adkll.ditto.components
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
@@ -161,8 +162,10 @@ public fun TabRow(
   val labelWidths = remember(tabs) { mutableMapOf<Int, Int>() }
   val selectedLabelWidth = with(density) { (labelWidths[selectedIndex] ?: 0).toDp() }
   val indicatorWidth = if (style.indicatorFitsLabel && selectedLabelWidth > 0.dp) selectedLabelWidth else tabWidth
-  val indicatorOffset by animateDpAsState(tabWidth * selectedIndex + (tabWidth - indicatorWidth) / 2, motion.springFor())
+  // Animate the index rather than the offset so the first frame is correct before the width is measured.
+  val animatedIndex by animateFloatAsState(selectedIndex.toFloat(), motion.spring)
   val animatedIndicatorWidth by animateDpAsState(indicatorWidth, motion.springFor())
+  val indicatorOffset = tabWidth * animatedIndex + (tabWidth - animatedIndicatorWidth) / 2
 
   Column(modifier.fillMaxWidth().onSizeChanged { widthPx = it.width }) {
     Box(Modifier.fillMaxWidth().height(style.height).selectableGroup()) {

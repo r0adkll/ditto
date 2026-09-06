@@ -1,6 +1,7 @@
 package com.r0adkll.ditto.components
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.drag
@@ -31,6 +32,11 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.input.pointer.pointerInput
@@ -207,6 +213,31 @@ public fun Slider(
       .fillMaxWidth()
       .height(style.touchHeight)
       .focusRing(interactionSource, DittoTheme.shapes.full)
+      .then(
+        if (enabled) {
+          Modifier
+            .onKeyEvent { event ->
+              if (event.type != KeyEventType.KeyDown) return@onKeyEvent false
+              val stepSize = if (steps > 0) span / (steps + 1) else span / 20f
+              val forward = if (rtl) -stepSize else stepSize
+              val next = when (event.key) {
+                Key.DirectionRight -> value + forward
+                Key.DirectionLeft -> value - forward
+                Key.DirectionUp -> value + stepSize
+                Key.DirectionDown -> value - stepSize
+                Key.MoveHome -> valueRange.start
+                Key.MoveEnd -> valueRange.endInclusive
+                else -> return@onKeyEvent false
+              }
+              onChange(snap(next))
+              onFinished?.invoke()
+              true
+            }
+            .focusable(interactionSource = interactionSource)
+        } else {
+          Modifier
+        },
+      )
       .progressSemantics(value, valueRange, steps)
       .semantics {
         if (!enabled) disabled()
