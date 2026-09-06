@@ -1,4 +1,4 @@
-name: Deploy catalog to GitHub Pages
+name: Deploy the docs site to GitHub Pages
 
 on:
   push:
@@ -24,10 +24,31 @@ jobs:
           distribution: zulu
           java-version: 21
       - uses: gradle/actions/setup-gradle@v4
-      - run: ./gradlew :catalog:web:wasmJsBrowserDistribution
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: docs-site/package-lock.json
+
+      # The wasm catalog is copied into the site *after* the Astro build, so Astro never
+      # scans 13 MB of wasm (ADR-030).
+      - name: Build the wasm catalog
+        run: ./gradlew :catalog:web:wasmJsBrowserDistribution
+
+      - name: Build the docs site
+        working-directory: docs-site
+        run: |
+          npm ci
+          npm run build
+
+      - name: Assemble the site
+        run: |
+          mkdir -p docs-site/dist/catalog
+          cp -r catalog/web/build/dist/wasmJs/productionExecutable/* docs-site/dist/catalog/
+
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: catalog/web/build/dist/wasmJs/productionExecutable
+          path: docs-site/dist
 
   deploy:
     needs: build

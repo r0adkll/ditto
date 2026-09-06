@@ -1,0 +1,93 @@
+---
+title: Slider
+description: A continuous or stepped value picker, drawn to each platform's proportions.
+sidebar:
+  order: 1
+---
+
+import { Image } from 'astro:assets';
+import { Tabs, TabItem, Aside } from '@astrojs/starlight/components';
+import IdiomDemos from '../../../components/IdiomDemos.astro';
+import Demo from '../../../components/Demo.astro';
+import idioms from '../../../assets/slider-idioms.png';
+
+Picks a value from a range. Press anywhere on the track to jump the thumb there, then drag; or
+focus it and use the arrow keys.
+
+<Demo id="controls" height={300} caption="Segmented control, tabs and sliders — try dragging" />
+
+## Across the idioms
+
+The same call renders to each platform's proportions. Android takes the Expressive treatment: a
+thick track split by a gap around a bar-shaped handle. Apple is a thin track with a large white
+thumb. Desktop is compact, with a ringed thumb.
+
+<IdiomDemos id="controls" height={300} />
+
+<Image src={idioms} alt="Ditto slider in Android, Apple and Desktop idioms, light and dark" />
+
+## Usage
+
+```kotlin
+var volume by remember { mutableFloatStateOf(0.5f) }
+
+Slider(value = volume, onValueChange = { volume = it })
+
+// Stepped: `steps` counts the stops *between* the ends, so this snaps to 0, .2, .4, .6, .8, 1.
+Slider(value = volume, onValueChange = { volume = it }, steps = 4)
+```
+
+<Aside type="caution" title="Stepped sliders keep an unsnapped position">
+  Dragging accumulates an internal, unsnapped position and only emits snapped values. Adding each
+  delta to the already-snapped value would round straight back to the current step and the thumb
+  would never move.
+</Aside>
+
+## Specification
+
+| | Android | Apple | Desktop |
+|---|---|---|---|
+| Track | 16dp, gap around the handle | 4dp | 6dp |
+| Thumb | 4×44dp bar, narrows while dragging | 27dp, white, 3dp shadow | 16dp, surface fill, 2dp accent ring |
+| Ticks | drawn when `steps > 0` | same | same |
+| Touch target | 48dp | 44dp | 32dp (28dp compact) |
+
+Colours come from `accent` for the active track and thumb, and from the neutral ramp for the
+inactive track. Override per call site with `style`, per subtree with `LocalSliderStyle`, or
+app-wide with a style transform.
+
+## States
+
+<Tabs>
+  <TabItem label="Enabled">Full opacity; the thumb responds to hover on pointer devices.</TabItem>
+  <TabItem label="Dragging">Android narrows the handle to half width; Apple and Desktop keep the thumb size.</TabItem>
+  <TabItem label="Disabled">Track, thumb and ticks drop to 38% alpha, and pointer and keyboard input are ignored.</TabItem>
+</Tabs>
+
+## Accessibility
+
+- `progressSemantics` reports the value, range and step count; a `setProgress` action lets
+  assistive technology set it directly.
+- Focusable, with a visible ring whenever a keyboard is present.
+- **← →** step (respecting right-to-left), **↑ ↓** step, **Home** and **End** jump to the ends.
+  A step is `range / (steps + 1)`, or 5% of the range when the slider is continuous.
+
+## API
+
+```kotlin
+@Composable
+fun Slider(
+  value: Float,
+  onValueChange: (Float) -> Unit,
+  modifier: Modifier = Modifier,
+  enabled: Boolean = true,
+  valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
+  steps: Int = 0,
+  onValueChangeFinished: (() -> Unit)? = null,
+  style: SliderStyle? = null,
+  interactionSource: MutableInteractionSource? = null,
+)
+```
+
+For two thumbs, see `RangeSlider`, which shares `SliderStyle` and grabs whichever thumb is nearer
+the press.

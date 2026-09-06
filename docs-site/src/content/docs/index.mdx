@@ -1,0 +1,37 @@
+---
+title: Ditto
+description: A Compose Multiplatform UI toolkit with one component API and three platform-adaptive idioms.
+template: splash
+hero:
+  tagline: One component API. Three idioms. Your tokens, not Material's.
+  image:
+    file: ../../assets/mascot.svg
+  actions:
+    - text: Components
+      link: /ditto/components/slider/
+      icon: right-arrow
+    - text: Open the catalog
+      link: /ditto/catalog/
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+<CardGrid>
+  <Card title="Three idioms, one call site">
+    `Button(onClick) { Text("Continue") }` renders Material-esque on Android, flat iOS-style on
+    Apple and a compact neutral control on Desktop. The idiom is a runtime value, so you can
+    preview any of them anywhere.
+  </Card>
+  <Card title="Its own design language">
+    A 12-step neutral ramp plus one accent, eight type styles, seven shapes, a density switch.
+    No tonal palettes, no Material dependency in the core.
+  </Card>
+  <Card title="Accessible by default">
+    Every component ships semantics, hit targets, keyboard operation and a focus model that
+    treats composite controls as one tab stop.
+  </Card>
+  <Card title="Everywhere Compose goes">
+    Android, iOS, Desktop JVM and the browser — including this page's live demos.
+  </Card>
+</CardGrid>

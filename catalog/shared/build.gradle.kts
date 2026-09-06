@@ -28,6 +28,10 @@ kotlin {
 kotlin {
   sourceSets {
     commonTest.dependencies { implementation(libs.kotlin.test) }
-    jvmTest.dependencies { implementation(projects.internal.screenshot) }
+    jvmTest.dependencies {
+      implementation(projects.internal.screenshot)
+      @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+      implementation(compose.uiTest)
+    }
   }
 }

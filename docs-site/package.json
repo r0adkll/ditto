@@ -1,0 +1,16 @@
+{
+  "name": "ditto-docs",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "node scripts/check-demo-ids.mjs && astro build",
+    "preview": "astro preview",
+    "check:demos": "node scripts/check-demo-ids.mjs"
+  },
+  "dependencies": {
+    "@astrojs/starlight": "^0.42.0",
+    "astro": "^7.3.1",
+    "sharp": "^0.35.4"
+  }
+}

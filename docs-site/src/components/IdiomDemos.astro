@@ -1,0 +1,14 @@
+---
+/** The same demo in all three idioms, side by side — the point of the library, in one row. */
+import Demo from './Demo.astro';
+interface Props { id: string; height?: number; mode?: 'light' | 'dark' }
+const { id, height = 260, mode } = Astro.props;
+const idioms = [
+  { key: 'android', label: 'Android' },
+  { key: 'apple', label: 'Apple' },
+  { key: 'desktop', label: 'Desktop' },
+] as const;
+---
+<div class="ditto-demo-row">
+  {idioms.map(({ key, label }) => <Demo id={id} idiom={key} mode={mode} height={height} caption={label} />)}
+</div>

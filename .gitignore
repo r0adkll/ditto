@@ -26,3 +26,8 @@ node_modules/
 # Screenshot test output
 **/screenshots/**/*-actual.png
 **/screenshots/**/*-diff.png
+
+# Docs site
+docs-site/node_modules/
+docs-site/dist/
+docs-site/.astro/

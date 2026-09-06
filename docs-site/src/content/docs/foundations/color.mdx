@@ -1,0 +1,51 @@
+---
+title: Color
+description: A 12-step neutral ramp plus a single accent, with contrast checked rather than assumed.
+sidebar:
+  order: 1
+---
+
+import { Image } from 'astro:assets';
+import Demo from '../../../components/Demo.astro';
+import roles from '../../../assets/color-roles.png';
+
+Ditto has no tonal palettes. A theme is **one accent colour and a neutral ramp**; everything else
+is derived, and every derived pairing is checked against WCAG 2 contrast targets.
+
+<Demo id="colors" height={420} caption="The colour roles and the neutral ramp, live" />
+
+## Roles
+
+About fifteen roles, deliberately fewer than Material's thirty. The brand colour is called
+`accent`, not `primary`, so the Material mental model doesn't come along with it.
+
+<Image src={roles} alt="Ditto colour roles rendered in all three idioms, light and dark" />
+
+## The neutral ramp
+
+Twelve steps, from the app background at step 1 to primary text at step 12. Surfaces, borders and
+text all draw from the ramp, so light and dark stay in step with each other by construction: the
+dark ramp is chosen for a dark ground rather than being an inversion of the light one.
+
+Four temperature presets: `Pure`, `Cool` (the default), `Warm`, and `Tinted`, which derives a
+subtle tint from the accent hue.
+
+## Contrast is enforced, not hoped for
+
+```kotlin
+val scheme = DittoColors.from(accent = Color(0xFF9C5AB4), dark = false)
+scheme.validateContrast()   // → emptyList() when every pairing passes
+```
+
+`DittoTheme` logs a warning for any scheme that fails, and the catalog surfaces the report. This
+is how Ditto's own brand colour was chosen: the mascot violet `#C57BE6` measures 2.81:1 against a
+light surface, below the 3:1 rule for UI, so the accent token is the darker `#9C5AB4` from the
+same palette, which passes in both modes.
+
+## Setting a theme
+
+```kotlin
+DittoTheme(accent = Color(0xFF9C5AB4), neutrals = Neutrals.Cool) {
+  // idiom and light/dark follow the platform unless you pin them
+}
+```
