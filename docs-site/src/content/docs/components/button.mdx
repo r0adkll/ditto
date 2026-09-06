@@ -27,16 +27,22 @@ TextButton(onClick = { }) { Text("Low emphasis") }
 
 ### With an icon
 
-The content slot is a `RowScope`, so an icon is an `Icon` placed before the label. Spacing comes
-from the theme rather than a magic number, and the icon inherits the button's content colour.
+The content slot is a `RowScope`, so an icon is an `Icon` placed before the label. The button
+publishes its own content colour and icon size to that slot, so a bare `Icon` already matches the
+button it sits in — no size argument, no tint. The gap between the two is the one thing a `Spacer`
+cannot pick up ambiently, so `ButtonDefaults` names it.
 
 ```kotlin
 Button(onClick = { download() }) {
   Icon(DittoIcons.check, contentDescription = null)
-  Spacer(Modifier.width(DittoTheme.spacing.sm))
+  Spacer(Modifier.width(ButtonDefaults.IconSpacing))
   Text("Continue")
 }
 ```
+
+Both values follow the idiom and density in force, so the same code produces an 18dp icon on
+Android and a smaller one in a Compact desktop window. `ButtonDefaults.IconSize` exposes the size
+directly for the rare case of sizing something that is not an `Icon`.
 
 Give the icon a `contentDescription` of `null` when the label already says what the button does —
 otherwise a screen reader reads the action twice.

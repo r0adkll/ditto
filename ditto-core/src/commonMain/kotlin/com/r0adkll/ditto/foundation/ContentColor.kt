@@ -8,10 +8,25 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.structuralEqualityPolicy
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.Dp
 import com.r0adkll.ditto.theme.DittoTheme
 
 /** The preferred color for content (text, icons) drawn on the current container. */
 public val LocalContentColor: ProvidableCompositionLocal<Color> = compositionLocalOf { Color.Black }
+
+/**
+ * The size [Icon] draws at when it isn't given one. Containers that have an opinion — buttons,
+ * icon buttons, chips — provide their style's icon size here, so an `Icon` written into a content
+ * slot matches the container without the caller repeating the number. `Dp.Unspecified` means
+ * "no opinion": fall back to the idiom's default icon size.
+ */
+public val LocalIconSize: ProvidableCompositionLocal<Dp> = compositionLocalOf { Dp.Unspecified }
+
+/** Sets the ambient [LocalIconSize] for [content]. */
+@Composable
+public fun ProvideIconSize(size: Dp, content: @Composable () -> Unit) {
+  CompositionLocalProvider(LocalIconSize provides size, content = content)
+}
 
 /** The ambient text style; [Text] merges it with its own. */
 public val LocalTextStyle: ProvidableCompositionLocal<TextStyle> =

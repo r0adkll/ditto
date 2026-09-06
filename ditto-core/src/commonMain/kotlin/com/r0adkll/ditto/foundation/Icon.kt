@@ -14,6 +14,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.takeOrElse
 import com.r0adkll.ditto.theme.DittoTheme
 
 /**
@@ -28,7 +29,7 @@ public fun Icon(
   contentDescription: String?,
   modifier: Modifier = Modifier,
   tint: Color = LocalContentColor.current,
-  size: Dp = DittoTheme.dimens.iconSize,
+  size: Dp = LocalIconSize.current.takeOrElse { DittoTheme.dimens.iconSize },
 ) {
   Icon(
     painter = rememberVectorPainter(imageVector),
@@ -45,7 +46,7 @@ public fun Icon(
   contentDescription: String?,
   modifier: Modifier = Modifier,
   tint: Color = LocalContentColor.current,
-  size: Dp = DittoTheme.dimens.iconSize,
+  size: Dp = LocalIconSize.current.takeOrElse { DittoTheme.dimens.iconSize },
 ) {
   val colorFilter = if (tint == Color.Unspecified) null else ColorFilter.tint(tint)
   val semantics = if (contentDescription != null) {

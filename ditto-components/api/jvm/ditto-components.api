@@ -67,6 +67,8 @@ public final class com/r0adkll/ditto/components/ButtonDefaults {
 	public static final field $stable I
 	public static final field INSTANCE Lcom/r0adkll/ditto/components/ButtonDefaults;
 	public static final field TonalContainerAlpha F
+	public final fun getIconSize (Landroidx/compose/runtime/Composer;I)F
+	public final fun getIconSpacing (Landroidx/compose/runtime/Composer;I)F
 	public final fun style (Lcom/r0adkll/ditto/components/ButtonVariant;Lcom/r0adkll/ditto/Idiom;Landroidx/compose/runtime/Composer;II)Lcom/r0adkll/ditto/components/ButtonStyle;
 }
 

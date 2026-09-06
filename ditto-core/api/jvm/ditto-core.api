@@ -16,9 +16,11 @@ public final class com/r0adkll/ditto/Idiom_jvmKt {
 }
 
 public final class com/r0adkll/ditto/foundation/ContentColorKt {
+	public static final fun ProvideIconSize-kHDZbjc (FLkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;I)V
 	public static final fun ProvideTextStyle (Landroidx/compose/ui/text/TextStyle;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;I)V
 	public static final fun contentColorFor-ek8zF_U (JLandroidx/compose/runtime/Composer;I)J
 	public static final fun getLocalContentColor ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+	public static final fun getLocalIconSize ()Landroidx/compose/runtime/ProvidableCompositionLocal;
 	public static final fun getLocalTextStyle ()Landroidx/compose/runtime/ProvidableCompositionLocal;
 }
 

@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.r0adkll.ditto.Idiom
 import com.r0adkll.ditto.foundation.LocalContentColor
+import com.r0adkll.ditto.foundation.LocalIconSize
 import com.r0adkll.ditto.input.LocalInputCapabilities
 import com.r0adkll.ditto.interaction.focusRing
 import com.r0adkll.ditto.interaction.minimumInteractiveSize
@@ -234,7 +235,7 @@ private fun IconButtonImpl(
       .then(if (pointer && enabled) Modifier.pointerHoverIcon(PointerIcon.Hand) else Modifier),
     contentAlignment = Alignment.Center,
   ) {
-    CompositionLocalProvider(LocalContentColor provides contentColor) {
+    CompositionLocalProvider(LocalContentColor provides contentColor, LocalIconSize provides style.iconSize) {
       content()
     }
   }

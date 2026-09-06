@@ -15,7 +15,6 @@ import androidx.compose.ui.unit.dp
 import com.r0adkll.ditto.components.HorizontalDivider
 import com.r0adkll.ditto.components.IconButton
 import com.r0adkll.ditto.components.SegmentedControl
-import com.r0adkll.ditto.icons.DittoIcons
 import androidx.compose.ui.Alignment
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -24,6 +23,7 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.r0adkll.ditto.Idiom
+import com.r0adkll.ditto.catalog.brand.CatalogIcons
 import com.r0adkll.ditto.catalog.brand.DittoBrand
 import com.r0adkll.ditto.foundation.Surface
 import com.r0adkll.ditto.foundation.Text
@@ -130,7 +130,7 @@ fun DemoScreen(
         Row(
           Modifier
             .fillMaxWidth()
-            .padding(horizontal = DittoTheme.spacing.sm, vertical = DittoTheme.spacing.xs),
+            .padding(horizontal = DittoTheme.spacing.md, vertical = DittoTheme.spacing.sm),
           verticalAlignment = Alignment.CenterVertically,
           horizontalArrangement = Arrangement.spacedBy(DittoTheme.spacing.sm),
         ) {
@@ -142,7 +142,7 @@ fun DemoScreen(
           )
           Spacer(Modifier.weight(1f))
           IconButton(
-            icon = if (dark) DittoIcons.visibilityOff else DittoIcons.visibility,
+            icon = if (dark) CatalogIcons.sun else CatalogIcons.moon,
             contentDescription = "Toggle light and dark",
             onClick = { selectedMode = if (dark) ColorMode.Light else ColorMode.Dark },
           )

@@ -100,6 +100,31 @@ public object ButtonDefaults {
   /** Alpha used for tonal containers: accent over surface (ADR-022, no second color). */
   public const val TonalContainerAlpha: Float = 0.12f
 
+  /**
+   * The gap between an icon and a label inside a button, for the current idiom and density.
+   *
+   * ```
+   * Button(onClick = { }) {
+   *   Icon(DittoIcons.check, contentDescription = null)   // sized by the button automatically
+   *   Spacer(Modifier.width(ButtonDefaults.IconSpacing))
+   *   Text("Continue")
+   * }
+   * ```
+   *
+   * The icon size needs no equivalent at the call site: buttons publish theirs through
+   * [com.r0adkll.ditto.foundation.LocalIconSize], so a bare `Icon` already matches. A `Spacer`
+   * has nothing ambient to read, so it gets this.
+   */
+  public val IconSpacing: Dp
+    @Composable @ReadOnlyComposable get() = style(ButtonVariant.Filled).iconSpacing
+
+  /**
+   * The size an icon draws at inside a button. Rarely needed directly, since buttons provide it
+   * ambiently; reach for it when sizing something that isn't an [com.r0adkll.ditto.foundation.Icon].
+   */
+  public val IconSize: Dp
+    @Composable @ReadOnlyComposable get() = style(ButtonVariant.Filled).iconSize
+
   /** The idiom default for [variant], before any [LocalButtonStyles] override. */
   @Composable
   @ReadOnlyComposable

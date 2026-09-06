@@ -27,6 +27,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.r0adkll.ditto.foundation.Icon
 import com.r0adkll.ditto.foundation.LocalContentColor
+import com.r0adkll.ditto.foundation.LocalIconSize
 import com.r0adkll.ditto.foundation.ProvideTextStyle
 import com.r0adkll.ditto.foundation.Text
 import com.r0adkll.ditto.input.LocalInputCapabilities
@@ -155,7 +156,7 @@ private fun ButtonImpl(
     horizontalArrangement = Arrangement.Center,
     verticalAlignment = Alignment.CenterVertically,
   ) {
-    CompositionLocalProvider(LocalContentColor provides contentColor) {
+    CompositionLocalProvider(LocalContentColor provides contentColor, LocalIconSize provides style.iconSize) {
       ProvideTextStyle(style.textStyle) {
         content()
       }
