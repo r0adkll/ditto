@@ -53,8 +53,12 @@ public val LocalDittoTypographyTransform: ProvidableCompositionLocal<((DittoTypo
 
 /** Defaults used when a theme parameter is omitted. */
 public object DittoDefaults {
-  /** A neutral blue that reads as "unbranded" so apps notice when they forget to set an accent. */
-  public val Accent: Color = Color(0xFF3B6CF6)
+  /**
+   * Ditto's own violet (the lead colour of the Ditto palette). Distinctive enough that an app
+   * notices it never set an accent, and it clears Ditto's contrast rules in both colour modes —
+   * unlike the lighter brand violet, which is for the mascot and site chrome only.
+   */
+  public val Accent: Color = Color(0xFF9C5AB4)
 }
 
 /**

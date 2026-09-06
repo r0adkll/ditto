@@ -123,8 +123,8 @@ import com.r0adkll.ditto.tokens.ElevationLevel
 import com.r0adkll.ditto.tokens.Neutrals
 
 private val Accents = listOf(
+  "Ditto" to DittoBrand.Violet,
   "Blue" to Color(0xFF3B6CF6),
-  "Violet" to Color(0xFF7C3AED),
   "Green" to Color(0xFF15803D),
   "Amber" to Color(0xFFF59E0B),
   "Rose" to Color(0xFFE11D48),

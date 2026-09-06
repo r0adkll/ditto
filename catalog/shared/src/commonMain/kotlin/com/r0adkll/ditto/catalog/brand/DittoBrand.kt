@@ -9,11 +9,18 @@ import androidx.compose.ui.unit.dp
 
 /** Ditto's brand: the mascot and the purple it is drawn in. See the vault's `Design/Brand.md`. */
 object DittoBrand {
-  /** `#C57BE6`, after the Ditto Pokémon. A brand colour, not a usable light-mode accent. */
-  val Purple: Color = Color(0xFFC57BE6)
+  /** The Ditto palette (pokemonpalette.com/ditto), lightest to darkest. */
+  val PaleMagenta: Color = Color(0xFFE2A7F4)
+  val LightViolet: Color = Color(0xFFC3ACD7)
 
-  /** The same hue at a lightness that passes Ditto's contrast rules; safe as a theme accent. */
-  val Accent: Color = Color(0xFFAA3EDA)
+  /** `#C57BE6` — the mascot's fill and the brand colour. Too light to carry text on a light surface. */
+  val BrandViolet: Color = Color(0xFFC57BE6)
+
+  /** `#9C5AB4` — the palette's lead violet and Ditto's default accent; passes contrast in both modes. */
+  val Violet: Color = Color(0xFF9C5AB4)
+
+  val DarkViolet: Color = Color(0xFF5A1894)
+  val DeepViolet: Color = Color(0xFF3A155B)
 
   private const val BLOB =
     "M8.76269 67.8076H71.2389C76.1913 67.8076 80.0008 63.9981 80.0008 59.0457V9.90285C80.0008 1.90285 70.8579 -2.66858 " +
@@ -32,7 +39,7 @@ object DittoBrand {
    * so the logo can be drawn monochrome (e.g. all one colour on a busy header) when needed.
    */
   fun mascot(
-    bodyColor: Color = Purple,
+    bodyColor: Color = BrandViolet,
     visorColor: Color = Color.Black,
     eyeColor: Color = Color.White,
   ): ImageVector = ImageVector.Builder(
