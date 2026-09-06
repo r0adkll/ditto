@@ -217,8 +217,17 @@ public final class com/r0adkll/ditto/components/ChipStyle {
 public final class com/r0adkll/ditto/components/ComposableSingletons$ScaffoldKt {
 	public static final field INSTANCE Lcom/r0adkll/ditto/components/ComposableSingletons$ScaffoldKt;
 	public fun <init> ()V
-	public final fun getLambda$-1601332654$ditto_ditto_components ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$2010777442$ditto_ditto_components ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$-1340244272$ditto_ditto_components ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$-398333921$ditto_ditto_components ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$1203477472$ditto_ditto_components ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$1853780910$ditto_ditto_components ()Lkotlin/jvm/functions/Function2;
+}
+
+public final class com/r0adkll/ditto/components/ComposableSingletons$SearchBarKt {
+	public static final field INSTANCE Lcom/r0adkll/ditto/components/ComposableSingletons$SearchBarKt;
+	public fun <init> ()V
+	public final fun getLambda$1314141744$ditto_ditto_components ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$394977655$ditto_ditto_components ()Lkotlin/jvm/functions/Function2;
 }
 
 public final class com/r0adkll/ditto/components/ComposableSingletons$TopBarKt {
@@ -267,6 +276,35 @@ public final class com/r0adkll/ditto/components/DialogStyle {
 public final class com/r0adkll/ditto/components/DividerKt {
 	public static final fun HorizontalDivider-orn9Ti0 (Landroidx/compose/ui/Modifier;FJFFLandroidx/compose/runtime/Composer;II)V
 	public static final fun VerticalDivider-orn9Ti0 (Landroidx/compose/ui/Modifier;FJFFLandroidx/compose/runtime/Composer;II)V
+}
+
+public final class com/r0adkll/ditto/components/FabDefaults {
+	public static final field $stable I
+	public static final field INSTANCE Lcom/r0adkll/ditto/components/FabDefaults;
+	public final fun style (Lcom/r0adkll/ditto/Idiom;Landroidx/compose/runtime/Composer;II)Lcom/r0adkll/ditto/components/FabStyle;
+}
+
+public final class com/r0adkll/ditto/components/FabStyle {
+	public static final field $stable I
+	public synthetic fun <init> (FLandroidx/compose/ui/graphics/Shape;JJFFLandroidx/compose/ui/text/TextStyle;FLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy-1bXstBY (FLandroidx/compose/ui/graphics/Shape;JJFFLandroidx/compose/ui/text/TextStyle;F)Lcom/r0adkll/ditto/components/FabStyle;
+	public static synthetic fun copy-1bXstBY$default (Lcom/r0adkll/ditto/components/FabStyle;FLandroidx/compose/ui/graphics/Shape;JJFFLandroidx/compose/ui/text/TextStyle;FILjava/lang/Object;)Lcom/r0adkll/ditto/components/FabStyle;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getContainerColor-0d7_KjU ()J
+	public final fun getContentColor-0d7_KjU ()J
+	public final fun getExtendedPadding-D9Ej5fM ()F
+	public final fun getIconSize-D9Ej5fM ()F
+	public final fun getShadow-D9Ej5fM ()F
+	public final fun getShape ()Landroidx/compose/ui/graphics/Shape;
+	public final fun getSize-D9Ej5fM ()F
+	public final fun getTextStyle ()Landroidx/compose/ui/text/TextStyle;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/r0adkll/ditto/components/FloatingActionButtonKt {
+	public static final fun FloatingActionButton (Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/graphics/vector/ImageVector;Ljava/lang/String;Landroidx/compose/ui/Modifier;Ljava/lang/String;ZLcom/r0adkll/ditto/components/FabStyle;Landroidx/compose/foundation/interaction/MutableInteractionSource;Landroidx/compose/runtime/Composer;II)V
+	public static final fun getLocalFabStyle ()Landroidx/compose/runtime/ProvidableCompositionLocal;
 }
 
 public final class com/r0adkll/ditto/components/IconButtonDefaults {
@@ -496,6 +534,17 @@ public final class com/r0adkll/ditto/components/ProgressIndicatorStyle {
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class com/r0adkll/ditto/components/PullToRefreshKt {
+	public static final fun PullToRefreshBox (ZLkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;Lcom/r0adkll/ditto/components/PullToRefreshState;ZLkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+	public static final fun rememberPullToRefreshState (Landroidx/compose/runtime/Composer;I)Lcom/r0adkll/ditto/components/PullToRefreshState;
+}
+
+public final class com/r0adkll/ditto/components/PullToRefreshState {
+	public static final field $stable I
+	public final fun getDistance ()F
+	public final fun getProgress ()F
+}
+
 public final class com/r0adkll/ditto/components/RadioButtonDefaults {
 	public static final field $stable I
 	public static final field INSTANCE Lcom/r0adkll/ditto/components/RadioButtonDefaults;
@@ -529,9 +578,19 @@ public final class com/r0adkll/ditto/components/RadioGroupKt {
 }
 
 public final class com/r0adkll/ditto/components/ScaffoldKt {
-	public static final fun Scaffold-vRFhKjU (Landroidx/compose/ui/Modifier;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;JJLandroidx/compose/foundation/layout/WindowInsets;Lkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;II)V
+	public static final fun Scaffold-dNgdfXs (Landroidx/compose/ui/Modifier;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;JJLandroidx/compose/foundation/layout/WindowInsets;Lkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;II)V
 	public static final fun getBottomBarInsets (Landroidx/compose/runtime/Composer;I)Landroidx/compose/foundation/layout/WindowInsets;
 	public static final fun getTopBarInsets (Landroidx/compose/runtime/Composer;I)Landroidx/compose/foundation/layout/WindowInsets;
+}
+
+public final class com/r0adkll/ditto/components/SearchBarDefaults {
+	public static final field $stable I
+	public static final field INSTANCE Lcom/r0adkll/ditto/components/SearchBarDefaults;
+	public final fun style (Lcom/r0adkll/ditto/Idiom;Landroidx/compose/runtime/Composer;II)Lcom/r0adkll/ditto/components/TextFieldStyle;
+}
+
+public final class com/r0adkll/ditto/components/SearchBarKt {
+	public static final fun SearchBar (Landroidx/compose/foundation/text/input/TextFieldState;Landroidx/compose/ui/Modifier;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ZLcom/r0adkll/ditto/components/TextFieldStyle;Landroidx/compose/foundation/interaction/MutableInteractionSource;Landroidx/compose/runtime/Composer;II)V
 }
 
 public final class com/r0adkll/ditto/components/SegmentedControlDefaults {
@@ -627,6 +686,73 @@ public final class com/r0adkll/ditto/components/SliderStyle {
 	public final fun getTouchHeight-D9Ej5fM ()F
 	public final fun getTrackGap-D9Ej5fM ()F
 	public final fun getTrackHeight-D9Ej5fM ()F
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/r0adkll/ditto/components/SnackbarData {
+	public static final field $stable I
+	public final fun dismiss ()V
+	public final fun getActionLabel ()Ljava/lang/String;
+	public final fun getDuration ()Lcom/r0adkll/ditto/components/SnackbarDuration;
+	public final fun getMessage ()Ljava/lang/String;
+	public final fun performAction ()V
+}
+
+public final class com/r0adkll/ditto/components/SnackbarDefaults {
+	public static final field $stable I
+	public static final field INSTANCE Lcom/r0adkll/ditto/components/SnackbarDefaults;
+	public final fun style (Lcom/r0adkll/ditto/Idiom;Landroidx/compose/runtime/Composer;II)Lcom/r0adkll/ditto/components/SnackbarStyle;
+}
+
+public final class com/r0adkll/ditto/components/SnackbarDuration : java/lang/Enum {
+	public static final field Indefinite Lcom/r0adkll/ditto/components/SnackbarDuration;
+	public static final field Long Lcom/r0adkll/ditto/components/SnackbarDuration;
+	public static final field Short Lcom/r0adkll/ditto/components/SnackbarDuration;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/r0adkll/ditto/components/SnackbarDuration;
+	public static fun values ()[Lcom/r0adkll/ditto/components/SnackbarDuration;
+}
+
+public final class com/r0adkll/ditto/components/SnackbarHostState {
+	public static final field $stable I
+	public fun <init> ()V
+	public final fun getCurrent ()Lcom/r0adkll/ditto/components/SnackbarData;
+	public final fun showSnackbar (Ljava/lang/String;Ljava/lang/String;Lcom/r0adkll/ditto/components/SnackbarDuration;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun showSnackbar$default (Lcom/r0adkll/ditto/components/SnackbarHostState;Ljava/lang/String;Ljava/lang/String;Lcom/r0adkll/ditto/components/SnackbarDuration;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+}
+
+public final class com/r0adkll/ditto/components/SnackbarKt {
+	public static final fun Snackbar (Lcom/r0adkll/ditto/components/SnackbarData;Landroidx/compose/ui/Modifier;Lcom/r0adkll/ditto/components/SnackbarStyle;Landroidx/compose/runtime/Composer;II)V
+	public static final fun SnackbarHost (Lcom/r0adkll/ditto/components/SnackbarHostState;Landroidx/compose/ui/Modifier;Lcom/r0adkll/ditto/components/SnackbarStyle;Landroidx/compose/runtime/Composer;II)V
+	public static final fun getLocalSnackbarStyle ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+}
+
+public final class com/r0adkll/ditto/components/SnackbarResult : java/lang/Enum {
+	public static final field ActionPerformed Lcom/r0adkll/ditto/components/SnackbarResult;
+	public static final field Dismissed Lcom/r0adkll/ditto/components/SnackbarResult;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/r0adkll/ditto/components/SnackbarResult;
+	public static fun values ()[Lcom/r0adkll/ditto/components/SnackbarResult;
+}
+
+public final class com/r0adkll/ditto/components/SnackbarStyle {
+	public static final field $stable I
+	public synthetic fun <init> (JJJLandroidx/compose/ui/graphics/Shape;Lcom/r0adkll/ditto/tokens/ElevationLevel;Landroidx/compose/foundation/BorderStroke;Landroidx/compose/foundation/layout/PaddingValues;Landroidx/compose/ui/text/TextStyle;FLandroidx/compose/ui/Alignment;FLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy-Xu6wWSk (JJJLandroidx/compose/ui/graphics/Shape;Lcom/r0adkll/ditto/tokens/ElevationLevel;Landroidx/compose/foundation/BorderStroke;Landroidx/compose/foundation/layout/PaddingValues;Landroidx/compose/ui/text/TextStyle;FLandroidx/compose/ui/Alignment;F)Lcom/r0adkll/ditto/components/SnackbarStyle;
+	public static synthetic fun copy-Xu6wWSk$default (Lcom/r0adkll/ditto/components/SnackbarStyle;JJJLandroidx/compose/ui/graphics/Shape;Lcom/r0adkll/ditto/tokens/ElevationLevel;Landroidx/compose/foundation/BorderStroke;Landroidx/compose/foundation/layout/PaddingValues;Landroidx/compose/ui/text/TextStyle;FLandroidx/compose/ui/Alignment;FILjava/lang/Object;)Lcom/r0adkll/ditto/components/SnackbarStyle;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getActionColor-0d7_KjU ()J
+	public final fun getAlignment ()Landroidx/compose/ui/Alignment;
+	public final fun getBorder ()Landroidx/compose/foundation/BorderStroke;
+	public final fun getContainerColor-0d7_KjU ()J
+	public final fun getContentColor-0d7_KjU ()J
+	public final fun getElevation ()Lcom/r0adkll/ditto/tokens/ElevationLevel;
+	public final fun getMargin-D9Ej5fM ()F
+	public final fun getMaxWidth-D9Ej5fM ()F
+	public final fun getPadding ()Landroidx/compose/foundation/layout/PaddingValues;
+	public final fun getShape ()Landroidx/compose/ui/graphics/Shape;
+	public final fun getTextStyle ()Landroidx/compose/ui/text/TextStyle;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
@@ -732,6 +858,38 @@ public final class com/r0adkll/ditto/components/TextFieldStyle {
 	public final fun getSupportingStyle ()Landroidx/compose/ui/text/TextStyle;
 	public final fun getTextColor-0d7_KjU ()J
 	public final fun getTextStyle ()Landroidx/compose/ui/text/TextStyle;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/r0adkll/ditto/components/ToggleButtonDefaults {
+	public static final field $stable I
+	public static final field INSTANCE Lcom/r0adkll/ditto/components/ToggleButtonDefaults;
+	public final fun style (Lcom/r0adkll/ditto/Idiom;Landroidx/compose/runtime/Composer;II)Lcom/r0adkll/ditto/components/ToggleButtonStyle;
+}
+
+public final class com/r0adkll/ditto/components/ToggleButtonKt {
+	public static final fun ToggleButton (ZLkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;ZLcom/r0adkll/ditto/components/ToggleButtonStyle;Landroidx/compose/foundation/interaction/MutableInteractionSource;Lkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;II)V
+	public static final fun getLocalToggleButtonStyle ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+}
+
+public final class com/r0adkll/ditto/components/ToggleButtonStyle {
+	public static final field $stable I
+	public synthetic fun <init> (Landroidx/compose/foundation/shape/CornerBasedShape;Landroidx/compose/foundation/shape/CornerBasedShape;JJJJLandroidx/compose/foundation/BorderStroke;FFLandroidx/compose/foundation/layout/PaddingValues;Landroidx/compose/ui/text/TextStyle;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy--v4wSSc (Landroidx/compose/foundation/shape/CornerBasedShape;Landroidx/compose/foundation/shape/CornerBasedShape;JJJJLandroidx/compose/foundation/BorderStroke;FFLandroidx/compose/foundation/layout/PaddingValues;Landroidx/compose/ui/text/TextStyle;)Lcom/r0adkll/ditto/components/ToggleButtonStyle;
+	public static synthetic fun copy--v4wSSc$default (Lcom/r0adkll/ditto/components/ToggleButtonStyle;Landroidx/compose/foundation/shape/CornerBasedShape;Landroidx/compose/foundation/shape/CornerBasedShape;JJJJLandroidx/compose/foundation/BorderStroke;FFLandroidx/compose/foundation/layout/PaddingValues;Landroidx/compose/ui/text/TextStyle;ILjava/lang/Object;)Lcom/r0adkll/ditto/components/ToggleButtonStyle;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCheckedContainerColor-0d7_KjU ()J
+	public final fun getCheckedContentColor-0d7_KjU ()J
+	public final fun getCheckedShape ()Landroidx/compose/foundation/shape/CornerBasedShape;
+	public final fun getContentPadding ()Landroidx/compose/foundation/layout/PaddingValues;
+	public final fun getMinHeight-D9Ej5fM ()F
+	public final fun getMinWidth-D9Ej5fM ()F
+	public final fun getTextStyle ()Landroidx/compose/ui/text/TextStyle;
+	public final fun getUncheckedBorder ()Landroidx/compose/foundation/BorderStroke;
+	public final fun getUncheckedContainerColor-0d7_KjU ()J
+	public final fun getUncheckedContentColor-0d7_KjU ()J
+	public final fun getUncheckedShape ()Landroidx/compose/foundation/shape/CornerBasedShape;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }

@@ -63,10 +63,19 @@ public fun render(width: Int, height: Int, time: Duration = 0.milliseconds, cont
   ImageComposeScene(width = width, height = height, density = Density(1f)) {
     screenshotTheme { content() }
   }.use { scene ->
-    // First frame lays out; render at [time] so animations settle deterministically.
-    scene.render(0L)
-    scene.render(time.inWholeNanoseconds)
+    // Step real frames up to [time]: transitions that start after the first frame (e.g. an
+    // AnimatedVisibility triggered from a LaunchedEffect) need intermediate frames to progress.
+    var image = scene.render(0L)
+    val end = time.inWholeNanoseconds
+    var t = 0L
+    while (t < end) {
+      t = minOf(t + FRAME_NANOS, end)
+      image = scene.render(t)
+    }
+    image
   }
+
+private const val FRAME_NANOS = 16_000_000L
 
 internal fun Image.png(): ByteArray =
   encodeToData(EncodedImageFormat.PNG)?.bytes ?: error("Failed to encode PNG")

@@ -192,10 +192,16 @@ public fun Slider(
   }
 
   val fraction = fractionOf(value)
+  // Unsnapped drag position. Accumulating on the snapped `value` would round every small delta
+  // straight back to the current step, so stepped sliders could never move.
+  var rawValue by remember { mutableFloatStateOf(value) }
+  if (!dragged) rawValue = value
   val draggable = rememberDraggableState { delta ->
     if (widthPx <= 0f) return@rememberDraggableState
     val deltaFraction = (if (rtl) -delta else delta) / widthPx
-    onChange(snap(value + deltaFraction * span))
+    rawValue = (rawValue + deltaFraction * span).coerceIn(valueRange.start, valueRange.endInclusive)
+    val snapped = snap(rawValue)
+    if (snapped != value) onChange(snapped)
   }
 
   Box(

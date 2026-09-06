@@ -18,6 +18,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,6 +38,12 @@ import com.r0adkll.ditto.Idiom
 import com.r0adkll.ditto.components.Button
 import com.r0adkll.ditto.components.ButtonVariant
 import com.r0adkll.ditto.components.AlertDialog
+import com.r0adkll.ditto.components.FloatingActionButton
+import com.r0adkll.ditto.components.PullToRefreshBox
+import com.r0adkll.ditto.components.SearchBar
+import com.r0adkll.ditto.components.SnackbarHost
+import com.r0adkll.ditto.components.SnackbarHostState
+import com.r0adkll.ditto.components.ToggleButton
 import com.r0adkll.ditto.components.Badge
 import com.r0adkll.ditto.components.BadgedBox
 import com.r0adkll.ditto.components.Chip
@@ -101,8 +111,13 @@ fun CatalogApp() {
 
   DittoTheme(accent = accent, neutrals = neutrals, idiom = idiom, colorMode = colorMode) {
     val scroll = rememberTopBarScrollBehavior()
+    val snackbars = remember { SnackbarHostState() }
+    var refreshing by remember { mutableStateOf(false) }
+    LaunchedEffect(refreshing) { if (refreshing) { delay(1500); refreshing = false } }
     Scaffold(
       modifier = Modifier.fillMaxSize(),
+      snackbarHost = { SnackbarHost(snackbars) },
+      floatingAction = { FloatingActionButton(onClick = { refreshing = true }, icon = DittoIcons.forward, contentDescription = "Refresh demo") },
       topBar = {
         TopBar(
           title = "Ditto",
@@ -118,12 +133,13 @@ fun CatalogApp() {
         )
       },
     ) { padding ->
+      PullToRefreshBox(isRefreshing = refreshing, onRefresh = { refreshing = true }, modifier = Modifier.fillMaxSize().padding(top = padding.calculateTopPadding())) {
       Column(
         Modifier
           .fillMaxSize()
           .nestedScroll(scroll.connection)
           .verticalScroll(rememberScrollState())
-          .padding(padding)
+          .padding(bottom = padding.calculateBottomPadding())
           .padding(DittoTheme.spacing.lg),
         verticalArrangement = Arrangement.spacedBy(DittoTheme.spacing.xl),
       ) {
@@ -141,6 +157,7 @@ fun CatalogApp() {
         Section("Lists and cards") { ListsDemo() }
         Section("Menus, dialogs, progress") { OverlaysDemo() }
         Section("Navigation, chips, badges, sheets") { NavigationDemo() }
+        Section("Toggles, FAB, search, snackbar, pull to refresh") { ActionsDemo(snackbars) }
         Section("Colors") { ColorsDemo() }
         Section("Typography") { TypographyDemo() }
         Section("Shapes") { ShapesDemo() }
@@ -148,6 +165,7 @@ fun CatalogApp() {
         Section("Elevation") { ElevationDemo() }
         Section("System icons") { IconsDemo() }
         ContrastReport()
+      }
       }
     }
   }
@@ -435,6 +453,25 @@ private fun NavigationDemo() {
         ListItem(headline = "Add to queue", onClick = { sheet = false })
         ListItem(headline = "Cancel", onClick = { sheet = false })
       }
+    }
+  }
+}
+
+@Composable
+private fun ActionsDemo(snackbars: SnackbarHostState) {
+  var on by remember { mutableStateOf(true) }
+  val scope = rememberCoroutineScope()
+  Column(verticalArrangement = Arrangement.spacedBy(DittoTheme.spacing.lg)) {
+    Row(horizontalArrangement = Arrangement.spacedBy(DittoTheme.spacing.sm), verticalAlignment = Alignment.CenterVertically) {
+      ToggleButton(checked = on, onCheckedChange = { on = it }) { Icon(DittoIcons.check, null); Text(if (on) " On" else " Off") }
+      ToggleButton(checked = !on, onCheckedChange = { on = !it }) { Text("Inverse") }
+      FloatingActionButton(onClick = {}, icon = DittoIcons.check, contentDescription = "Add")
+      FloatingActionButton(onClick = {}, icon = DittoIcons.search, contentDescription = null, text = "Search")
+    }
+    SearchBar(state = rememberTextFieldState(), modifier = Modifier.width(360.dp), onSearch = { q -> scope.launch { snackbars.showSnackbar("Searched for \"$q\"") } })
+    Row(horizontalArrangement = Arrangement.spacedBy(DittoTheme.spacing.sm)) {
+      Button(text = "Show snackbar", onClick = { scope.launch { snackbars.showSnackbar("Saved to library", actionLabel = "Undo") } }, variant = ButtonVariant.Tonal)
+      Text("Pull the page down to refresh.", style = DittoTheme.typography.bodySmall, color = DittoTheme.colors.onSurfaceVariant, modifier = Modifier.padding(top = 10.dp))
     }
   }
 }
