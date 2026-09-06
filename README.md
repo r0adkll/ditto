@@ -1,5 +1,7 @@
 # Ditto
 
+![](.github/art/DittoMascot.svg) 
+
 A [Compose Multiplatform](https://www.jetbrains.com/compose-multiplatform/) UI toolkit with one component API and three platform-adaptive **idioms**, built on its own design tokens rather than Material3.
 
 | Idiom | Default on | Feel |
