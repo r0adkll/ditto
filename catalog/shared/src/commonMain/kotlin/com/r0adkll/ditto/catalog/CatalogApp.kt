@@ -1,5 +1,6 @@
 package com.r0adkll.ditto.catalog
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -38,6 +39,7 @@ import kotlin.math.roundToInt
 import com.r0adkll.ditto.Idiom
 import com.r0adkll.ditto.components.Button
 import com.r0adkll.ditto.components.ButtonVariant
+import com.r0adkll.ditto.catalog.brand.DittoBrand
 import com.r0adkll.ditto.components.AlertDialog
 import com.r0adkll.ditto.components.FloatingActionButton
 import com.r0adkll.ditto.components.PullToRefreshBox
@@ -162,7 +164,13 @@ fun CatalogApp() {
       floatingAction = { FloatingActionButton(onClick = { refreshing = true }, icon = DittoIcons.forward, contentDescription = "Refresh demo") },
       topBar = {
         TopBar(
-          title = "Ditto",
+          title = { Text("Ditto") },
+          largeTitle = {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(DittoTheme.spacing.md)) {
+              Image(DittoBrand.mascot(), contentDescription = null, modifier = Modifier.size(40.dp))
+              Text("Ditto")
+            }
+          },
           variant = TopBarVariant.Large,
           scrollBehavior = scroll,
           actions = {

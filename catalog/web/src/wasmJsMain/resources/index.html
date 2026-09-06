@@ -3,11 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ditto Catalog</title>
+  <title>Ditto — a Compose Multiplatform UI toolkit</title>
+  <meta name="description" content="One component API, three platform-adaptive idioms: Android, Apple and Desktop.">
+  <link rel="icon" type="image/svg+xml" href="mascot.svg">
+  <meta name="theme-color" content="#C57BE6">
   <style>
     html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #fafafa; }
+    @media (prefers-color-scheme: dark) { html, body { background: #0f1013; } }
+    /* Shown until the wasm bundle finishes loading. */
+    #splash { position: fixed; inset: 0; display: grid; place-content: center; justify-items: center; gap: 16px;
+      font: 500 15px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #6b7280; }
+    #splash img { width: 72px; height: 64px; }
   </style>
   <script type="application/javascript" src="catalog.js"></script>
 </head>
-<body></body>
+<body>
+  <div id="splash">
+    <img src="mascot.svg" alt="">
+    <span>Loading the Ditto catalog…</span>
+  </div>
+  <script>
+    // The Compose canvas replaces the body content once it mounts; drop the splash then.
+    const splash = document.getElementById('splash');
+    new MutationObserver((_, obs) => {
+      if (document.querySelector('canvas')) { splash.remove(); obs.disconnect(); }
+    }).observe(document.body, { childList: true, subtree: true });
+  </script>
+</body>
 </html>
