@@ -372,6 +372,7 @@ internal fun IconsDemo() {
     "clear" to DittoIcons.clear, "more" to DittoIcons.more, "search" to DittoIcons.search,
     "dropdown" to DittoIcons.dropdown, "visibility" to DittoIcons.visibility,
     "visibilityOff" to DittoIcons.visibilityOff, "indeterminate" to DittoIcons.indeterminate,
+    "external" to DittoIcons.external,
   )
   Column(verticalArrangement = Arrangement.spacedBy(DittoTheme.spacing.md)) {
     icons.chunked(7).forEach { row ->

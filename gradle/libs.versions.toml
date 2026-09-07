@@ -1,6 +1,7 @@
 [versions]
 agp = "9.4.0"
 kotlin = "2.4.10"
+dokka = "2.2.0"
 compose-multiplatform = "1.12.0"
 compose-m3 = "1.12.0-alpha03"
 coroutines = "1.11.0"
@@ -19,6 +20,7 @@ compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "compose-m
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 binary-compatibility-validator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version.ref = "binary-compatibility-validator" }
 maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "maven-publish" }
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 
 [libraries]
 # Gradle plugins (for build-logic classpath)
@@ -49,6 +51,7 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 maven-publish-gradlePlugin = { module = "com.vanniktech:gradle-maven-publish-plugin", version.ref = "maven-publish" }
 binary-compatibility-validator-gradlePlugin = { module = "org.jetbrains.kotlinx:binary-compatibility-validator", version.ref = "binary-compatibility-validator" }
+dokka-gradlePlugin = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "dokka" }
 compose-material-ripple = { module = "org.jetbrains.compose.material:material-ripple", version.ref = "compose-multiplatform" }
 compose-unstyled = { module = "com.composables:composeunstyled", version = "2.9.2" }
 compose-unstyled-bottom-sheet = { module = "com.composables:composeunstyled-modal-bottom-sheet", version = "2.9.2" }

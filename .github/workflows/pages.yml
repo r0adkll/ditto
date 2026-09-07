@@ -35,16 +35,23 @@ jobs:
       - name: Build the wasm catalog
         run: ./gradlew :catalog:web:wasmJsBrowserDistribution
 
+      - name: Build the API reference
+        run: ./gradlew dokkaGeneratePublicationHtml
+
       - name: Build the docs site
         working-directory: docs-site
         run: |
           npm ci
           npm run build
 
+      # Both are copied in *after* the Astro build so Astro never scans 13 MB of wasm or 14 MB
+      # of generated API HTML.
       - name: Assemble the site
         run: |
-          mkdir -p docs-site/dist/catalog
+          mkdir -p docs-site/dist/catalog docs-site/dist/api
           cp -r catalog/web/build/dist/wasmJs/productionExecutable/* docs-site/dist/catalog/
+          cp -r build/dokka/html/* docs-site/dist/api/
+          test -f docs-site/dist/api/index.html
 
       - uses: actions/upload-pages-artifact@v3
         with:

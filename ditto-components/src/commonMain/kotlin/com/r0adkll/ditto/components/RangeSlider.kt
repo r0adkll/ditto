@@ -1,6 +1,20 @@
 package com.r0adkll.ditto.components
 
 import androidx.compose.foundation.Canvas
+import com.r0adkll.ditto.interaction.focusRing
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.semantics.setProgress
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.input.key.type
+import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.Key
+import androidx.compose.foundation.progressSemantics
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.drag
@@ -87,10 +101,7 @@ public fun RangeSlider(
     modifier
       .fillMaxWidth()
       .height(style.touchHeight)
-      .semantics {
-        contentDescription = "Range ${value.start} to ${value.endInclusive}"
-        if (!enabled) disabled()
-      }
+      .semantics { if (!enabled) disabled() }
       .onSizeChanged { widthPx = it.width.toFloat() }
       .then(
         if (enabled) {
@@ -126,6 +137,64 @@ public fun RangeSlider(
   ) {
     Canvas(Modifier.fillMaxWidth().height(style.touchHeight)) {
       drawRange(style, fractionOf(value.start), fractionOf(value.endInclusive), steps, rtl, alpha, activeThumb)
+    }
+
+    // Two focus stops rather than one. Each thumb is a separate value, so each carries its own
+    // progress semantics and its own setProgress action: assistive tech can set either end
+    // directly instead of being handed a single conflated "range" it cannot address.
+    val density = LocalDensity.current
+    val thumbWidthPx = with(density) { style.thumbWidth.toPx() }
+    val padPx = with(density) { maxOf(style.thumbWidth.toPx(), style.trackHeight.toPx()) / 2 }
+    for (index in 0..1) {
+      val thumbValue = if (index == 0) value.start else value.endInclusive
+      // A thumb's range stops at the other thumb, which is also what stops them crossing on drag.
+      val lower = if (index == 0) valueRange.start else value.start
+      val upper = if (index == 0) value.endInclusive else valueRange.endInclusive
+      val handleSource = remember(index) { MutableInteractionSource() }
+
+      fun move(next: Float) {
+        val clamped = snap(next).coerceIn(lower, upper)
+        val updated = if (index == 0) clamped..value.endInclusive else value.start..clamped
+        if (updated != value) {
+          onChange(updated)
+          onFinished?.invoke()
+        }
+      }
+
+      Box(
+        Modifier
+          .offset {
+            val f = fractionOf(thumbValue).let { if (rtl) 1f - it else it }
+            val usable = (widthPx - padPx * 2).coerceAtLeast(0f)
+            IntOffset((padPx + f * usable - thumbWidthPx / 2).roundToInt(), 0)
+          }
+          .width(style.thumbWidth)
+          .height(style.touchHeight)
+          .focusRing(handleSource, DittoTheme.shapes.full)
+          .onKeyEvent { event ->
+            if (!enabled || event.type != KeyEventType.KeyDown) return@onKeyEvent false
+            val stepSize = if (steps > 0) span / (steps + 1) else span / 20f
+            val forward = if (rtl) -stepSize else stepSize
+            val next = when (event.key) {
+              Key.DirectionRight -> thumbValue + forward
+              Key.DirectionLeft -> thumbValue - forward
+              Key.DirectionUp -> thumbValue + stepSize
+              Key.DirectionDown -> thumbValue - stepSize
+              Key.MoveHome -> lower
+              Key.MoveEnd -> upper
+              else -> return@onKeyEvent false
+            }
+            move(next)
+            true
+          }
+          .focusable(enabled = enabled, interactionSource = handleSource)
+          .progressSemantics(thumbValue, lower..upper, steps)
+          .semantics {
+            contentDescription = if (index == 0) "Range start" else "Range end"
+            if (!enabled) disabled()
+            setProgress { target -> move(target); true }
+          },
+      )
     }
   }
 }

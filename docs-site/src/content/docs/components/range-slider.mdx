@@ -37,11 +37,25 @@ RangeSlider(value = span, onValueChange = { span = it }, steps = 3)
 Use `onValueChangeFinished` for work you do not want to run on every frame of a drag — a network
 call, a database write.
 
+## Keyboard
+
+Each thumb is its own focus stop, because each is its own value — one conflated "range" node is
+something assistive tech cannot address.
+
+| Key | Action |
+|---|---|
+| ← / → | move the focused thumb (RTL-aware) |
+| ↑ / ↓ | same, without the mirroring |
+| Home / End | send it to its own limit — the range end, or the other thumb |
+
+A step is `span / (steps + 1)` when stepped, and 5% otherwise.
+
 ## Accessibility
 
-- Each thumb carries progress semantics with the current bounds.
-- Per-thumb `setProgress` actions and keyboard adjustment are not implemented yet; the single-value
-  [slider](/ditto/components/slider/) has both.
+- Each thumb carries its own progress semantics **and its own `setProgress` action**, with bounds
+  that stop at the other thumb, so either end can be set directly.
+- The thumbs are labelled "Range start" and "Range end" rather than sharing one name.
+- The container carries no name of its own: it would merge the two thumbs into a single node.
 
 ## API
 

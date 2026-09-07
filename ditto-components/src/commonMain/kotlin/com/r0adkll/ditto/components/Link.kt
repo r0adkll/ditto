@@ -194,7 +194,7 @@ public fun Link(
           // Sized in em so the glyph tracks the text it follows, at any font scale.
           Placeholder(width = 1.05.em, height = 1.05.em, placeholderVerticalAlign = PlaceholderVerticalAlign.Center),
         ) {
-          Icon(DittoIcons.forward, contentDescription = "opens externally", tint = arrowColor, size = arrowSize)
+          Icon(DittoIcons.external, contentDescription = "opens externally", tint = arrowColor, size = arrowSize)
         },
       )
     },

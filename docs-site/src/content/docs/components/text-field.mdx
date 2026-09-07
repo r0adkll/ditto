@@ -64,8 +64,11 @@ Selection handles and the caret use `accent` in every idiom.
 
 ## Accessibility
 
-- The label is the field's accessible name; the supporting text becomes its description.
-- Error state is exposed to screen readers, not only drawn in red.
+- The label is the field's accessible name. It has to be set explicitly, because the label draws
+  *above* the field and would otherwise be a sibling node — leaving the input announced as a
+  nameless edit box.
+- `isError` sets the node's error semantics, carrying the supporting text as the reason. A red
+  border says nothing to someone who is not looking at it.
 - Respects the platform font scale: the container grows with the text rather than clipping it.
 
 ## API

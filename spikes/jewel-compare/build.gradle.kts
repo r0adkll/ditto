@@ -28,7 +28,12 @@ configurations.all {
   }
 }
 
+// Same rule as the Unstyled spike: this test renders a side-by-side comparison image for a human to
+// look at, not a committed golden, so it fails whenever Ditto's rendering legitimately changes.
+// Run it explicitly with -Pditto.spikes=true. `enabled` is evaluated at configuration time, which
+// keeps the configuration cache (an `onlyIf` lambda does not).
 tasks.withType<Test>().configureEach {
+  enabled = providers.gradleProperty("ditto.spikes").isPresent
   systemProperty("ditto.updateGoldens", providers.gradleProperty("ditto.updateGoldens").orNull ?: "false")
 }
 

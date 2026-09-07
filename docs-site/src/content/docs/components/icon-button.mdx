@@ -47,6 +47,22 @@ IconButton(
 
 See [Tooltip](/ditto/components/tooltip/) for the timing and touch behaviour.
 
+## Staying pressed
+
+`ToggleIconButton` is the same control holding a state — mute, pin, favourite, a formatting toggle:
+
+```kotlin
+var pinned by remember { mutableStateOf(false) }
+
+ToggleIconButton(checked = pinned, onCheckedChange = { pinned = it }) {
+  Icon(DittoIcons.check, contentDescription = "Pin to top")
+}
+```
+
+Like [ToggleButton](/ditto/components/toggle-button/) it takes no variant: unchecked is the
+standard icon button and checked gains a tonal accent container, so there is one on-state to learn
+rather than four. It announces its checked state, and fires the platform haptic on Apple.
+
 ## Specification
 
 | | Android | Apple | Desktop |
@@ -78,6 +94,17 @@ fun IconButton(
 )
 
 // Same shape: FilledIconButton, TonalIconButton, OutlinedIconButton
+
+@Composable
+fun ToggleIconButton(
+  checked: Boolean,
+  onCheckedChange: (Boolean) -> Unit,
+  modifier: Modifier = Modifier,
+  enabled: Boolean = true,
+  style: IconButtonStyle? = null,
+  interactionSource: MutableInteractionSource? = null,
+  content: @Composable () -> Unit,
+)
 
 @Composable
 fun IconButton(

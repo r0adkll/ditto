@@ -49,6 +49,7 @@ public final class com/r0adkll/ditto/icons/DittoIcons {
 	public final fun clear (Lcom/r0adkll/ditto/Idiom;)Landroidx/compose/ui/graphics/vector/ImageVector;
 	public final fun close (Lcom/r0adkll/ditto/Idiom;)Landroidx/compose/ui/graphics/vector/ImageVector;
 	public final fun dropdown (Lcom/r0adkll/ditto/Idiom;)Landroidx/compose/ui/graphics/vector/ImageVector;
+	public final fun external (Lcom/r0adkll/ditto/Idiom;)Landroidx/compose/ui/graphics/vector/ImageVector;
 	public final fun forward (Lcom/r0adkll/ditto/Idiom;)Landroidx/compose/ui/graphics/vector/ImageVector;
 	public final fun getBack (Landroidx/compose/runtime/Composer;I)Landroidx/compose/ui/graphics/vector/ImageVector;
 	public final fun getCheck (Landroidx/compose/runtime/Composer;I)Landroidx/compose/ui/graphics/vector/ImageVector;
@@ -57,6 +58,7 @@ public final class com/r0adkll/ditto/icons/DittoIcons {
 	public final fun getClear (Landroidx/compose/runtime/Composer;I)Landroidx/compose/ui/graphics/vector/ImageVector;
 	public final fun getClose (Landroidx/compose/runtime/Composer;I)Landroidx/compose/ui/graphics/vector/ImageVector;
 	public final fun getDropdown (Landroidx/compose/runtime/Composer;I)Landroidx/compose/ui/graphics/vector/ImageVector;
+	public final fun getExternal (Landroidx/compose/runtime/Composer;I)Landroidx/compose/ui/graphics/vector/ImageVector;
 	public final fun getForward (Landroidx/compose/runtime/Composer;I)Landroidx/compose/ui/graphics/vector/ImageVector;
 	public final fun getIndeterminate (Landroidx/compose/runtime/Composer;I)Landroidx/compose/ui/graphics/vector/ImageVector;
 	public final fun getMore (Landroidx/compose/runtime/Composer;I)Landroidx/compose/ui/graphics/vector/ImageVector;

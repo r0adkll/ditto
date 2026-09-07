@@ -77,12 +77,22 @@ internal fun ButtonDemo() = Stack {
 }
 
 @Composable
-internal fun IconButtonDemo() = Line {
-  IconButton(onClick = {}) { Icon(DittoIcons.more, "More") }
-  FilledIconButton(onClick = {}) { Icon(DittoIcons.check, "Done") }
-  TonalIconButton(onClick = {}) { Icon(DittoIcons.search, "Search") }
-  OutlinedIconButton(onClick = {}) { Icon(DittoIcons.close, "Close") }
-  IconButton(onClick = {}, enabled = false) { Icon(DittoIcons.back, "Back") }
+internal fun IconButtonDemo() {
+  var pinned by remember { mutableStateOf(true) }
+  Stack {
+    Line {
+      IconButton(onClick = {}) { Icon(DittoIcons.more, "More") }
+      FilledIconButton(onClick = {}) { Icon(DittoIcons.check, "Done") }
+      TonalIconButton(onClick = {}) { Icon(DittoIcons.search, "Search") }
+      OutlinedIconButton(onClick = {}) { Icon(DittoIcons.close, "Close") }
+      IconButton(onClick = {}, enabled = false) { Icon(DittoIcons.back, "Back") }
+    }
+    Line {
+      ToggleIconButton(checked = pinned, onCheckedChange = { pinned = it }) { Icon(DittoIcons.check, "Pin") }
+      ToggleIconButton(checked = false, onCheckedChange = {}) { Icon(DittoIcons.search, "Filter") }
+      ToggleIconButton(checked = true, onCheckedChange = {}, enabled = false) { Icon(DittoIcons.more, "Disabled") }
+    }
+  }
 }
 
 @Composable

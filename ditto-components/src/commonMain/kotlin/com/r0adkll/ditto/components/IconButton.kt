@@ -8,6 +8,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
@@ -19,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.isSpecified
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
@@ -53,6 +55,10 @@ public class IconButtonStyle(
   /** Visual container size; the hit target is at least the idiom minimum (ADR-021). */
   public val size: Dp,
   public val iconSize: Dp,
+  /** Container while checked ([ToggleIconButton]); ignored by the plain button. */
+  public val checkedContainerColor: Color = Color.Transparent,
+  /** Content while checked ([ToggleIconButton]). */
+  public val checkedContentColor: Color = Color.Unspecified,
 ) {
   public fun copy(
     containerColor: Color = this.containerColor,
@@ -63,17 +69,22 @@ public class IconButtonStyle(
     border: BorderStroke? = this.border,
     size: Dp = this.size,
     iconSize: Dp = this.iconSize,
+    checkedContainerColor: Color = this.checkedContainerColor,
+    checkedContentColor: Color = this.checkedContentColor,
   ): IconButtonStyle = IconButtonStyle(
     containerColor, contentColor, disabledContainerColor, disabledContentColor, shape, border, size, iconSize,
+    checkedContainerColor, checkedContentColor,
   )
 
   override fun equals(other: Any?): Boolean = other is IconButtonStyle &&
     containerColor == other.containerColor && contentColor == other.contentColor &&
     disabledContainerColor == other.disabledContainerColor && disabledContentColor == other.disabledContentColor &&
-    shape == other.shape && border == other.border && size == other.size && iconSize == other.iconSize
+    shape == other.shape && border == other.border && size == other.size && iconSize == other.iconSize &&
+    checkedContainerColor == other.checkedContainerColor && checkedContentColor == other.checkedContentColor
 
   override fun hashCode(): Int = listOf(
     containerColor, contentColor, disabledContainerColor, disabledContentColor, shape, border, size, iconSize,
+    checkedContainerColor, checkedContentColor,
   ).hashCode()
 
   override fun toString(): String = "IconButtonStyle(containerColor=$containerColor, size=$size)"
@@ -120,6 +131,10 @@ public object IconButtonDefaults {
       border = null,
       size = size,
       iconSize = dimens.iconSize,
+      // A toggle has to read as on at a glance, so the checked state gains a container rather than
+      // only re-tinting the glyph — the same tonal accent a checked ToggleButton uses.
+      checkedContainerColor = colors.accent.copy(alpha = ButtonDefaults.TonalContainerAlpha),
+      checkedContentColor = colors.accent,
     )
     return when (variant) {
       IconButtonVariant.Standard -> standard
@@ -236,6 +251,70 @@ private fun IconButtonImpl(
     contentAlignment = Alignment.Center,
   ) {
     CompositionLocalProvider(LocalContentColor provides contentColor, LocalIconSize provides style.iconSize) {
+      content()
+    }
+  }
+}
+
+/**
+ * An [IconButton] that stays pressed — mute, pin, favourite, a formatting toggle.
+ *
+ * Like [ToggleButton], this has no variant: the unchecked state is the standard icon button and the
+ * checked state is the style's checked container, so there is one on-state to recognise rather than
+ * four. For one of several exclusive options use a [SegmentedControl]; for a settings row, a
+ * [Switch].
+ */
+@Composable
+public fun ToggleIconButton(
+  checked: Boolean,
+  onCheckedChange: (Boolean) -> Unit,
+  modifier: Modifier = Modifier,
+  enabled: Boolean = true,
+  style: IconButtonStyle? = null,
+  interactionSource: MutableInteractionSource? = null,
+  content: @Composable () -> Unit,
+) {
+  val resolved = IconButtonDefaults.resolve(style, IconButtonVariant.Standard)
+  @Suppress("NAME_SHADOWING")
+  val interactionSource = interactionSource ?: remember { MutableInteractionSource() }
+  val haptics = rememberToggleHaptics()
+  val pointer = LocalInputCapabilities.current.pointer
+
+  val containerColor = when {
+    !enabled -> resolved.disabledContainerColor
+    checked -> resolved.checkedContainerColor
+    else -> resolved.containerColor
+  }
+  val contentColor = when {
+    !enabled -> resolved.disabledContentColor
+    checked -> resolved.checkedContentColor.takeIf { it.isSpecified } ?: resolved.contentColor
+    else -> resolved.contentColor
+  }
+
+  Box(
+    modifier = modifier
+      .minimumInteractiveSize()
+      .size(resolved.size)
+      .pressScale(interactionSource, enabled)
+      .focusRing(interactionSource, resolved.shape)
+      .then(if (resolved.border != null) Modifier.border(resolved.border, resolved.shape) else Modifier)
+      .background(containerColor, resolved.shape)
+      .clip(resolved.shape)
+      .toggleable(
+        value = checked,
+        interactionSource = interactionSource,
+        indication = LocalIndication.current,
+        enabled = enabled,
+        role = Role.Checkbox,
+        onValueChange = {
+          haptics.toggled(it)
+          onCheckedChange(it)
+        },
+      )
+      .then(if (pointer && enabled) Modifier.pointerHoverIcon(PointerIcon.Hand) else Modifier),
+    contentAlignment = Alignment.Center,
+  ) {
+    CompositionLocalProvider(LocalContentColor provides contentColor, LocalIconSize provides resolved.iconSize) {
       content()
     }
   }

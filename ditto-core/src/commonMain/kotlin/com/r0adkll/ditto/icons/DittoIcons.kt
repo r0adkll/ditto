@@ -32,6 +32,15 @@ public object DittoIcons {
   public val visibility: ImageVector @Composable @ReadOnlyComposable get() = visibility(LocalIdiom.current)
   public val visibilityOff: ImageVector @Composable @ReadOnlyComposable get() = visibilityOff(LocalIdiom.current)
   public val indeterminate: ImageVector @Composable @ReadOnlyComposable get() = indeterminate(LocalIdiom.current)
+  public val external: ImageVector @Composable @ReadOnlyComposable get() = external(LocalIdiom.current)
+
+  /**
+   * The "leaves the app" arrow. Identical in all three idioms: unlike a chevron or a back arrow it
+   * is a symbol rather than a platform affordance, and every platform draws it the same way.
+   */
+  public fun external(idiom: Idiom): ImageVector = cached("external", idiom) {
+    stroked("external", idiom, "M7 17L17 7", "M8 7h9v9")
+  }
 
   public fun back(idiom: Idiom): ImageVector = cached("back", idiom) {
     when (idiom) {

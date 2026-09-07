@@ -38,6 +38,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.error
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.Dp
@@ -211,7 +214,7 @@ public fun TextField(
   ProvideSelectionColors(style) {
     BasicTextField(
       state = state,
-      modifier = modifier,
+      modifier = modifier.fieldSemantics(label, supportingText, isError),
       enabled = enabled,
       readOnly = readOnly,
       inputTransformation = inputTransformation,
@@ -240,6 +243,19 @@ public fun TextField(
     )
   }
 }
+
+
+/**
+ * The label is drawn *above* the field, so it is a sibling node: without this a screen reader lands
+ * on the input and announces an unnamed edit box. [isError] likewise has to reach the semantics
+ * tree — a red border is invisible to anyone not looking at it — and the supporting text is the
+ * only place that says what is actually wrong.
+ */
+private fun Modifier.fieldSemantics(label: String?, supportingText: String?, isError: Boolean): Modifier =
+  semantics {
+    if (label != null) contentDescription = label
+    if (isError) error(supportingText ?: "Invalid entry")
+  }
 
 /** Migration overload with the classic `value` / `onValueChange` contract. Prefer the state-based API. */
 @Composable
@@ -274,7 +290,7 @@ public fun TextField(
     BasicTextField(
       value = value,
       onValueChange = onValueChange,
-      modifier = modifier,
+      modifier = modifier.fieldSemantics(label, supportingText, isError),
       enabled = enabled,
       readOnly = readOnly,
       textStyle = style.textStyle.copy(color = textColor),

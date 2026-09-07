@@ -12,6 +12,8 @@ class PublishingConventionPlugin : Plugin<Project> {
   override fun apply(target: Project) = with(target) {
     pluginManager.apply("com.vanniktech.maven.publish")
     pluginManager.apply("org.jetbrains.kotlinx.binary-compatibility-validator")
+    // Published module == documented module: the root project aggregates whatever declares this.
+    pluginManager.apply("org.jetbrains.dokka")
 
     // ADR-028 guardrail: behaviour dependencies must not leak into Ditto's public API.
     val leakCheck = tasks.register("checkNoLeakedTypes") {

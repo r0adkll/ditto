@@ -35,11 +35,25 @@ A hairline in `outlineVariant` with an 8dp hit area around it — wider than it 
 1dp target is not grabbable. It thickens to 2dp and takes the accent colour on hover and while
 dragging. `minFirst` and `minSecond` stop either pane collapsing to nothing.
 
+## Keyboard
+
+The divider is a focusable control, not just a drag target — a 1dp hairline reachable only by
+pointer would make the layout unadjustable without a mouse.
+
+| Key | Action |
+|---|---|
+| ← / → | move the divider by 16dp (horizontal, RTL-aware) |
+| ↑ / ↓ | the same, on a `VerticalSplitPane` |
+| Home / End | collapse to `minFirst`, or to `minSecond` |
+
+The step is a fixed 16dp rather than a percentage, so it feels the same whatever the pane is worth.
+
 ## Accessibility
 
-Keyboard resizing is not implemented yet, so the divider is pointer-only today. Compose's common
-API also has no resize cursor, so the pointer does not change shape over the divider. Both are
-tracked as open work — do not make a split pane the only route to content.
+- The divider is labelled "Resize panes" and exposes progress semantics with a `setProgress`
+  action, so its position can be set directly.
+- Compose's common API still has no resize cursor, so the pointer does not change shape over the
+  divider. That one remains open.
 
 ## API
 
