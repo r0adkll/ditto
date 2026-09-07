@@ -1,0 +1,180 @@
+---
+title: Getting started
+description: Add Ditto to a Kotlin Multiplatform app, set a theme, and build a screen out of it.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import Demo from '../../components/Demo.astro';
+
+Ditto is a Compose Multiplatform UI toolkit. If a target runs Compose — Android, iOS, desktop JVM,
+or the browser through Wasm — it runs Ditto, from the same `commonMain` source set.
+
+<Aside type="caution" title="Not on Maven Central yet">
+  Ditto is at `0.1.0-SNAPSHOT` with no release tagged, so **the coordinates below do not resolve
+  yet**. Until 0.1.0 ships, depend on it as an included build (see [Before it is
+  published](#before-it-is-published)). The API is still moving; that is what the pre-1.0 version
+  means.
+</Aside>
+
+## The artifacts
+
+Three published modules. Most apps need the first two.
+
+| Artifact | What is in it | When you need it |
+|---|---|---|
+| `com.r0adkll.ditto:ditto-core` | `DittoTheme` and its tokens, `Text`, `Icon`, `Surface`, the idiom model, system glyphs | always — `ditto-components` brings it transitively |
+| `com.r0adkll.ditto:ditto-components` | the components: buttons through trees, sheets, split panes, scrollbars | whenever you draw a control |
+| `com.r0adkll.ditto:ditto-material3-interop` | bridges `DittoTheme` to a `MaterialTheme` | only while you still have Material 3 on screen — a date picker, or a screen you haven't migrated |
+
+The interop module is for migration, not for permanent residence. It maps Ditto's tokens onto
+Material's so an M3 component inside a Ditto screen doesn't arrive in the wrong colours, which is
+what makes a screen-by-screen move possible.
+
+```kotlin
+// build.gradle.kts
+kotlin {
+  sourceSets {
+    commonMain.dependencies {
+      implementation("com.r0adkll.ditto:ditto-components:<version>")
+
+      // Only while Material 3 components remain on screen
+      // implementation("com.r0adkll.ditto:ditto-material3-interop:<version>")
+    }
+  }
+}
+```
+
+Ditto targets Android, `iosArm64`, `iosSimulatorArm64`, `jvm` and `wasmJs`, and needs
+`minSdk 31` on Android.
+
+### Before it is published
+
+Clone the repo beside your project and pull it in as a composite build. You get the same imports,
+and any change you make to Ditto shows up in your app immediately:
+
+```kotlin
+// settings.gradle.kts
+includeBuild("../ditto")
+```
+
+```kotlin
+commonMain.dependencies {
+  implementation("com.r0adkll.ditto:ditto-components")   // no version: the included build supplies it
+}
+```
+
+## Set the theme
+
+Wrap your app once. Everything below it reads the tokens from composition locals, so no component
+needs the theme passed to it:
+
+```kotlin
+@Composable
+fun App() {
+  DittoTheme(accent = Color(0xFF9C5AB4)) {
+    Surface(color = DittoTheme.colors.background) {
+      AccountScreen()
+    }
+  }
+}
+```
+
+That single accent is the whole colour input. Ditto derives the rest — surfaces, borders, text,
+status colours, light and dark — from it plus a neutral ramp, and checks every derived pairing
+against contrast rules rather than trusting the eye. See [Color](/ditto/foundations/color/).
+
+Three arguments are worth knowing about; every one of them has a sensible default:
+
+```kotlin
+DittoTheme(
+  accent = Color(0xFF9C5AB4),
+  neutrals = Neutrals.Cool,          // Pure, Cool, Warm, or Tinted from the accent's hue
+  idiom = platformIdiom(),           // Android, Apple or Desktop — the platform's own by default
+  colorMode = ColorMode.System,      // or Light / Dark
+  density = DittoDensity.forIdiom(idiom),  // Desktop defaults to Compact
+) { /* … */ }
+```
+
+`idiom` is an ordinary runtime value, not a compile-time target. Pin it and you get that
+platform's look anywhere — which is exactly how the demos on this site render three platforms in
+one browser tab.
+
+## Build something out of it
+
+Components compose the way you'd expect. Here is a small organism — a piece of a settings screen —
+built only from Ditto parts:
+
+```kotlin
+@Composable
+fun AccountCard(
+  name: TextFieldState,
+  syncOverCellular: Boolean,
+  onSyncChange: (Boolean) -> Unit,
+  modifier: Modifier = Modifier,
+) {
+  Card(variant = CardVariant.Outlined, modifier = modifier) {
+    Column(
+      Modifier.padding(DittoTheme.spacing.lg),
+      verticalArrangement = Arrangement.spacedBy(DittoTheme.spacing.md),
+    ) {
+      Text("Account", style = DittoTheme.typography.heading)
+
+      TextField(state = name, label = "Display name", modifier = Modifier.fillMaxWidth())
+
+      ListItem(
+        headline = "Sync over cellular",
+        supporting = if (syncOverCellular) "On" else "Wi-Fi only",
+        trailing = { Switch(checked = syncOverCellular, onCheckedChange = onSyncChange) },
+        onClick = { onSyncChange(!syncOverCellular) },
+      )
+
+      Row(
+        Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(DittoTheme.spacing.sm, Alignment.End),
+      ) {
+        TextButton(onClick = { }) { Text("Cancel") }
+        Button(onClick = { }) { Text("Save") }
+      }
+    }
+  }
+}
+```
+
+That is the whole point of the toolkit, and it is easier to see than to describe. **Switch the
+idiom** in the demo below: the card's corners, the field's height and fill, the row height, the
+switch's proportions and the type scale all move together, from the code above unchanged.
+
+<Demo id="getting-started" height={440} caption="One composition, three platforms" />
+
+Notice what the code did *not* have to say: no colours, no corner radii, no control heights, no
+`if (isIos)`. Sizes come from `DittoTheme.dimens`, spacing from `DittoTheme.spacing`, and both
+follow the idiom and density in force.
+
+## Restyle it globally
+
+When the defaults aren't your brand, override the **transform**, not the component. Overrides are
+registered per style type and applied on top of whatever the idiom would have produced, so they
+keep tracking the platform:
+
+```kotlin
+DittoTheme(
+  accent = brand,
+  styleOverrides = dittoStyleOverrides {
+    override<ButtonStyle> { it.copy(shape = RoundedCornerShape(4.dp)) }        // every button
+    override<ButtonStyle>(ButtonVariant.Text) { it.copy(minHeight = 32.dp) }  // text buttons only
+    override<CardStyle> { it.copy(shape = RoundedCornerShape(4.dp)) }
+  },
+) { App() }
+```
+
+For one subtree rather than the whole app, provide a `Local*Style`; for one call, pass `style`
+directly. The resolution order is always explicit `style` → subtree local → app override on the
+idiom default.
+
+## Where to go next
+
+- **[Button](/ditto/components/button/)** — the component page shape: idiom specs, accessibility, API.
+- **[Color](/ditto/foundations/color/)**, **[Typography](/ditto/foundations/typography/)**,
+  **[Spacing & density](/ditto/foundations/spacing/)**, **[Shape](/ditto/foundations/shape/)** — the tokens.
+- **[The full catalog](/ditto/catalog/)** — every component in one page, with an idiom switch.
+- **[API reference](/ditto/api/)** — generated from the source.

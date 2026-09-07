@@ -7,9 +7,12 @@ hero:
   image:
     file: ../../assets/mascot.svg
   actions:
+    - text: Get started
+      link: /ditto/getting-started/
+      icon: right-arrow
     - text: Components
       link: /ditto/components/button/
-      icon: right-arrow
+      variant: minimal
     - text: Open the catalog
       link: /ditto/catalog/
       variant: minimal
@@ -18,30 +21,26 @@ hero:
 import { Card, CardGrid } from '@astrojs/starlight/components';
 
 <CardGrid>
-  <Card title="The same button, three ways">
-    `Button(onClick) { Text("Save") }` draws a Material-ish filled button on Android, a flat tinted
-    one on iOS, and a 28dp neutral control on desktop. The idiom is a `CompositionLocal`, not a
-    compile target, which is why every demo on this site has an idiom selector you can flip while
-    it runs.
+  <Card title="Compose Multiplatform">
+    Ditto is a UI toolkit for Compose, so it runs wherever you already write Compose: Android, iOS,
+    desktop on the JVM, and the browser through Wasm. Components live in `commonMain` and there is
+    no per-platform source set to keep in sync — this page's live demos are the same code running
+    in a browser.
   </Card>
-  <Card title="Desktop gets desktop sizes">
-    Material on a monitor is a phone app scaled up: 48dp targets, 16sp body text, 56dp rows. The
-    desktop idiom defaults to Compact — 28dp controls, 13sp body, 24dp menu rows — nearer to what
-    an IDE or a native app uses. Mobile stays touch-sized, and one `density` argument moves either.
+  <Card title="Platform adaptive">
+    Every platform has its own idea of what a control looks like, and users notice when an app gets
+    it wrong. Write the screen once and Ditto renders it as each platform expects: Material-ish on
+    Android, flat and tinted on iOS, compact and dense on the desktop. The idiom is a runtime
+    value, so you can pin it, preview it, or let the platform choose.
   </Card>
-  <Card title="One accent and twelve greys">
-    No tonal palettes. A theme is a single accent plus a 12-step neutral ramp, and every pairing
-    derived from it is measured against contrast rules rather than eyeballed. Ditto's own brand
-    violet failed that check at 2.81:1, so the accent is a darker one from the same palette and the
-    violet stayed on the mascot.
+  <Card title="Components">
+    Thirty-three components — buttons, fields, sheets, menus, tabs, trees, split panes, scrollbars —
+    across sixty-odd composables. Restyle any of them globally with a transform that applies on top
+    of the idiom default, so your brand travels without flattening the platform underneath it.
   </Card>
-  <Card title="One tab stop per control">
-    A segmented control, tab row or tree is a single stop in the tab order; arrows move inside it,
-    the way each platform does. Hit targets come from the idiom minimum even when a control is
-    drawn smaller than that, so a 16dp desktop checkbox still answers to a 28dp press.
+  <Card title="Getting started">
+    Add one dependency, wrap your app in `DittoTheme`, pick an accent colour. **[Start
+    here](/ditto/getting-started/)** for the artifacts, the theme, and a worked example you can
+    switch between platforms as you read it.
   </Card>
 </CardGrid>
-
-Ditto is small on purpose: atoms and molecules, no router, no date pickers — those come from the
-Material 3 interop module. It is pre-1.0 and built to serve one app, so the API still moves when
-that app needs it to.

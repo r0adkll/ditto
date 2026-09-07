@@ -40,6 +40,22 @@ class DemoScreenTest {
     }
   }
 
+  /**
+   * The organism the Getting started page leads with. It is the first thing a reader sees Ditto
+   * do, and the claim on that page is specifically that one composition adapts — so all three
+   * idioms belong in the golden.
+   */
+  @Test
+  fun gettingStartedOrganism() = assertScreenshot("getting-started", width = 1140, height = 430) {
+    Row {
+      Idiom.entries.forEach { idiom ->
+        Column(Modifier.size(380.dp, 430.dp)) {
+          DemoScreen(id = "getting-started", idiom = idiom, colorMode = ColorMode.Light)
+        }
+      }
+    }
+  }
+
   @Test
   fun unknownIdIsVisible() = assertScreenshot("demo-screen-unknown", width = 420, height = 140) {
     DemoScreen(id = "nope", idiom = Idiom.Desktop, colorMode = ColorMode.Light)

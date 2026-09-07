@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -542,5 +543,56 @@ internal fun ScrollbarDemo() {
       (1..25).forEach { Text("Row $it", style = DittoTheme.typography.body) }
     }
     VerticalScrollbar(scroll, Modifier.align(Alignment.CenterEnd).fillMaxHeight())
+  }
+}
+
+// ---------------------------------------------------------------- getting started
+
+/**
+ * The organism from the Getting started page: a small piece of a real screen, assembled from
+ * Ditto parts. It exists to show that the interesting thing is not any one component but what
+ * happens to a *composition* of them when the idiom changes — the card's corners, the field's
+ * height, the row's height, the switch's proportions and the button order all move together.
+ */
+@Composable
+internal fun GettingStartedDemo() {
+  val name = rememberTextFieldState("Ada Lovelace")
+  var sync by remember { mutableStateOf(true) }
+  AccountCard(
+    name = name,
+    syncOverCellular = sync,
+    onSyncChange = { sync = it },
+    modifier = Modifier.width(340.dp),
+  )
+}
+
+@Composable
+private fun AccountCard(
+  name: TextFieldState,
+  syncOverCellular: Boolean,
+  onSyncChange: (Boolean) -> Unit,
+  modifier: Modifier = Modifier,
+) {
+  Card(variant = CardVariant.Outlined, modifier = modifier) {
+    Column(
+      Modifier.padding(DittoTheme.spacing.lg),
+      verticalArrangement = Arrangement.spacedBy(DittoTheme.spacing.md),
+    ) {
+      Text("Account", style = DittoTheme.typography.heading)
+      TextField(state = name, label = "Display name", modifier = Modifier.fillMaxWidth())
+      ListItem(
+        headline = "Sync over cellular",
+        supporting = if (syncOverCellular) "On" else "Wi-Fi only",
+        trailing = { Switch(checked = syncOverCellular, onCheckedChange = onSyncChange) },
+        onClick = { onSyncChange(!syncOverCellular) },
+      )
+      Row(
+        Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(DittoTheme.spacing.sm, Alignment.End),
+      ) {
+        TextButton(onClick = {}) { Text("Cancel") }
+        Button(onClick = {}) { Text("Save") }
+      }
+    }
   }
 }

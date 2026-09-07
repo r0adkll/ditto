@@ -88,6 +88,8 @@ fun catalogDemos(): List<DemoItem> = listOf(
   DemoItem("tree", "Tree") { TreeDemo() },
   DemoItem("split-pane", "Split pane") { SplitPaneDemo() },
   DemoItem("scrollbar", "Scrollbar") { ScrollbarDemo() },
+  // Getting started
+  DemoItem("getting-started", "Putting it together") { GettingStartedDemo() },
   // Foundations
   DemoItem("colors", "Colors") { ColorsDemo() },
   DemoItem("typography", "Typography") { TypographyDemo() },
