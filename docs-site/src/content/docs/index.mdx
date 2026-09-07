@@ -18,20 +18,30 @@ hero:
 import { Card, CardGrid } from '@astrojs/starlight/components';
 
 <CardGrid>
-  <Card title="Three idioms, one call site">
-    `Button(onClick) { Text("Continue") }` renders Material-esque on Android, flat iOS-style on
-    Apple and a compact neutral control on Desktop. The idiom is a runtime value, so you can
-    preview any of them anywhere.
+  <Card title="The same button, three ways">
+    `Button(onClick) { Text("Save") }` draws a Material-ish filled button on Android, a flat tinted
+    one on iOS, and a 28dp neutral control on desktop. The idiom is a `CompositionLocal`, not a
+    compile target, which is why every demo on this site has an idiom selector you can flip while
+    it runs.
   </Card>
-  <Card title="Its own design language">
-    A 12-step neutral ramp plus one accent, eight type styles, seven shapes, a density switch.
-    No tonal palettes, no Material dependency in the core.
+  <Card title="Desktop gets desktop sizes">
+    Material on a monitor is a phone app scaled up: 48dp targets, 16sp body text, 56dp rows. The
+    desktop idiom defaults to Compact — 28dp controls, 13sp body, 24dp menu rows — nearer to what
+    an IDE or a native app uses. Mobile stays touch-sized, and one `density` argument moves either.
   </Card>
-  <Card title="Accessible by default">
-    Every component ships semantics, hit targets, keyboard operation and a focus model that
-    treats composite controls as one tab stop.
+  <Card title="One accent and twelve greys">
+    No tonal palettes. A theme is a single accent plus a 12-step neutral ramp, and every pairing
+    derived from it is measured against contrast rules rather than eyeballed. Ditto's own brand
+    violet failed that check at 2.81:1, so the accent is a darker one from the same palette and the
+    violet stayed on the mascot.
   </Card>
-  <Card title="Everywhere Compose goes">
-    Android, iOS, Desktop JVM and the browser — including this page's live demos.
+  <Card title="One tab stop per control">
+    A segmented control, tab row or tree is a single stop in the tab order; arrows move inside it,
+    the way each platform does. Hit targets come from the idiom minimum even when a control is
+    drawn smaller than that, so a 16dp desktop checkbox still answers to a 28dp press.
   </Card>
 </CardGrid>
+
+Ditto is small on purpose: atoms and molecules, no router, no date pickers — those come from the
+Material 3 interop module. It is pre-1.0 and built to serve one app, so the API still moves when
+that app needs it to.
