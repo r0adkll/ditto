@@ -19,6 +19,11 @@ public data class DittoDimens(
   val borderWidth: Dp,
   /** Focus ring stroke width. */
   val focusRingWidth: Dp,
+  /**
+   * Space between the control's edge and the inside of the focus ring. Desktop UIs draw the ring
+   * against the border (Jewel, browsers, Windows); Material offsets it (ADR-008).
+   */
+  val focusRingGap: Dp,
   /** Buttons, segmented controls, toggle buttons. */
   val controlHeight: Dp,
   /** Text fields and search bars. */
@@ -37,23 +42,23 @@ public data class DittoDimens(
   public companion object {
     public fun forIdiom(idiom: Idiom, density: DittoDensity = DittoDensity.forIdiom(idiom)): DittoDimens = when (idiom) {
       Idiom.Android -> DittoDimens(
-        minInteractiveSize = 48.dp, iconSize = 24.dp, borderWidth = 1.dp, focusRingWidth = 2.dp,
+        minInteractiveSize = 48.dp, iconSize = 24.dp, borderWidth = 1.dp, focusRingWidth = 2.dp, focusRingGap = 2.dp,
         controlHeight = 40.dp, fieldHeight = 56.dp, iconButtonSize = 40.dp,
         listRowHeight = 56.dp, listRowHeightTwoLine = 72.dp, menuItemHeight = 48.dp, tabHeight = 48.dp,
       )
       Idiom.Apple -> DittoDimens(
-        minInteractiveSize = 44.dp, iconSize = 22.dp, borderWidth = 0.5.dp, focusRingWidth = 2.dp,
+        minInteractiveSize = 44.dp, iconSize = 22.dp, borderWidth = 0.5.dp, focusRingWidth = 2.dp, focusRingGap = 1.dp,
         controlHeight = 44.dp, fieldHeight = 44.dp, iconButtonSize = 36.dp,
         listRowHeight = 44.dp, listRowHeightTwoLine = 60.dp, menuItemHeight = 44.dp, tabHeight = 44.dp,
       )
       Idiom.Desktop -> when (density) {
         DittoDensity.Comfortable -> DittoDimens(
-          minInteractiveSize = 32.dp, iconSize = 18.dp, borderWidth = 1.dp, focusRingWidth = 2.dp,
+          minInteractiveSize = 32.dp, iconSize = 18.dp, borderWidth = 1.dp, focusRingWidth = 2.dp, focusRingGap = 0.dp,
           controlHeight = 36.dp, fieldHeight = 36.dp, iconButtonSize = 32.dp,
           listRowHeight = 40.dp, listRowHeightTwoLine = 56.dp, menuItemHeight = 32.dp, tabHeight = 40.dp,
         )
         DittoDensity.Compact -> DittoDimens(
-          minInteractiveSize = 28.dp, iconSize = 16.dp, borderWidth = 1.dp, focusRingWidth = 2.dp,
+          minInteractiveSize = 28.dp, iconSize = 16.dp, borderWidth = 1.dp, focusRingWidth = 2.dp, focusRingGap = 0.dp,
           controlHeight = 28.dp, fieldHeight = 28.dp, iconButtonSize = 24.dp,
           listRowHeight = 28.dp, listRowHeightTwoLine = 44.dp, menuItemHeight = 24.dp, tabHeight = 32.dp,
         )

@@ -1,6 +1,8 @@
 package com.r0adkll.ditto.interaction
 
 import androidx.compose.foundation.interaction.FocusInteraction
+import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
@@ -26,14 +28,19 @@ import kotlinx.coroutines.launch
 
 /**
  * Draws a keyboard focus ring around [shape] while the node is focused **and** a keyboard is
- * present (ADR-008). Touch-only platforms draw nothing. Defaults: accent color, idiom ring width.
+ * present (ADR-008). Touch-only platforms draw nothing.
+ *
+ * [gap] is the space between the control's edge and the inside of the ring, and defaults to the
+ * idiom's `focusRingGap`: Material offsets its ring, desktop UIs draw it against the border. The
+ * ring's corners are grown by the offset so they stay concentric with the control's — a ring that
+ * keeps the control's radius on a larger box reads as squarer than the thing it is wrapping.
  */
 public fun Modifier.focusRing(
   interactionSource: InteractionSource,
   shape: Shape,
   color: Color = Color.Unspecified,
   width: Dp = Dp.Unspecified,
-  gap: Dp = 2.dp,
+  gap: Dp = Dp.Unspecified,
 ): Modifier = this then FocusRingElement(interactionSource, shape, color, width, gap)
 
 private data class FocusRingElement(
@@ -101,11 +108,23 @@ private class FocusRingNode(
     drawContent()
     if (!focused || !currentValueOf(LocalInputCapabilities).keyboard) return
     val ringColor = if (color == Color.Unspecified) currentValueOf(LocalDittoColors).accent else color
-    val ringWidth = (if (width == Dp.Unspecified) currentValueOf(LocalDittoDimens).focusRingWidth else width).toPx()
-    val inset = gap.toPx() + ringWidth / 2f
+    val dimens = currentValueOf(LocalDittoDimens)
+    val ringWidth = (if (width == Dp.Unspecified) dimens.focusRingWidth else width).toPx()
+    val ringGap = (if (gap == Dp.Unspecified) dimens.focusRingGap else gap).toPx()
+    val inset = ringGap + ringWidth / 2f
     val outlineSize = Size(size.width + inset * 2, size.height + inset * 2)
+    // Grow every corner by the offset so the ring runs parallel to the control's edge. Without
+    // this the ring keeps the control's radius on a bigger box and its corners look squared off.
+    val outlineShape = (shape as? CornerBasedShape)?.let { s ->
+      s.copy(
+        topStart = CornerSize(s.topStart.toPx(size, this) + inset),
+        topEnd = CornerSize(s.topEnd.toPx(size, this) + inset),
+        bottomEnd = CornerSize(s.bottomEnd.toPx(size, this) + inset),
+        bottomStart = CornerSize(s.bottomStart.toPx(size, this) + inset),
+      )
+    } ?: shape
     translate(-inset, -inset) {
-      drawOutline(shape.createOutline(outlineSize, layoutDirection, this), ringColor, style = Stroke(ringWidth))
+      drawOutline(outlineShape.createOutline(outlineSize, layoutDirection, this), ringColor, style = Stroke(ringWidth))
     }
   }
 }

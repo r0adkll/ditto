@@ -60,9 +60,15 @@ DittoTheme(density = DittoDensity.Comfortable) { App() }
 | Menu item | 48dp | 44dp | 32dp | 24dp |
 | Tab height | 48dp | 44dp | 40dp | 32dp |
 | Icon size | 24dp | 22dp | 18dp | 16dp |
+| Focus ring gap | 2dp | 1dp | 0dp | 0dp |
 
 These are `DittoTheme.dimens`, and components read them rather than hard-coding heights — which is
 why a single `density` argument shortens every row, field and menu item in the app at once.
+
+The focus ring gap is in that table for the same reason. Material offsets its focus indicator from
+the control; desktop toolkits draw it against the border, the way a browser or an IDE does. So it
+is a token per idiom rather than a constant, and the ring's corners are grown by the offset to stay
+concentric with the control's own.
 
 `Compact` on a *mobile* idiom is a different thing: it trims 8dp from heights but leaves
 `minInteractiveSize` alone, so a denser phone list still has honest touch targets.
@@ -92,6 +98,7 @@ data class DittoDimens(
   val iconSize: Dp,
   val borderWidth: Dp,
   val focusRingWidth: Dp,
+  val focusRingGap: Dp,
   val controlHeight: Dp,
   val fieldHeight: Dp,
   val iconButtonSize: Dp,
