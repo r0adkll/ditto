@@ -25,6 +25,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.state.ToggleableState
+import androidx.compose.ui.text.LinkAnnotation
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withLink
 import androidx.compose.ui.unit.dp
 import com.r0adkll.ditto.components.*
 import com.r0adkll.ditto.foundation.Icon
@@ -455,10 +458,27 @@ internal fun TopBarDemo() {
 // ---------------------------------------------------------------- desktop
 
 @Composable
-internal fun LinkDemo() = Line {
-  Link("Learn more", onClick = {})
-  Link("Docs", onClick = {}, external = true)
-  Link("Disabled", onClick = {}, enabled = false)
+internal fun LinkDemo() {
+  // The inline case is the common one, so it gets equal billing: same styling, same mechanism,
+  // just written into an AnnotatedString instead of standing on its own.
+  val linkStyles = LinkDefaults.textLinkStyles()
+  val sentence = remember(linkStyles) {
+    buildAnnotatedString {
+      append("By continuing you agree to the ")
+      withLink(LinkAnnotation.Clickable("terms", styles = linkStyles) {}) { append("Terms") }
+      append(" and ")
+      withLink(LinkAnnotation.Clickable("privacy", styles = linkStyles) {}) { append("Privacy Policy") }
+      append(".")
+    }
+  }
+  Stack {
+    Line {
+      Link("Learn more", onClick = {})
+      Link("Docs", onClick = {}, external = true)
+      Link("Disabled", onClick = {}, enabled = false)
+    }
+    Text(sentence, modifier = Modifier.width(320.dp))
+  }
 }
 
 @Composable

@@ -462,8 +462,40 @@ public final class com/r0adkll/ditto/components/IconButtonVariant : java/lang/En
 	public static fun values ()[Lcom/r0adkll/ditto/components/IconButtonVariant;
 }
 
+public final class com/r0adkll/ditto/components/LinkDefaults {
+	public static final field $stable I
+	public static final field INSTANCE Lcom/r0adkll/ditto/components/LinkDefaults;
+	public final fun resolve (Lcom/r0adkll/ditto/components/LinkStyle;Landroidx/compose/runtime/Composer;II)Lcom/r0adkll/ditto/components/LinkStyle;
+	public final fun style (Lcom/r0adkll/ditto/Idiom;Landroidx/compose/runtime/Composer;II)Lcom/r0adkll/ditto/components/LinkStyle;
+	public final fun textLinkStyles (Lcom/r0adkll/ditto/components/LinkStyle;Landroidx/compose/runtime/Composer;II)Landroidx/compose/ui/text/TextLinkStyles;
+}
+
 public final class com/r0adkll/ditto/components/LinkKt {
-	public static final fun Link (Ljava/lang/String;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;ZZLandroidx/compose/ui/text/TextStyle;Landroidx/compose/foundation/interaction/MutableInteractionSource;Landroidx/compose/runtime/Composer;II)V
+	public static final fun Link (Ljava/lang/String;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;ZZLcom/r0adkll/ditto/components/LinkStyle;Landroidx/compose/runtime/Composer;II)V
+	public static final fun getLocalLinkStyle ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+}
+
+public final class com/r0adkll/ditto/components/LinkStyle {
+	public static final field $stable I
+	public synthetic fun <init> (Landroidx/compose/ui/text/TextStyle;JJLcom/r0adkll/ditto/components/LinkUnderline;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy-IbeAmgk (Landroidx/compose/ui/text/TextStyle;JJLcom/r0adkll/ditto/components/LinkUnderline;)Lcom/r0adkll/ditto/components/LinkStyle;
+	public static synthetic fun copy-IbeAmgk$default (Lcom/r0adkll/ditto/components/LinkStyle;Landroidx/compose/ui/text/TextStyle;JJLcom/r0adkll/ditto/components/LinkUnderline;ILjava/lang/Object;)Lcom/r0adkll/ditto/components/LinkStyle;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getColor-0d7_KjU ()J
+	public final fun getDisabledColor-0d7_KjU ()J
+	public final fun getTextStyle ()Landroidx/compose/ui/text/TextStyle;
+	public final fun getUnderline ()Lcom/r0adkll/ditto/components/LinkUnderline;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/r0adkll/ditto/components/LinkUnderline : java/lang/Enum {
+	public static final field Always Lcom/r0adkll/ditto/components/LinkUnderline;
+	public static final field Never Lcom/r0adkll/ditto/components/LinkUnderline;
+	public static final field OnHover Lcom/r0adkll/ditto/components/LinkUnderline;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/r0adkll/ditto/components/LinkUnderline;
+	public static fun values ()[Lcom/r0adkll/ditto/components/LinkUnderline;
 }
 
 public final class com/r0adkll/ditto/components/ListItemDefaults {

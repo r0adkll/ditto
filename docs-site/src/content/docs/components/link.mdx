@@ -1,23 +1,61 @@
 ---
 title: Link
-description: Inline navigation that looks like a link on each platform.
+description: Text that navigates — inside a sentence, or standing on its own.
 ---
 
+import { Aside } from '@astrojs/starlight/components';
 import Demo from '../../../components/Demo.astro';
 
-Text that navigates. Ditto's link is a real control — focusable, hoverable, with a hand cursor —
-rather than styled text, so keyboard and screen-reader users can reach it.
+Ditto has one link mechanism with two shapes. Most links live **inside a sentence**, so that is the
+case to reach for first; `Link` is the standalone form for a "Learn more" on its own line. Both are
+`LinkAnnotation` underneath, so both carry real link semantics rather than announcing themselves as
+buttons.
 
-<Demo id="link" height={160} />
+<Demo id="link" height={240} caption="Standalone links, and the same styling inside a sentence" />
 
-## Usage
+## Inside a sentence
+
+`LinkDefaults.textLinkStyles()` gives you the idiom's link styling as `TextLinkStyles`, ready for
+`withLink`:
+
+```kotlin
+val linkStyles = LinkDefaults.textLinkStyles()
+
+Text(
+  buildAnnotatedString {
+    append("By continuing you agree to the ")
+    withLink(LinkAnnotation.Url("https://example.com/terms", linkStyles)) { append("Terms") }
+    append(".")
+  },
+)
+```
+
+`LinkAnnotation.Url` hands the destination to the platform's URI handler. Use
+`LinkAnnotation.Clickable` when navigating means something in-app:
+
+```kotlin
+withLink(LinkAnnotation.Clickable("terms", styles = linkStyles) { navigateTo(Terms) }) {
+  append("Terms")
+}
+```
+
+<Aside type="tip" title="Hoist the styles out of the builder">
+  `textLinkStyles()` is a composable read, and `buildAnnotatedString` takes an ordinary lambda. Read
+  it first, then use it inside — and key your `remember` on it so the string rebuilds when the
+  idiom or colour mode changes.
+</Aside>
+
+## Standing on its own
 
 ```kotlin
 Link("Learn more", onClick = { navigate() })
 
-// Leaving the app: adds a small arrow glyph and says so to a screen reader
+// Leaving the app: adds an arrow glyph described as "opens externally"
 Link("Read the licence", onClick = { openBrowser() }, external = true)
 ```
+
+`Link` is a single string, not a layout — it cannot hold a sentence with a link in the middle. That
+is what the inline form above is for.
 
 ## Specification
 
@@ -26,15 +64,22 @@ Link("Read the licence", onClick = { openBrowser() }, external = true)
 | Colour | `accent` | `accent` | `accent` |
 | Underline | always | never | on hover |
 
-The underline rule is the platform convention rather than a preference: Material underlines links
-in body text, iOS relies on colour alone, and desktop UIs reveal the underline on hover.
+That rule is `LinkStyle.underline`, and it is the reason to use these helpers rather than colouring
+a `SpanStyle` yourself — Material underlines links in body text, iOS relies on colour, and desktop
+UIs reveal the underline on hover.
+
+**Focus underlines in every idiom**, including Apple, which otherwise never does. A focus indicator
+that is only a colour change is not an indicator.
 
 ## Accessibility
 
-- `Role.Button` with the link text as its label; **Space** and **Enter** activate it.
-- `external = true` appends "opens externally" to the accessible description, so the destination
-  change is announced rather than only drawn.
-- Focus ring when a keyboard is present; hand cursor with a pointer.
+- The link is a real `LinkAnnotation`, so it is focusable, activatable and announced as a link.
+  Compose has no `Role.Link`, so a hand-rolled clickable text can only claim to be a button — which
+  is why this component was rebuilt on the annotation.
+- A disabled `Link` drops the annotation entirely rather than dimming a live one, so it takes no
+  tab stop and offers nothing to activate.
+- `external` adds an arrow described as "opens externally". The glyph is sized from the surrounding
+  text, so it tracks the font scale.
 
 ## API
 
@@ -46,7 +91,21 @@ fun Link(
   modifier: Modifier = Modifier,
   enabled: Boolean = true,
   external: Boolean = false,
-  style: TextStyle = LocalTextStyle.current,
-  interactionSource: MutableInteractionSource? = null,
+  style: LinkStyle? = null,
 )
+
+object LinkDefaults {
+  @Composable fun style(idiom: Idiom = DittoTheme.idiom): LinkStyle
+  @Composable fun resolve(style: LinkStyle? = null): LinkStyle
+  @Composable fun textLinkStyles(style: LinkStyle? = null): TextLinkStyles
+}
+
+class LinkStyle(
+  val textStyle: TextStyle?,      // null inherits LocalTextStyle
+  val color: Color,
+  val disabledColor: Color,
+  val underline: LinkUnderline,   // Always, Never, OnHover
+)
+
+val LocalLinkStyle: ProvidableCompositionLocal<LinkStyle?>
 ```
