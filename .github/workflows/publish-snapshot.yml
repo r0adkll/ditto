@@ -1,0 +1,57 @@
+name: Publish snapshot
+
+# Every push to main republishes the snapshot, so anyone can depend on Ditto between releases
+# instead of waiting for a tag or vendoring the repo. Docs-only pushes are skipped: they cannot
+# change a published artifact.
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'docs-site/**'
+      - '**/*.md'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+# Snapshots overwrite each other, so let an in-flight upload finish rather than racing it.
+concurrency:
+  group: publish-snapshot
+  cancel-in-progress: false
+
+jobs:
+  snapshot:
+    # macOS because the Apple targets have to be built to be published.
+    runs-on: macos-15
+    if: github.repository == 'r0adkll/ditto'
+    env:
+      # `secrets` cannot be read in a step-level `if`, so surface it as an env value first.
+      HAS_CREDENTIALS: ${{ secrets.MAVEN_CENTRAL_USERNAME != '' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: zulu
+          java-version: 21
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Check this is a snapshot version
+        run: |
+          version=$(grep '^VERSION_NAME=' gradle.properties | cut -d= -f2)
+          echo "VERSION_NAME=$version"
+          case "$version" in
+            *-SNAPSHOT) ;;
+            *) echo "::error::VERSION_NAME=$version is not a snapshot. main should carry the next -SNAPSHOT version; releases are published by tagging." ; exit 1 ;;
+          esac
+
+      - name: Tell me why nothing was published
+        if: env.HAS_CREDENTIALS != 'true'
+        run: |
+          echo "::warning::Skipping: MAVEN_CENTRAL_USERNAME is not set. See RELEASING.md for the one-time Central Portal setup."
+
+      - name: Publish snapshot
+        if: env.HAS_CREDENTIALS == 'true'
+        # Snapshots are not signed and not "released"; the Central Portal takes them straight into
+        # its snapshot repository.
+        run: ./gradlew publishToMavenCentral --no-configuration-cache
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}

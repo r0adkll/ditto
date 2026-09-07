@@ -15,6 +15,21 @@ jobs:
           distribution: zulu
           java-version: 21
       - uses: gradle/actions/setup-gradle@v4
+
+      # A tag and gradle.properties can disagree, and the failure is silent and expensive: you get
+      # 0.1.0-SNAPSHOT in the snapshot repo under a v0.1.0 tag, or 0.1.1 published as 0.1.0.
+      - name: Check the tag matches the declared version
+        run: |
+          version=$(grep '^VERSION_NAME=' gradle.properties | cut -d= -f2)
+          echo "VERSION_NAME=$version"
+          case "$version" in
+            *-SNAPSHOT) echo "::error::VERSION_NAME=$version is a snapshot; a release needs a fixed version." ; exit 1 ;;
+          esac
+          if [ "$GITHUB_REF_TYPE" = "tag" ] && [ "${GITHUB_REF_NAME#v}" != "$version" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match VERSION_NAME=$version."
+            exit 1
+          fi
+
       - name: Publish to Maven Central
         run: ./gradlew publishAndReleaseToMavenCentral --no-configuration-cache -PRELEASE_SIGNING_ENABLED=true
         env:
